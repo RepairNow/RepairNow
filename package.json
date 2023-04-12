@@ -1,27 +1,28 @@
 {
-  "name": "repairnow",
-  "private": true,
+  "name": "repair-now",
   "version": "0.0.0",
-  "type": "module",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "dev": "vite",
-    "build": "vue-tsc && vite build",
-    "preview": "vite preview"
+    "build": "turbo run build",
+    "clean": "turbo run clean",
+    "dev": "turbo run dev",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "lint": "turbo run lint",
+    "test": "turbo run test"
   },
-  "dependencies": {
-    "axios": "^1.3.5",
-    "pinia": "^2.0.34",
-    "vue": "^3.2.47",
-    "vue-i18n": "^9.2.2",
-    "vue-router": "^4.1.6"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "@vitejs/plugin-vue": "^4.1.0",
-    "prettier": "2.8.7",
-    "typescript": "^4.9.3",
-    "vite": "^4.2.0",
-    "vite-plugin-windicss": "^1.8.10",
-    "vue-tsc": "^1.2.0",
-    "windicss": "^3.5.6"
+    "eslint-config-custom": "*",
+    "prettier": "latest",
+    "turbo": "latest"
+  },
+  "packageManager": "yarn@1.22.19",
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=7.0.0"
   }
 }
