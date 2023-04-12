@@ -8,12 +8,16 @@ Changed NextJS front app by the vueJS app provided by Antoine Pollet config
 
 This turborepo uses [Yarn](https://classic.yarnpkg.com/lang/en/) as a package manager. It includes the following packages/apps:
 
-### Apps and Packages
+## Apps and Packages
+
+#### APPS
 
 - `front`: a vueJS app boiler plate created by Antoine
 - `api`: an [Express](https://expressjs.com/) server
+
+#### Packages (shared between apps)
+
 - `ui`: ui: a React component library (TODO: not usefull for the moment, maybe we can replace it by a vuejs lib?)
-- `eslint-config-custom`: `eslint` configurations for client side applications (includes `eslint-config-next` and `eslint-config-prettier`)
 - `eslint-config-custom-server`: `eslint` configurations for server side applications (includes `eslint-config-next` and `eslint-config-prettier`)
 - `scripts`: Jest configurations
 - `logger`: Isomorphic logger (a small wrapper around console.log)
@@ -24,6 +28,8 @@ Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 ### For DEV only
 
 run `yarn install && yarn run dev` => this will start all services provided by this monorepo
+
+Have a look to `localhost:5173` to see your front app and `locahost:3001` for API (it can be changed)
 
 ### Docker
 
@@ -39,6 +45,9 @@ COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose -f docker-compose.ym
 
 # Start prod in detached mode
 docker-compose -f docker-compose.yml up -d
+
+# To see logs on a detached docker compose
+docker-compose logs -f
 ```
 
 Open http://localhost:80 to see your front working with all others services.
