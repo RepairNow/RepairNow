@@ -8,20 +8,35 @@ services:
       dockerfile: ./apps/front/Dockerfile
     restart: always
     ports:
-      - 80:80
+      - 5173:5173
     networks:
       - app_network
+    volumes:
+      - ./apps/front:/app/apps/front
 
-  api:
-    container_name: api
+  api-gateway:
+    container_name: api-gateway
     build:
       context: .
-      dockerfile: ./apps/api/Dockerfile
+      dockerfile: ./apps/back/api-gateway/Dockerfile
     restart: always
     ports:
-      - 3001:3001
+      - 9000:9000
     networks:
       - app_network
+    volumes:
+      - ./apps/back/api-gateway:/app/apps/back/api-gateway
+
+  auth:
+    container_name: auth
+    build:
+      context: .
+      dockerfile: ./apps/back/auth/Dockerfile
+    restart: always
+    networks:
+      - app_network
+    volumes:
+      - ./apps/back/auth:/app/apps/back/auth
 
 # Define a network, which allows containers to communicate
 # with each other, by using their container name as a hostname
