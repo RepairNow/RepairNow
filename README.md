@@ -1,6 +1,6 @@
-# Turborepo Docker starter
+# RepairNow Monorepo
 
-This is an V1 TurboRepo based on an official Docker starter Turborepo.
+This repository is based on an official Docker starter Turborepo.
 
 Changed NextJS front app by the vueJS app provided by Antoine Pollet config
 
@@ -13,7 +13,8 @@ This turborepo uses [Yarn](https://classic.yarnpkg.com/lang/en/) as a package ma
 #### APPS
 
 - `front`: a vueJS app boiler plate created by Antoine
-- `api`: an [Express](https://expressjs.com/) server
+- `back/api-gateway`: API Gateway (Nest.js)
+- `back/auth`: Auth microservice (Nest.js)
 
 #### Packages (shared between apps)
 
@@ -25,13 +26,25 @@ This turborepo uses [Yarn](https://classic.yarnpkg.com/lang/en/) as a package ma
 
 Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
-### For DEV only
+<!-- ### For DEV only
 
 run `yarn install && yarn run dev` => this will start all services provided by this monorepo
 
-Have a look to `localhost:5173` to see your front app and `locahost:3001` for API (it can be changed)
+Have a look to `localhost:5173` to see your front app and `locahost:3001` for API (it can be changed) -->
 
-### Docker
+### Run project - DEV
+
+To run all projects in DEV environment inside docker containers:
+
+```
+# Create a network, which allows containers to communicate
+# with each other, by using their container name as a hostname
+docker network create app_network
+# start all projects
+docker compose up
+```
+
+<!-- ### Docker - PROD
 
 This repo is configured to be built with Docker, and Docker compose. To build all apps in this repo:
 
@@ -65,7 +78,7 @@ This example includes optional remote caching. In the Dockerfiles of the apps, u
 
 You can test this behavior using a command like:
 
-`docker build -f apps/front/Dockerfile . --build-arg TURBO_TEAM=“your-team-name” --build-arg TURBO_TOKEN=“your-token“ --no-cache`
+`docker build -f apps/front/Dockerfile . --build-arg TURBO_TEAM=“your-team-name” --build-arg TURBO_TOKEN=“your-token“ --no-cache` -->
 
 ### Utilities
 
