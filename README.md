@@ -26,24 +26,28 @@ This turborepo uses [Yarn](https://classic.yarnpkg.com/lang/en/) as a package ma
 
 Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
-<!-- ### For DEV only
-
-run `yarn install && yarn run dev` => this will start all services provided by this monorepo
-
-Have a look to `localhost:5173` to see your front app and `locahost:3001` for API (it can be changed) -->
-
 ### Run project - DEV
+<br>
+To run all projects in DEV environment:
+<br><br>
 
-To run all projects in DEV environment inside docker containers:
+At the root of the repo :
+<br><br>
 
+1 - Launch postgres database (docker container):
 ```
-# Create a network, which allows containers to communicate
-# with each other, by using their container name as a hostname
-docker network create app_network
-# start all projects
-docker compose up
+docker compose up -f docker-compose-bdd.yml
 ```
 
+2 - Install dependencies in all projects  
+```
+yarn install
+```
+
+2 - Launch all projects  
+```
+yarn run dev
+```
 <!-- ### Docker - PROD
 
 This repo is configured to be built with Docker, and Docker compose. To build all apps in this repo:

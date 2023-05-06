@@ -12,7 +12,7 @@ export class AppController {
   }
 
   @MessagePattern({ cmd: 'call_auth' })
-  callAuth(): string {
-    return 'auth called from another microservice !';
+  callAuth(): any {
+    return this.appService.getUsers();
   }
 }
