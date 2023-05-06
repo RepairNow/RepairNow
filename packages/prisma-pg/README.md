@@ -1,0 +1,1 @@
+ts config to look : https://github.com/aiji42/turbo-with-prisma/tree/main/packages/tsconfig
