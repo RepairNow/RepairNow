@@ -1,7 +1,0 @@
-{
-	"arrowParens": "always",
-	"bracketSameLine": true,
-	"semi": true,
-	"tabWidth": 4,
-	"useTabs": true
-}
