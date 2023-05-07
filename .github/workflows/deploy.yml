@@ -1,0 +1,83 @@
+name: Build and Deploy to GKE
+
+on:
+  push:
+    branches:
+      - feature/18
+    paths:
+      - 'apps/back/**'
+
+env:
+  PROJECT_ID: ${{ secrets.GKE_PROJECT }}
+  GAR_LOCATION: europe-west9
+  GKE_CLUSTER: repair-now
+  GKE_ZONE: europe-west9
+  IMAGE: production
+
+jobs:
+  setup-build-publish-deploy:
+    name: Setup, Build, Publish, and Deploy
+    runs-on: ubuntu-latest
+    environment: production
+
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - id: 'auth'
+      uses: 'google-github-actions/auth@v1'
+      with:
+        token_format: 'access_token'
+        credentials_json: '${{ secrets.GKE_SA_KEY }}'
+
+    - name: Docker configuration
+      run: |-
+        echo ${{steps.auth.outputs.access_token}} | docker login -u oauth2accesstoken --password-stdin https://$GAR_LOCATION-docker.pkg.dev
+
+    - name: Set up GKE credentials
+      uses: google-github-actions/get-gke-credentials@v1
+      with:
+        cluster_name: ${{ env.GKE_CLUSTER }}
+        location: ${{ env.GKE_ZONE }}
+
+    - name: Build API Gateway
+      run: |-
+        docker build \
+          -f ./apps/back/api-gateway/Dockerfile \
+          --tag "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/api-gateway/$IMAGE:$GITHUB_SHA" \
+          --build-arg GITHUB_SHA="$GITHUB_SHA" \
+          --build-arg GITHUB_REF="$GITHUB_REF" \
+          .
+    - name: Publish API Gateway
+      run: |-
+        docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/api-gateway/$IMAGE:$GITHUB_SHA"
+    
+    - name: Build Auth
+      run: |-
+        docker build \
+          -f ./apps/back/auth/Dockerfile \
+          --tag "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/auth/$IMAGE:$GITHUB_SHA" \
+          --build-arg GITHUB_SHA="$GITHUB_SHA" \
+          --build-arg GITHUB_REF="$GITHUB_REF" \
+          .
+    - name: Publish Auth
+      run: |-
+        docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/auth/$IMAGE:$GITHUB_SHA"
+
+    - name: Helm upgrade release
+      run: |
+        helm upgrade --install repair-now ./k8s/repair-now --set GITHUB_SHA=$GITHUB_SHA
+
+    - name: Deploy API Gateway to GKE
+      run: |
+        kubectl set image deployment/api-gateway api-gateway="$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/api-gateway/$IMAGE:$GITHUB_SHA"
+        kubectl rollout restart deployment/api-gateway
+      
+    - name: Deploy Auth to GKE
+      run: |
+        kubectl set image deployment/auth auth="$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/auth/$IMAGE:$GITHUB_SHA"
+        kubectl rollout restart deployment/auth

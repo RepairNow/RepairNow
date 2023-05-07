@@ -12,22 +12,24 @@
         "build": "tsup",
         "clean": "rimraf .turbo node_modules dist",
         "db:migrate:deploy": "prisma migrate deploy",
-        "db:migrate:dev": "prisma migrate dev",
-        "db:push": "prisma db push",
+        "db:migrate:dev": "dotenv -e ./env/dev.env prisma migrate dev",
+        "db:push:dev": "dotenv -e ./env/dev.env -- prisma db push",
+        "db:push:prod": "dotenv -e ./env/prod.env -- prisma db push",
         "db:seed": "tsx src/seed.ts",
-        "dev": "tsup --watch",
+        "dev": "dotenv -e ./env/dev.env tsup --watch",
         "format": "prisma format",
-        "generate": "prisma generate",
+        "generate": "dotenv -e ./env/dev.env prisma generate",
         "lint": "eslint ./src --fix",
         "prebuild": "npm run generate",
         "predev": "npm run generate",
-        "studio": "prisma studio"
+        "studio": "dotenv -e ./env/dev.env prisma studio"
     },
     "dependencies": {
         "@prisma/client": "^4.13.0",
         "class-transformer": "^0.5.1",
         "cache-manager": "^5.2.1",
-        "class-validator": "^0.14.0"
+        "class-validator": "^0.14.0",
+        "dotenv-cli": "^7.2.1"
     },
     "devDependencies": {
         "config": "*",

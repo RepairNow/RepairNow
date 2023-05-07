@@ -43,6 +43,7 @@ WORKDIR /app
 RUN addgroup --system --gid 1001 expressjs
 RUN adduser --system --uid 1001 expressjs
 USER expressjs
+
 COPY --from=installer /app .
 
-CMD node apps/api-gateway/dist/index.js
+CMD ["yarn", "workspace", "api-gateway", "start:prod"]

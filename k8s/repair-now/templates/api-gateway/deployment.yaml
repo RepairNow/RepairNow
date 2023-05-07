@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: api-gateway
+  name: api-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api-gateway
+  template:
+    metadata:
+      labels:
+        app: api-gateway
+    spec:
+      containers:
+      - image: europe-west9-docker.pkg.dev/repair-now-386112/api-gateway/production:{{ .Values.GITHUB_SHA }}
+        name: api-gateway
+        env:
+        - name: API_GATEWAY_PORT
+          value: '3000'
+        - name: AUTH_HOST
+          value: auth-svc
+        - name: AUTH_PORT
+          value: '3001'
+        ports:
+        - containerPort: 3000
+      

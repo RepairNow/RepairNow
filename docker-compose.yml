@@ -19,7 +19,7 @@ services:
       dockerfile: ./apps/back/api-gateway/Dockerfile
     restart: always
     ports:
-      - 9000:9000
+      - 3000:3000
     networks:
       - app_network
 
@@ -29,28 +29,6 @@ services:
       context: .
       dockerfile: ./apps/back/auth/Dockerfile
     restart: always
-    networks:
-      - app_network
-
-  postgres:
-    container_name: postgres
-    image: postgres
-    restart: always
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: repair-now
-    networks:
-      - app_network
-    ports:
-      - 5432:5432
-
-  adminer:
-    container_name: adminer
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
     networks:
       - app_network
 

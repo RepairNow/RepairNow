@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: auth
+  name: auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth
+  template:
+    metadata:
+      labels:
+        app: auth
+    spec:
+      containers:
+      - image: europe-west9-docker.pkg.dev/repair-now-386112/auth/production
+        name: auth
+        env:
+        - name: AUTH_PORT
+          value: '3001'
+        - name: AUTH_HOST
+          value: auth-svc
+        - name: DATABASE_URL
+          value: postgres://hlbssyah:VaVO-BYiSuFj2JU7LUUzWxNaF6hcx0wT@horton.db.elephantsql.com/hlbssyah
+        ports:
+        - containerPort: 3001

@@ -28,15 +28,15 @@ Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
 ### Run project - DEV
 <br>
-To run all projects in DEV environment:
+To run all projects in DEV environment (local without docker) :
 <br><br>
 
-At the root of the repo :
+At the root of the repo ... :
 <br><br>
 
-1 - Launch postgres database (docker container):
+1 - Launch local postgres database (docker container):
 ```
-docker compose up -f docker-compose-bdd.yml
+docker compose -f docker-compose-bdd.yml up -d
 ```
 
 2 - Install dependencies in all projects  
@@ -44,11 +44,16 @@ docker compose up -f docker-compose-bdd.yml
 yarn install
 ```
 
-2 - Launch all projects  
+3 - Update BDD
+```
+yarn workspace prisma-pg db:push:dev
+```
+
+4 - Launch all projects
 ```
 yarn run dev
 ```
-<!-- ### Docker - PROD
+### Docker - PROD
 
 This repo is configured to be built with Docker, and Docker compose. To build all apps in this repo:
 
