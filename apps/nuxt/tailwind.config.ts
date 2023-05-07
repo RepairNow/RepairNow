@@ -10,7 +10,18 @@ export default <Partial<Config>>{
     "./app.vue",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        'primary': '#4D908E',
+        'primary-darken-1': '#577590',
+        'secondary': '#F8961E',
+        'secondary-darken-1': '#F9844A'
+      },
+      fontFamily: {
+        sans: ['Noto Sans', 'sans-serif'],
+        serif: ['Merriweather', 'serif'],
+      }
+    },
   },
   plugins: [],
 }
