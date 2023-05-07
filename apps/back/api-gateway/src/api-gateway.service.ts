@@ -3,7 +3,7 @@ import { ClientProxy } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
 
 @Injectable()
-export class AppService {
+export class ApiGatewayService {
   constructor(
     @Inject('AUTH_SERVICE') private authClient: ClientProxy,
   ) { }

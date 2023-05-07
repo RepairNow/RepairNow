@@ -32,28 +32,6 @@ services:
     networks:
       - app_network
 
-  postgres:
-    container_name: postgres
-    image: postgres
-    restart: always
-    environment:
-      POSTGRES_USER: user
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: repair-now
-    networks:
-      - app_network
-    ports:
-      - 5432:5432
-
-  adminer:
-    container_name: adminer
-    image: adminer
-    restart: always
-    ports:
-      - 8080:8080
-    networks:
-      - app_network
-
 # Define a network, which allows containers to communicate
 # with each other, by using their container name as a hostname
 networks:

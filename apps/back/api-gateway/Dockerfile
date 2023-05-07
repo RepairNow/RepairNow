@@ -40,9 +40,9 @@ FROM node:alpine AS runner
 WORKDIR /app
 
 # Don't run production as root
-RUN addgroup --system --gid 1001 expressjs
-RUN adduser --system --uid 1001 expressjs
-USER expressjs
+RUN addgroup --system --gid 1001 nestjs
+RUN adduser --system --uid 1001 nestjs
+USER nestjs
 COPY --from=installer /app .
 
-CMD node apps/api-gateway/dist/index.js
+CMD ["yarn", "workspace", "api-gateway", "start:prod"]
