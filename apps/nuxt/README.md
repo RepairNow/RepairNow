@@ -35,3 +35,15 @@ yarn preview
 ```
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+
+## Testing
+
+```bash
+yarn test
+```
+
+To get the coverage of the application
+
+```bash
+yarn coverage
+```

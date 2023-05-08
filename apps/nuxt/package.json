@@ -2,6 +2,8 @@
   "name": "nuxt-app",
   "private": true,
   "scripts": {
+    "test": "vitest",
+    "coverage": "vitest run --coverage",
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",

@@ -33,7 +33,9 @@
     "tailwindcss": "^3.3.2",
     "eslint-config-custom": "*",
     "prettier": "latest",
-    "turbo": "latest"
+    "turbo": "latest",
+    "vitest": "0.31.0",
+    "@nuxt/test-utils": "^3.4.3"
   },
   "packageManager": "yarn@1.22.19",
   "engines": {
