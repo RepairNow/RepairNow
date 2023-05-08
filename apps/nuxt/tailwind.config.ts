@@ -20,8 +20,9 @@ export default <Partial<Config>>{
       fontFamily: {
         sans: ['Noto Sans', 'sans-serif'],
         serif: ['Merriweather', 'serif'],
-      }
+      },
     },
   },
+  important: true,
   plugins: [],
 }
