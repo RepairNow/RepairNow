@@ -1,13 +1,11 @@
-import type { Config } from 'tailwindcss'
-export default <Partial<Config>>{
+// import type { Config } from 'tailwindcss'
+/** @type {import('tailwindcss').Config} */
+
+export default {
   prefix: 'tw-',
   content: [
-    "./components/**/*.{js,vue,ts}",
-    "./layouts/**/*.vue",
-    "./pages/**/*.vue",
-    "./plugins/**/*.{js,ts}",
-    "./nuxt.config.{js,ts}",
-    "./app.vue",
+    "./src/**/*.{vue,js,ts,jsx,tsx}",
+    "./index.html",
   ],
   theme: {
     extend: {
@@ -23,5 +21,6 @@ export default <Partial<Config>>{
       }
     },
   },
+  important: true,
   plugins: [],
 }
