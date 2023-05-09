@@ -28,7 +28,7 @@
     "@nestjs/platform-express": "^9.0.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
-    "prisma-pg": "*"
+    "@repairnow/prisma-pg": "*"
   },
   "devDependencies": {
     "@nestjs/cli": "^9.0.0",

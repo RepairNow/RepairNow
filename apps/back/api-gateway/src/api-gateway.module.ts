@@ -8,7 +8,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: `${process.cwd()}/env/${process.env.NODE_ENV}.env`
+      envFilePath: `${process.cwd()}/env/${process.env.NODE_ENV}.env`,
     }),
     ClientsModule.registerAsync([
       {
@@ -17,14 +17,14 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
           transport: Transport.TCP,
           options: {
             host: configService.get('AUTH_HOST'),
-            port: configService.get('AUTH_PORT')
+            port: configService.get('AUTH_PORT'),
           },
         }),
-        inject: [ConfigService]
-      }
-    ])
+        inject: [ConfigService],
+      },
+    ]),
   ],
   controllers: [ApiGatewayController],
   providers: [ApiGatewayService],
 })
-export class ApiGatewayModule { }
+export class ApiGatewayModule {}

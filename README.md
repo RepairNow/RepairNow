@@ -2,8 +2,6 @@
 
 This repository is based on an official Docker starter Turborepo.
 
-Changed NextJS front app by the vueJS app provided by Antoine Pollet config
-
 ## What's inside?
 
 This turborepo uses [Yarn](https://classic.yarnpkg.com/lang/en/) as a package manager. It includes the following packages/apps:
@@ -12,7 +10,7 @@ This turborepo uses [Yarn](https://classic.yarnpkg.com/lang/en/) as a package ma
 
 #### APPS
 
-- `front`: a vueJS app boiler plate created by Antoine
+- `front`: a vueJS app configured with vite (use vitest for tests, tailwind, typescript, pinia etc.)
 - `back/api-gateway`: API Gateway (Nest.js)
 - `back/auth`: Auth microservice (Nest.js)
 
@@ -26,33 +24,34 @@ This turborepo uses [Yarn](https://classic.yarnpkg.com/lang/en/) as a package ma
 
 Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
 
-### Run project - DEV
-<br>
+## Run project - DEV
+
 To run all projects in DEV environment:
-<br><br>
 
-At the root of the repo :
-<br><br>
+1 - **!!At the root of the repo!!** Install dependencies for all apps/packages
 
-1 - Launch local postgres database (docker container):
-```
-docker compose -f docker-compose-bdd.yml up -d
-```
-
-2 - Install dependencies in all projects  
 ```
 yarn install
 ```
 
+2 - Launch local postgres database (docker container):
+
+```
+docker compose -f docker-compose-bdd.yml up -d
+```
+
 3 - Update BDD
+
 ```
 yarn workspace prisma-pg db:push:dev
 ```
 
 4 - Launch all projects
+
 ```
 yarn run dev
 ```
+
 ### Docker - PROD
 
 This repo is configured to be built with Docker, and Docker compose. To build all apps in this repo:
