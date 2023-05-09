@@ -1,12 +1,15 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { ApiGatewayController } from './api-gateway.controller';
+import { ApiGatewayService } from './api-gateway.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: `${process.cwd()}/env/${process.env.NODE_ENV}.env`,
+    }),
     ClientsModule.registerAsync([
       {
         name: 'AUTH_SERVICE',
@@ -14,14 +17,14 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
           transport: Transport.TCP,
           options: {
             host: configService.get('AUTH_HOST'),
-            port: configService.get('AUTH_PORT')
+            port: configService.get('AUTH_PORT'),
           },
         }),
-        inject: [ConfigService]
-      }
-    ])
+        inject: [ConfigService],
+      },
+    ]),
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [ApiGatewayController],
+  providers: [ApiGatewayService],
 })
-export class AppModule { }
+export class ApiGatewayModule {}

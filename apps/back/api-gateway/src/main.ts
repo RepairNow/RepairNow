@@ -1,10 +1,12 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { ApiGatewayModule } from './api-gateway.module';
 import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(ApiGatewayModule);
   const configService = app.get(ConfigService);
-  await app.listen(configService.get('API_GATEWAY_PORT'));
+  await app.listen(configService.get('API_GATEWAY_PORT'), function () {
+    console.log('ApiGateway is listening on port ' + configService.get('API_GATEWAY_PORT'));
+  });
 }
 bootstrap();
