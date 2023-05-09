@@ -16,7 +16,8 @@
 		"vuetify": "^3.2.2",
 		"vitest": "^0.31.0",
 		"vue-i18n": "^9.2.2",
-		"vue-router": "^4.1.6"
+		"vue-router": "^4.1.6",
+		"@repairnow/tracker": "*"
 	},
 	"devDependencies": {
 		"@types/node": "^18",

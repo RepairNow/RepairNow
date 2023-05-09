@@ -5,7 +5,11 @@
 			<!-- <v-system-bar color="deep-purple darken-3"></v-system-bar> -->
 
 			<v-app-bar color="background">
-				<v-btn variant="text" icon="mdi-home" color="lightBlack">
+				<v-btn
+					variant="text"
+					icon="mdi-home"
+					color="lightBlack"
+					v-tracker="'IMG-LOGO'">
 					<router-link to="/">
 						<v-img
 							src="repairnow-logo-xs.svg"
