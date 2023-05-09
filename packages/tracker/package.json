@@ -1,0 +1,11 @@
+{
+  "name": "@repairnow/tracker",
+  "version": "0.0.0",
+  "description": "Tracker for Repair Now",
+  "author": "Repair Now",
+  "dependencies": {
+    "ua-parser-js": "^1.0.35"
+  },
+  "main": "src/index.ts",
+  "types": "src/index.ts"
+}
