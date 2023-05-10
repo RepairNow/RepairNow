@@ -9,8 +9,8 @@
   ],
   "scripts": {
     "build": "turbo run build",
-    "clean": "turbo run clean",
-    "dev": "turbo run dev",
+    "clean": "turbo run clean && rm -rf node_modules",
+    "dev": "turbo run dev --concurrency=11",
     "dev:back": "turbo run dev --filter=./apps/back/*",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "lint": "turbo run lint",
