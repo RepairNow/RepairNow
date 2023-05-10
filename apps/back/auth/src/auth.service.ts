@@ -3,7 +3,7 @@ import { PrismaService } from '@repairnow/prisma-pg';
 
 @Injectable()
 export class AuthService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(private prismaService: PrismaService) { }
 
   getHello(): string {
     return 'Hello World from auth service!';

@@ -14,4 +14,4 @@ import { PrismaService } from '@repairnow/prisma-pg';
   controllers: [AuthController],
   providers: [AuthService, PrismaService],
 })
-export class AuthModule {}
+export class AuthModule { }

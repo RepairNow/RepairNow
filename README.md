@@ -30,6 +30,7 @@ To run all projects in DEV environment:
 
 1 - **!!At the root of the repo!!** Install dependencies for all apps/packages
 
+1 - Launch local postgres database (docker container):
 ```
 yarn install
 ```
