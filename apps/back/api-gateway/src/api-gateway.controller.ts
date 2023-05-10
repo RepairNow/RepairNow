@@ -18,7 +18,7 @@ export class ApiGatewayController {
   }
 
   @Get("users")
-  getHelloTwo(): string {
+  getHelloTwo(): any {
     return this.apiGatewayService.getUsers();
   }
 
