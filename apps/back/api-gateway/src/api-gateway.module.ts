@@ -44,4 +44,4 @@ import { JwtModule } from '@nestjs/jwt';
     },
   ],
 })
-export class ApiGatewayModule { }
+export class ApiGatewayModule {}

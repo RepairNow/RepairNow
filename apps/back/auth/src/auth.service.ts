@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, HttpException, HttpStatus } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { SignWithEmailDto } from '@repairnow/dto';
 import { PrismaService, User } from '@repairnow/prisma';
@@ -8,7 +8,7 @@ export class AuthService {
   constructor(
     private prismaService: PrismaService,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   async isUserExist(email: SignWithEmailDto['email']): Promise<boolean> {
     const user = await this.prismaService.user.findUnique({
@@ -48,12 +48,23 @@ export class AuthService {
   }
 
   async signUpEmail(email: string, password: string): Promise<User> {
-    return await this.prismaService.user.create({
-      data: {
+    const user = await this.prismaService.user.findUnique({
+      where: {
         email,
-        password,
       },
     });
+    if (user) {
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+    }
+    if (!user) {
+      const newUser = await this.prismaService.user.create({
+        data: {
+          email,
+          password,
+        },
+      });
+      return newUser;
+    }
   }
 
   getHello(): string {

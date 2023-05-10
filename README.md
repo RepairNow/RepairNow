@@ -86,6 +86,7 @@ To shutdown all running containers:
 ```
 # Stop all running containers
 docker kill $(docker ps -q) && docker rm $(docker ps -a -q) -->
+
 ```
 
 ### Remote Caching
@@ -104,3 +105,4 @@ This Turborepo has some additional tools already setup for you:
 - [ESLint](https://eslint.org/) for code linting
 - [Jest](https://jestjs.io) test runner for all things JavaScript
 - [Prettier](https://prettier.io) for code formatting
+```
