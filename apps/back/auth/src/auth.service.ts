@@ -6,7 +6,7 @@ export class AuthService {
   constructor(private prismaService: PrismaService) {}
 
   getHello(): string {
-    return 'Hello World!';
+    return 'Hello World from auth service!';
   }
 
   getUsers() {

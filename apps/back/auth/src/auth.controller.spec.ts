@@ -8,15 +8,25 @@ describe('AuthController', () => {
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
       controllers: [AuthController],
-      providers: [AuthService],
+      providers: [
+        {
+          provide: AuthService,
+          useValue: {
+            getHello: jest
+              .fn()
+              .mockReturnValue('Hello World from auth service!'),
+            getUsers: jest.fn(),
+          },
+        },
+      ],
     }).compile();
 
     authController = app.get<AuthController>(AuthController);
   });
 
   describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(authController.getHello()).toBe('Hello World!');
+    it('should return "Hello World from auth service!"', () => {
+      expect(authController.getHello()).toBe('Hello World from auth service!');
     });
   });
 });
