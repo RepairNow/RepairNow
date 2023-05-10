@@ -27,4 +27,4 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
   controllers: [ApiGatewayController],
   providers: [ApiGatewayService],
 })
-export class ApiGatewayModule { }
+export class ApiGatewayModule {}

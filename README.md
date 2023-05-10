@@ -31,6 +31,7 @@ To run all projects in DEV environment:
 1 - **!!At the root of the repo!!** Install dependencies for all apps/packages
 
 1 - Launch local postgres database (docker container):
+
 ```
 yarn install
 ```
@@ -41,7 +42,7 @@ yarn install
 docker compose -f docker-compose-bdd.yml up -d
 ```
 
-3 - Update BDD
+3 - Update BDD (init Tables)
 
 ```
 yarn workspace @repairnow/prisma-pg db:push:dev
@@ -51,6 +52,12 @@ yarn workspace @repairnow/prisma-pg db:push:dev
 
 ```
 yarn run dev
+```
+
+5 - (Optionnal) Observe Tables with Prisma studio (adminer like)
+
+```
+yarn workspace @repairnow/prisma-pg studio
 ```
 
 ### Docker - PROD
