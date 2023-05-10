@@ -15,7 +15,7 @@ spec:
         app: auth
     spec:
       containers:
-      - image: europe-west9-docker.pkg.dev/repair-now-386112/auth/production
+      - image: europe-west9-docker.pkg.dev/repair-now-386112/auth/production:{{ .Values.GITHUB_SHA }}
         name: auth
         env:
         - name: AUTH_PORT

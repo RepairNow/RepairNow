@@ -5,7 +5,7 @@ import { ApiGatewayService } from './api-gateway.service';
 export class ApiGatewayController {
   constructor(private readonly apiGatewayService: ApiGatewayService) { }
 
-  // create a route health check
+  // Needed for k8s - Don't touch !!!
   @Get()
   health() {
     return true;
@@ -15,6 +15,11 @@ export class ApiGatewayController {
   getHello(): string {
     console.log("getHello");
     return this.apiGatewayService.getHello();
+  }
+
+  @Get("users")
+  getHelloTwo(): string {
+    return this.apiGatewayService.getUsers();
   }
 
   @Get('auth')

@@ -44,6 +44,6 @@ RUN addgroup --system --gid 1001 nestjs
 RUN adduser --system --uid 1001 nestjs
 USER nestjs
 COPY --from=installer /app .
-RUN yarn workspace prisma-pg db:push:prod
+RUN yarn workspace @repairnow/prisma-pg db:push:prod
 
 CMD ["yarn", "workspace", "auth", "start:prod"]

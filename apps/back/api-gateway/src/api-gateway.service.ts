@@ -9,6 +9,11 @@ export class ApiGatewayService {
   callAuth(): Observable<string> {
     return this.authClient.send({ cmd: 'call_auth' }, {});
   }
+
+  getUsers(): Observable<any> {
+    return this.authClient.send({ cmd: 'get_users' }, {});
+  }
+
   getHello(): string {
     return 'Bonjour !';
   }

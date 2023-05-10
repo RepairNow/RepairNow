@@ -13,6 +13,11 @@ export class AuthController {
 
   @MessagePattern({ cmd: 'call_auth' })
   callAuth(): any {
+    return 'Auth called';
+  }
+
+  @MessagePattern({ cmd: 'get_users' })
+  getUsers(): any {
     return this.authService.getUsers();
   }
 }
