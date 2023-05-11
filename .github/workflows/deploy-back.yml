@@ -60,6 +60,8 @@ jobs:
     
     - name: Build Auth
       run: |-
+        export DATABASE_URL=${{ env.DATABASE_URL }}
+        echo $DATABASE_URL
         docker build \
           -f ./apps/back/auth/Dockerfile \
           --tag "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/auth/$IMAGE:$GITHUB_SHA" \
