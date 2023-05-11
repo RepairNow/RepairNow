@@ -59,8 +59,9 @@ jobs:
     #     docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/api-gateway/$IMAGE:$GITHUB_SHA"
     
     - name: Build Auth
+      env:
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
       run: |-
-        export DATABASE_URL=${{ env.DATABASE_URL }}
         echo $DATABASE_URL
         docker build \
           -f ./apps/back/auth/Dockerfile \
