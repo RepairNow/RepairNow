@@ -8,6 +8,8 @@ import { Observable, map } from 'rxjs';
 
 @Injectable()
 export class StatusInterceptor implements NestInterceptor {
+  // this interceptor is usefull to modify the response status of the api-gateway
+  // exemple: if the auth service return a 401 status, the api-gateway will return a 401 status too (not a 201 status for exemple)
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
     return next.handle().pipe(
       map((response) => {

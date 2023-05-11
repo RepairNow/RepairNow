@@ -4,7 +4,7 @@ import {
   CreateUserDto,
   UpdatePasswordDto,
   UpdateUserDto,
-} from './users.user.dto';
+} from './dto/user.dto';
 import { compare, hash } from 'bcrypt';
 
 // utilisation de https://blog.bitsrc.io/jwt-authentication-with-nestjs-4f587c5dd649

@@ -1,4 +1,4 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsEmail, IsString } from 'class-validator';
 
 enum ERole {
   ADMIN = 'ADMIN',
@@ -16,9 +16,11 @@ export class LoginUserDto {
 
 export class CreateUserDto {
   @IsNotEmpty()
+  @IsEmail()
   email: string;
 
   @IsNotEmpty()
+  @IsString()
   password: string;
 
   avatar: string;
