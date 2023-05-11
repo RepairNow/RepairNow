@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { Injectable, UnauthorizedException, HttpException, HttpStatus } from '@nestjs/common';
+=======
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+>>>>>>> 992847a (fix signup and signin and use class-validation for types)
 import { JwtService } from '@nestjs/jwt';
 import { SignWithEmailDto } from '@repairnow/dto';
 import { PrismaService, User } from '@repairnow/prisma';
@@ -48,23 +52,12 @@ export class AuthService {
   }
 
   async signUpEmail(email: string, password: string): Promise<User> {
-    const user = await this.prismaService.user.findUnique({
-      where: {
+    return await this.prismaService.user.create({
+      data: {
         email,
+        password,
       },
     });
-    if (user) {
-      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
-    }
-    if (!user) {
-      const newUser = await this.prismaService.user.create({
-        data: {
-          email,
-          password,
-        },
-      });
-      return newUser;
-    }
   }
 
   getHello(): string {
