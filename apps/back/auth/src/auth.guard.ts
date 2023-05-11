@@ -14,6 +14,7 @@ export class AuthGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<boolean> {
     // TODO: Find why request = {} and not the request object
     const request = context.switchToHttp().getRequest<Request>();
+    console.log('%cauth.guard.ts line:17 request', 'color: #007acc;', request);
 
     const token = this.extractTokenFromHeader(request);
     if (!token) {

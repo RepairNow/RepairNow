@@ -14,6 +14,7 @@ import { MessagePattern } from '@nestjs/microservices';
 import { AuthGuard } from './auth.guard';
 import { SignWithEmailDto } from './dto/sign-with-email.dto';
 import { RpcValidationFilter } from './filters/rpc-validation.filter';
+// import { Public } from './auth.module';
 
 @Controller()
 export class AuthController {
@@ -54,6 +55,7 @@ export class AuthController {
   }
 
   @UseGuards(AuthGuard)
+  @UseFilters(new RpcValidationFilter())
   @MessagePattern({ cmd: 'get_profile' })
   getProfile(@Request() req) {
     return req.user;
