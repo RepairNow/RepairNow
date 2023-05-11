@@ -6,6 +6,7 @@ import {
   HttpException,
   HttpStatus,
   Request,
+  UseFilters,
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
@@ -13,6 +14,7 @@ import { AuthService } from './auth.service';
 import { MessagePattern } from '@nestjs/microservices';
 import { AuthGuard } from './auth.guard';
 import { SignWithEmailDto } from './dto/sign-with-email.dto';
+import { RpcValidationFilter } from './filters/rpc-validation.filter';
 
 @Controller()
 export class AuthController {
@@ -33,12 +35,13 @@ export class AuthController {
     return this.authService.getUsers();
   }
 
-  @HttpCode(HttpStatus.OK)
+  @UseFilters(new RpcValidationFilter())
   @MessagePattern({ cmd: 'sign_in_email' })
-  signIn(@Body() params: SignWithEmailDto) {
+  signIn(@Body(ValidationPipe) params: SignWithEmailDto) {
     return this.authService.signInEmail(params.email, params.password);
   }
 
+  @UseFilters(new RpcValidationFilter())
   @MessagePattern({ cmd: 'sign_up_email' })
   async signUp(
     @Body(ValidationPipe)

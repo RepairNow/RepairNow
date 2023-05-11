@@ -1,6 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService, User } from '@repairnow/prisma-pg';
+import { SignWithEmailDto } from './dto/sign-with-email.dto';
 
 @Injectable()
 export class AuthService {
@@ -9,7 +10,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async isUserExist(email: string): Promise<boolean> {
+  async isUserExist(email: SignWithEmailDto['email']): Promise<boolean> {
     const user = await this.prismaService.user.findUnique({
       where: {
         email,
