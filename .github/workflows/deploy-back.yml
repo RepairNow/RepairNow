@@ -56,10 +56,14 @@ jobs:
     # - name: Publish API Gateway
     #   run: |-
     #     docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/api-gateway/$IMAGE:$GITHUB_SHA"
+    - name: Replace .env with secret
+      uses: actions/github-script@v4
+      with:
+        script: |
+          const fs = require('fs');
+          fs.writeFileSync('./package/prisma-pg/.env', 'DATABASE_URL=${{ secrets.DATABASE_URL }}');
     
     - name: Build Auth
-      env:
-        DATABASE_URL: ${{ secrets.DATABASE_URL }}
       run: |-
         docker build \
           -f ./apps/back/auth/Dockerfile \
