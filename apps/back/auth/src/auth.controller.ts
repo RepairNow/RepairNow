@@ -58,6 +58,7 @@ export class AuthController {
   }
 
   @UseGuards(AuthGuard)
+  @UseFilters(new RpcValidationFilter())
   @MessagePattern({ cmd: 'get_profile' })
   getProfile(@Request() req) {
     return req.user;
