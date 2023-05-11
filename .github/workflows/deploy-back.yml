@@ -3,16 +3,17 @@ name: Build and Deploy to GKE
 on:
   push:
     branches:
-      - main
+      - feature/config
     paths:
       - 'apps/back/**'
 
 env:
-  PROJECT_ID: ${{ secrets.GKE_PROJECT }}
+  PROJECT_ID: ${{ secrets.GCLOUD_PROJECT_ID }}
   GAR_LOCATION: europe-west9
   GKE_CLUSTER: repair-now
   GKE_ZONE: europe-west9
   IMAGE: production
+  DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
 jobs:
   setup-build-publish-deploy:
@@ -70,4 +71,6 @@ jobs:
 
     - name: Helm upgrade release
       run: |
-        helm upgrade --install repair-now ./k8s/repair-now --set GITHUB_SHA=$GITHUB_SHA
+        helm upgrade --install repair-now ./k8s/repair-now \
+        --set GITHUB_SHA=$GITHUB_SHA \
+        --set DATABASE_URL="$DATABASE_URL"

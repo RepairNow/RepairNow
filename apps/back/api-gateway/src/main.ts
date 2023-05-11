@@ -6,6 +6,7 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(ApiGatewayModule);
   const configService = app.get(ConfigService);
+  const port = configService.get('API_GATEWAY_PORT') || 3000;
 
   // swagger part
   const swaggerConfig = new DocumentBuilder()
@@ -23,7 +24,7 @@ async function bootstrap() {
     function () {
       console.log(
         'Hey ya ya ya ! ApiGateway is listening on port ' +
-          configService.get('API_GATEWAY_PORT'),
+        configService.get('API_GATEWAY_PORT'),
       );
     },
   );
