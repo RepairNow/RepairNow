@@ -6,6 +6,7 @@ on:
       - feature/config
     paths:
       - 'apps/back/**'
+      - '.github/workflows/**'
 
 env:
   PROJECT_ID: ${{ secrets.GCLOUD_PROJECT_ID }}
