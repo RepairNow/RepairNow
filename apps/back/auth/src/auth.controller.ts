@@ -3,13 +3,16 @@ import {
   Controller,
   Get,
   HttpCode,
+  HttpException,
   HttpStatus,
   Request,
   UseGuards,
+  ValidationPipe,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { MessagePattern } from '@nestjs/microservices';
 import { AuthGuard } from './auth.guard';
+import { SignWithEmailDto } from './dto/sign-with-email.dto';
 
 @Controller()
 export class AuthController {
@@ -32,20 +35,20 @@ export class AuthController {
 
   @HttpCode(HttpStatus.OK)
   @MessagePattern({ cmd: 'sign_in_email' })
-  signIn(@Body() signInDto: { email: string; password: string }) {
-    return this.authService.signInEmail(signInDto.email, signInDto.password);
+  signIn(@Body() params: SignWithEmailDto) {
+    return this.authService.signInEmail(params.email, params.password);
   }
 
-  @HttpCode(HttpStatus.CREATED)
   @MessagePattern({ cmd: 'sign_up_email' })
-  signUp(
-    @Body()
-    signInDto: {
-      email: string;
-      password: string;
-    },
+  async signUp(
+    @Body(ValidationPipe)
+    params: SignWithEmailDto,
   ) {
-    return this.authService.signUpEmail(signInDto.email, signInDto.password);
+    const isUserExist = await this.authService.isUserExist(params.email);
+    if (isUserExist) {
+      return new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+    }
+    return this.authService.signUpEmail(params.email, params.password);
   }
 
   @UseGuards(AuthGuard)

@@ -1,9 +1,4 @@
-import {
-  HttpException,
-  HttpStatus,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService, User } from '@repairnow/prisma-pg';
 
@@ -13,6 +8,15 @@ export class AuthService {
     private prismaService: PrismaService,
     private jwtService: JwtService,
   ) {}
+
+  async isUserExist(email: string): Promise<boolean> {
+    const user = await this.prismaService.user.findUnique({
+      where: {
+        email,
+      },
+    });
+    return !!user;
+  }
 
   async signInEmail(
     email: string,
@@ -42,23 +46,12 @@ export class AuthService {
   }
 
   async signUpEmail(email: string, password: string): Promise<User> {
-    const user = await this.prismaService.user.findUnique({
-      where: {
+    return await this.prismaService.user.create({
+      data: {
         email,
+        password,
       },
     });
-    if (user) {
-      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
-    }
-    if (!user) {
-      const newUser = await this.prismaService.user.create({
-        data: {
-          email,
-          password,
-        },
-      });
-      return newUser;
-    }
   }
 
   getHello(): string {
