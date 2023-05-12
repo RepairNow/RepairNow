@@ -10,7 +10,7 @@ import { compare, hash } from 'bcrypt';
 // utilisation de https://blog.bitsrc.io/jwt-authentication-with-nestjs-4f587c5dd649
 @Injectable()
 export class UsersService {
-  constructor(private prismaService: PrismaService) { }
+  constructor(private prismaService: PrismaService) {}
 
   async createUser(userDto: CreateUserDto): Promise<User> {
     // check if the user exists in the db
@@ -35,7 +35,7 @@ export class UsersService {
     return this.prismaService.user.findMany();
   }
 
-  async getUserById(id: number): Promise<any> {
+  async getUserById(id: string): Promise<any> {
     return this.prismaService.user.findUnique({
       where: {
         id,
@@ -43,7 +43,7 @@ export class UsersService {
     });
   }
 
-  async updateUser(payload: UpdateUserDto, id: number): Promise<any> {
+  async updateUser(payload: UpdateUserDto, id: string): Promise<any> {
     return this.prismaService.user.update({
       where: {
         id,
@@ -54,7 +54,7 @@ export class UsersService {
     });
   }
 
-  async deleteUser(id: number): Promise<any> {
+  async deleteUser(id: string): Promise<any> {
     return this.prismaService.user.delete({
       where: {
         id,
@@ -62,7 +62,7 @@ export class UsersService {
     });
   }
 
-  async updatePassword(payload: UpdatePasswordDto, id: number): Promise<User> {
+  async updatePassword(payload: UpdatePasswordDto, id: string): Promise<User> {
     const user = await this.prismaService.user.findUnique({
       where: { id },
     });
