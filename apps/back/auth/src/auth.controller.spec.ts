@@ -1,6 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
+import { JwtService } from '@nestjs/jwt';
+import { PrismaService } from '@repairnow/prisma-pg';
 
 describe('AuthController', () => {
   let authController: AuthController;
@@ -9,15 +11,19 @@ describe('AuthController', () => {
     const app: TestingModule = await Test.createTestingModule({
       controllers: [AuthController],
       providers: [
-        {
-          provide: AuthService,
-          useValue: {
-            getHello: jest
-              .fn()
-              .mockReturnValue('Hello World from auth service!'),
-            getUsers: jest.fn(),
-          },
-        },
+        // {
+        // Example of how we can mock a service (do not remove pls)
+        //   provide: AuthService,
+        //   useValue: {
+        //     getHello: jest
+        //       .fn()
+        //       .mockReturnValue('Hello World from auth service!'),
+        //     getUsers: jest.fn(),
+        //   },
+        // },
+        PrismaService,
+        AuthService,
+        JwtService,
       ],
     }).compile();
 
