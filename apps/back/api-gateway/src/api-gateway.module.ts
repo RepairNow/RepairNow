@@ -3,6 +3,8 @@ import { ApiGatewayController } from './api-gateway.controller';
 import { ApiGatewayService } from './api-gateway.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { StatusInterceptor } from './interceptors/status.interceptor';
 
 @Module({
   imports: [
@@ -25,6 +27,13 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     ]),
   ],
   controllers: [ApiGatewayController],
-  providers: [ApiGatewayService],
+  providers: [
+    ApiGatewayService,
+    // list of global interceptors, not needed if you use the interceptor only in one controller
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: StatusInterceptor,
+    },
+  ],
 })
-export class ApiGatewayModule { }
+export class ApiGatewayModule {}
