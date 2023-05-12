@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
+import { SignWithEmailDto } from '@repairnow/dto';
 import { PrismaService, User } from '@repairnow/prisma';
-import { SignWithEmailDto } from './dto/sign-with-email.dto';
 
 @Injectable()
 export class AuthService {

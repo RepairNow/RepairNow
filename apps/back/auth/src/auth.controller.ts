@@ -10,13 +10,13 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { MessagePattern } from '@nestjs/microservices';
-import { SignWithEmailDto } from './dto/sign-with-email.dto';
 import { RpcValidationFilter } from './filters/rpc-validation.filter';
 // import { Public } from './auth.module';
+import { SignWithEmailDto } from '@repairnow/dto';
 
 @Controller()
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @Get()
   getHello(): string {

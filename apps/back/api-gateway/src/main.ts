@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { ApiGatewayModule } from './api-gateway.module';
 import { ConfigService } from '@nestjs/config';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { DocumentBuilder, SwaggerModule } from '@repairnow/dto';
 
 async function bootstrap() {
   const app = await NestFactory.create(ApiGatewayModule);
@@ -13,6 +13,7 @@ async function bootstrap() {
     .setTitle('Repair Now API Doc')
     .setDescription('The Repair Now API documentation')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api', app, document);
