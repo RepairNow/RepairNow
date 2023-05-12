@@ -14,7 +14,7 @@ async function bootstrap() {
     transport: Transport.TCP,
     options: {
       host: '0.0.0.0',
-      port: configService.get('AUTH_PORT'),
+      port: configService.get('AUTH_PORT') || 3001,
     },
   });
   await app.startAllMicroservices();

@@ -18,8 +18,8 @@ import { StatusInterceptor } from './interceptors/status.interceptor';
         useFactory: (configService: ConfigService) => ({
           transport: Transport.TCP,
           options: {
-            host: configService.get('AUTH_HOST'),
-            port: configService.get('AUTH_PORT'),
+            host: configService.get('AUTH_HOST') || 'localhost',
+            port: configService.get('AUTH_PORT') || 3001,
           },
         }),
         inject: [ConfigService],

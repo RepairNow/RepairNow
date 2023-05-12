@@ -45,7 +45,7 @@ docker compose -f docker-compose-bdd.yml up -d
 3 - Update BDD (init Tables)
 
 ```
-yarn workspace @repairnow/prisma-pg db:push:dev
+yarn workspace @repairnow/prisma db:push
 ```
 
 4 - Launch all projects
@@ -57,7 +57,7 @@ yarn run dev
 5 - (Optionnal) Observe Tables with Prisma studio (adminer like)
 
 ```
-yarn workspace @repairnow/prisma-pg studio
+yarn workspace @repairnow/prisma studio
 ```
 
 ### Docker - PROD

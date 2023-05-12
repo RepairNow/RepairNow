@@ -15,7 +15,7 @@ spec:
         app: auth
     spec:
       containers:
-      - image: europe-west9-docker.pkg.dev/repair-now-386112/auth/production:{{ .Values.GITHUB_SHA }}
+      - image: europe-west9-docker.pkg.dev/{{ .Values.GCLOUD_PROJECT_ID }}/auth/production:{{ .Values.GITHUB_SHA }}
         name: auth
         env:
         - name: AUTH_PORT
@@ -23,6 +23,6 @@ spec:
         - name: AUTH_HOST
           value: auth-svc
         - name: DATABASE_URL
-          value: postgres://hlbssyah:VaVO-BYiSuFj2JU7LUUzWxNaF6hcx0wT@horton.db.elephantsql.com/hlbssyah
+          value: {{ .Values.DATABASE_URL }}
         ports:
         - containerPort: 3001

@@ -1,5 +1,5 @@
 {
-    "name": "@repairnow/prisma-pg",
+    "name": "@repairnow/prisma",
     "version": "1.0.0",
     "license": "MIT",
     "main": "./dist/index.js",
@@ -12,17 +12,16 @@
         "build": "tsup",
         "clean": "rimraf .turbo node_modules dist",
         "db:migrate:deploy": "prisma migrate deploy",
-        "db:migrate:dev": "dotenv -e ./env/dev.env prisma migrate dev",
-        "db:push:dev": "dotenv -e ./env/dev.env -- prisma db push",
-        "db:push:prod": "dotenv -e ./env/prod.env -- prisma db push",
+        "db:migrate:dev": "prisma migrate dev",
+        "db:push": "prisma db push",
         "db:seed": "tsx src/seed.ts",
-        "dev": "dotenv -e ./env/dev.env tsup --watch",
+        "dev": "tsup --watch",
         "format": "prisma format",
-        "generate": "dotenv -e ./env/dev.env prisma generate",
+        "generate": "prisma generate",
         "lint": "eslint ./src --fix",
         "prebuild": "npm run generate",
         "predev": "npm run generate",
-        "studio": "dotenv -e ./env/dev.env prisma studio"
+        "studio": "prisma studio"
     },
     "dependencies": {
         "@prisma/client": "^4.13.0",
