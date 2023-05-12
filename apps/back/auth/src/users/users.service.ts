@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { PrismaService, User } from '@repairnow/prisma-pg';
+import { PrismaService, User } from '@repairnow/prisma';
 import {
   CreateUserDto,
   UpdatePasswordDto,
@@ -10,7 +10,7 @@ import { compare, hash } from 'bcrypt';
 // utilisation de https://blog.bitsrc.io/jwt-authentication-with-nestjs-4f587c5dd649
 @Injectable()
 export class UsersService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(private prismaService: PrismaService) { }
 
   async createUser(userDto: CreateUserDto): Promise<User> {
     // check if the user exists in the db

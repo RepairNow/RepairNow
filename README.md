@@ -57,7 +57,7 @@ yarn run dev
 5 - (Optionnal) Observe Tables with Prisma studio (adminer like)
 
 ```
-yarn workspace @repairnow/prisma-pg studio
+yarn workspace @repairnow/prisma studio
 ```
 
 ### Docker - PROD
