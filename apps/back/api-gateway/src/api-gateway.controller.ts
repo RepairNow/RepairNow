@@ -3,7 +3,7 @@ import { ApiGatewayService } from './api-gateway.service';
 
 @Controller('/')
 export class ApiGatewayController {
-  constructor(private readonly apiGatewayService: ApiGatewayService) { }
+  constructor(private readonly apiGatewayService: ApiGatewayService) {}
 
   // Needed for k8s - Don't touch !!!
   @Get()
@@ -14,6 +14,11 @@ export class ApiGatewayController {
   @Get('hello')
   getHello(): string {
     return this.apiGatewayService.getHello();
+  }
+
+  @Get('helloTracker')
+  getHelloTracker() {
+    return this.apiGatewayService.getHelloTracker();
   }
 
   @Get('users')

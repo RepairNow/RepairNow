@@ -24,6 +24,17 @@ import { StatusInterceptor } from './interceptors/status.interceptor';
         }),
         inject: [ConfigService],
       },
+      {
+        name: 'TRACKER_SERVICE',
+        useFactory: (configService: ConfigService) => ({
+          transport: Transport.TCP,
+          options: {
+            host: configService.get('TRACKER_HOST') || 'localhost',
+            port: configService.get('TRACKER_PORT') || 3002,
+          },
+        }),
+        inject: [ConfigService],
+      },
     ]),
   ],
   controllers: [ApiGatewayController],
