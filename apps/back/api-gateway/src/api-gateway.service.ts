@@ -26,8 +26,8 @@ export class ApiGatewayService {
     );
   }
 
-  getProfile(): Observable<string> {
-    return this.authClient.send({ cmd: 'get_profile' }, {});
+  getMe(): Observable<string> {
+    return this.authClient.send({ cmd: 'get_me' }, {});
   }
 
   callAuth(): Observable<string> {

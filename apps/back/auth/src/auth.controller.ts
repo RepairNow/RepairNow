@@ -6,12 +6,10 @@ import {
   HttpStatus,
   Request,
   UseFilters,
-  UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { MessagePattern } from '@nestjs/microservices';
-import { AuthGuard } from './auth.guard';
 import { SignWithEmailDto } from './dto/sign-with-email.dto';
 import { RpcValidationFilter } from './filters/rpc-validation.filter';
 // import { Public } from './auth.module';
@@ -52,12 +50,5 @@ export class AuthController {
       return new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     }
     return this.authService.signUpEmail(params.email, params.password);
-  }
-
-  @UseGuards(AuthGuard)
-  @UseFilters(new RpcValidationFilter())
-  @MessagePattern({ cmd: 'get_profile' })
-  getProfile(@Request() req) {
-    return req.user;
   }
 }

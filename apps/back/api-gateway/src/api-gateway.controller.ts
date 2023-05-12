@@ -1,9 +1,10 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { ApiGatewayService } from './api-gateway.service';
+import { AuthGuard } from './guards/auth.guard';
 
 @Controller('/')
 export class ApiGatewayController {
-  constructor(private readonly apiGatewayService: ApiGatewayService) { }
+  constructor(private readonly apiGatewayService: ApiGatewayService) {}
 
   // Needed for k8s - Don't touch !!!
   @Get()
@@ -26,9 +27,17 @@ export class ApiGatewayController {
     return this.apiGatewayService.callAuth();
   }
 
-  @Get('profile')
-  getProfile() {
-    return this.apiGatewayService.getProfile();
+  @UseGuards(AuthGuard)
+  @Get('me')
+  async getMe(@Req() req) {
+    // UseGuard will add to the request the user object
+    // Use this user object to get the user info
+    const userInfos = req.user;
+    return userInfos;
+
+    // TO PASS JWT TOKEN TO MICROSERVICES:
+    // const jwt_token = req.token:
+    // return this.apiGatewayService.getMe(jwt_token);
   }
 
   @Post('signIn')

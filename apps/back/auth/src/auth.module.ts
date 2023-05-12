@@ -15,12 +15,12 @@ import { JwtModule } from '@nestjs/jwt';
     UsersModule,
     JwtModule.register({
       global: true,
-      // TODO: I don't know if the secret is being read from the env file. Check this.
-      secret: `${process.cwd()}/env/${process.env.NODE_ENV}.env.JWT_SECRET`,
-      signOptions: { expiresIn: '120s' },
+      // TODO: Store this secret differently
+      secret: 'CHANGE_ME',
+      signOptions: { expiresIn: '6s' },
     }),
   ],
   controllers: [AuthController],
   providers: [AuthService, PrismaService],
 })
-export class AuthModule { }
+export class AuthModule {}

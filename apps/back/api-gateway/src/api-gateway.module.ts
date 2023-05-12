@@ -5,6 +5,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { StatusInterceptor } from './interceptors/status.interceptor';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -25,6 +26,12 @@ import { StatusInterceptor } from './interceptors/status.interceptor';
         inject: [ConfigService],
       },
     ]),
+    JwtModule.register({
+      global: true,
+      // TODO: Store this secret differently
+      secret: 'CHANGE_ME',
+      signOptions: { expiresIn: '6s' },
+    }),
   ],
   controllers: [ApiGatewayController],
   providers: [
