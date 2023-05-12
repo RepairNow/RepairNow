@@ -71,13 +71,3 @@ jobs:
     - name: Helm upgrade release
       run: |
         helm upgrade --install repair-now ./k8s/repair-now --set GITHUB_SHA=$GITHUB_SHA
-
-    - name: Deploy API Gateway to GKE
-      run: |
-        kubectl set image deployment/api-gateway api-gateway="$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/api-gateway/$IMAGE:$GITHUB_SHA"
-        kubectl rollout restart deployment/api-gateway
-      
-    - name: Deploy Auth to GKE
-      run: |
-        kubectl set image deployment/auth auth="$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/auth/$IMAGE:$GITHUB_SHA"
-        kubectl rollout restart deployment/auth

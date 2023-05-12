@@ -13,7 +13,6 @@ export class ApiGatewayController {
 
   @Get('hello')
   getHello(): string {
-    console.log('getHello');
     return this.apiGatewayService.getHello();
   }
 
