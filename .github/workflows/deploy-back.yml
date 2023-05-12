@@ -61,7 +61,7 @@ jobs:
       with:
         script: |
           const fs = require('fs');
-          fs.writeFileSync('./packages/prisma-pg/.env', 'DATABASE_URL=${{ secrets.DATABASE_URL }}');
+          fs.writeFileSync('./packages/prisma/.env', 'DATABASE_URL=${{ secrets.DATABASE_URL }}');
     
     - name: Build Auth
       run: |-

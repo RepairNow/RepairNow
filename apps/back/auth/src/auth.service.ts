@@ -8,7 +8,7 @@ export class AuthService {
   constructor(
     private prismaService: PrismaService,
     private jwtService: JwtService,
-  ) {}
+  ) { }
 
   async isUserExist(email: SignWithEmailDto['email']): Promise<boolean> {
     const user = await this.prismaService.user.findUnique({
