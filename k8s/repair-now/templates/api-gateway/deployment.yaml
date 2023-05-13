@@ -24,6 +24,8 @@ spec:
           value: auth-svc
         - name: AUTH_PORT
           value: '3001'
+        - name: JWT_SECRET
+          value: {{ .Values.JWT_SECRET }}
         ports:
         - containerPort: 3000
       
