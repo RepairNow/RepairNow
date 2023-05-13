@@ -46,7 +46,7 @@ jobs:
         cluster_name: ${{ env.GKE_CLUSTER }}
         location: ${{ env.GKE_ZONE }}
 
-    - name: Build API Gateway Image
+    - name: Build API Gateway
       run: |-
         docker build \
           -f ./apps/back/api-gateway/Dockerfile \
@@ -54,7 +54,7 @@ jobs:
           --build-arg GITHUB_SHA="$GITHUB_SHA" \
           --build-arg GITHUB_REF="$GITHUB_REF" \
           .
-    - name: Publish Api Gateway Image to GAR (Google Artifact Registry)
+    - name: Publish API Gateway
       run: |-
         docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/api-gateway/$IMAGE:$GITHUB_SHA"
 
@@ -65,7 +65,7 @@ jobs:
           const fs = require('fs');
           fs.writeFileSync('./packages/prisma/.env', 'DATABASE_URL=${{ secrets.DATABASE_URL }}');
     
-    - name: Build Auth Image
+    - name: Build Auth
       run: |-
         docker build \
           -f ./apps/back/auth/Dockerfile \
@@ -74,14 +74,14 @@ jobs:
           --build-arg GITHUB_REF="$GITHUB_REF" \
           .
 
-    - name: Publish Auth Image to GAR (Google Artifact Registry)
+    - name: Publish Auth
       run: |-
         docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/auth/$IMAGE:$GITHUB_SHA"
 
-    - name: Deploy microservices to GKE cluster (Google Kubernetes Engine)
+    - name: Helm upgrade release
       run: |
         helm upgrade --install repair-now ./k8s/repair-now \
         --set GITHUB_SHA=$GITHUB_SHA \
         --set DATABASE_URL=${{ secrets.DATABASE_URL }} \
         --set GCLOUD_PROJECT_ID=$PROJECT_ID \
-        --set JWT_SECRET=${{ secrets.JWT_SECRET }} \
+        --set JWT_SECRET=${{ secrets.JWT_SECRET }}
