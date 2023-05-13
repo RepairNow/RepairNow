@@ -1,2 +1,2 @@
 export { SignWithEmailDto } from './src/signup-with-email.dto';
-export { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
+export * from "@nestjs/swagger";

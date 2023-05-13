@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { ApiGatewayService } from './api-gateway.service';
 import { AuthGuard } from './guards/auth.guard';
-import { SignWithEmailDto } from '@repairnow/dto';
+import { ApiBearerAuth, SignWithEmailDto } from '@repairnow/dto';
 
 @Controller('/')
 export class ApiGatewayController {
@@ -28,6 +28,7 @@ export class ApiGatewayController {
     return this.apiGatewayService.callAuth();
   }
 
+  @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Get('me')
   async getMe(@Req() req) {
