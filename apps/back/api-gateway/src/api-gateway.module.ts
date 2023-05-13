@@ -5,12 +5,12 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { StatusInterceptor } from './interceptors/status.interceptor';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: `${process.cwd()}/env/${process.env.NODE_ENV}.env`,
+      isGlobal: true
     }),
     ClientsModule.registerAsync([
       {
@@ -18,13 +18,21 @@ import { StatusInterceptor } from './interceptors/status.interceptor';
         useFactory: (configService: ConfigService) => ({
           transport: Transport.TCP,
           options: {
-            host: configService.get('AUTH_HOST') || 'localhost',
-            port: configService.get('AUTH_PORT') || 3001,
+            host: configService.get('AUTH_HOST'),
+            port: configService.get('AUTH_PORT')
           },
         }),
         inject: [ConfigService],
       },
     ]),
+    JwtModule.registerAsync({
+      useFactory: (configService: ConfigService) => ({
+        global: true,
+        secret: configService.get('JWT_SECRET'),
+        signOptions: { expiresIn: '1h' }
+      }),
+      inject: [ConfigService],
+    }),
   ],
   controllers: [ApiGatewayController],
   providers: [
@@ -36,4 +44,4 @@ import { StatusInterceptor } from './interceptors/status.interceptor';
     },
   ],
 })
-export class ApiGatewayModule {}
+export class ApiGatewayModule { }

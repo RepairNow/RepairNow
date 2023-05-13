@@ -24,5 +24,7 @@ spec:
           value: auth-svc
         - name: DATABASE_URL
           value: {{ .Values.DATABASE_URL }}
+        - name: JWT_SECRET
+          value: {{ .Values.JWT_SECRET }}
         ports:
         - containerPort: 3001
