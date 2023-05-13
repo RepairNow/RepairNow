@@ -78,7 +78,7 @@ jobs:
       run: |-
         docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/auth/$IMAGE:$GITHUB_SHA"
 
-    - name: Helm upgrade release
+    - name: Deploy microservices to GKE cluster
       run: |
         helm upgrade --install repair-now ./k8s/repair-now \
         --set GITHUB_SHA=$GITHUB_SHA \
