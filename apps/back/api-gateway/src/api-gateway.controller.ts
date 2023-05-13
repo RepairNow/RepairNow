@@ -4,7 +4,7 @@ import { AuthGuard } from './guards/auth.guard';
 
 @Controller('/')
 export class ApiGatewayController {
-  constructor(private readonly apiGatewayService: ApiGatewayService) {}
+  constructor(private readonly apiGatewayService: ApiGatewayService) { }
 
   // Needed for k8s - Don't touch !!!
   @Get()
