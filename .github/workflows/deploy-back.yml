@@ -59,17 +59,17 @@ jobs:
             AUTH_PORT=3001
           `);
 
-    # - name: Build API Gateway
-    #   run: |-
-    #     docker build \
-    #       -f ./apps/back/api-gateway/Dockerfile \
-    #       --tag "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/api-gateway/$IMAGE:$GITHUB_SHA" \
-    #       --build-arg GITHUB_SHA="$GITHUB_SHA" \
-    #       --build-arg GITHUB_REF="$GITHUB_REF" \
-    #       .
-    # - name: Publish API Gateway
-    #   run: |-
-    #     docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/api-gateway/$IMAGE:$GITHUB_SHA"
+    - name: Build API Gateway
+      run: |-
+        docker build \
+          -f ./apps/back/api-gateway/Dockerfile \
+          --tag "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/api-gateway/$IMAGE:$GITHUB_SHA" \
+          --build-arg GITHUB_SHA="$GITHUB_SHA" \
+          --build-arg GITHUB_REF="$GITHUB_REF" \
+          .
+    - name: Publish API Gateway
+      run: |-
+        docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/api-gateway/$IMAGE:$GITHUB_SHA"
 
     - name: Replace prisma .env content with secret
       uses: actions/github-script@v4
@@ -91,18 +91,18 @@ jobs:
             AUTH_PORT=3001
           `);
 
-    # - name: Build Auth
-    #   run: |-
-    #     docker build \
-    #       -f ./apps/back/auth/Dockerfile \
-    #       --tag "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/auth/$IMAGE:$GITHUB_SHA" \
-    #       --build-arg GITHUB_SHA="$GITHUB_SHA" \
-    #       --build-arg GITHUB_REF="$GITHUB_REF" \
-    #       .
+    - name: Build Auth
+      run: |-
+        docker build \
+          -f ./apps/back/auth/Dockerfile \
+          --tag "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/auth/$IMAGE:$GITHUB_SHA" \
+          --build-arg GITHUB_SHA="$GITHUB_SHA" \
+          --build-arg GITHUB_REF="$GITHUB_REF" \
+          .
 
-    # - name: Publish Auth
-    #   run: |-
-    #     docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/auth/$IMAGE:$GITHUB_SHA"
+    - name: Publish Auth
+      run: |-
+        docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/auth/$IMAGE:$GITHUB_SHA"
 
     - name: Deploy microservices to GKE cluster
       run: |
