@@ -2,7 +2,8 @@ name: Deploy Api Gateway
 
 on:
   push:
-    branches: ["main"]
+    branches: 
+      - feature/docker-hub
   paths:
       - 'apps/back/api-gateway/**'
       - '.github/workflows/**'
