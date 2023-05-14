@@ -11,10 +11,12 @@ runs:
   steps:
     - name: Récupérer les entrées dynamiques
       id: inputs
+      shell: bash
       run: |
         echo "::set-output name=dynamicInputs::$(jq -r 'keys | .[]' <<< '${{ inputs.dynamicInputs }}')"
 
     - name: Afficher la liste
+      shell: bash
       run: |
         for inputKey in ${{ steps.inputs.outputs.dynamicInputs.split('\n') }}
         do
