@@ -58,9 +58,11 @@ yarn run dev
 yarn workspace @repairnow/prisma studio
 ```
 
-### Docker - PROD
+### Google Kubernetes Engine (GKE) - PROD
 
-This repo is configured to be built with Docker, and Docker compose. To build all apps in this repo:
+All backend microservices are automatically deployed to a Google Kubernetes Engine (GKE) cluster via a github action pipeline (see .github/workflows folder)
+
+<!-- This repo is configured to be built with Docker, and Docker compose. To build all apps in this repo:
 
 ```
 # Create a network, which allows containers to communicate
@@ -83,7 +85,7 @@ To shutdown all running containers:
 
 ```
 # Stop all running containers
-docker kill $(docker ps -q) && docker rm $(docker ps -a -q)
+docker kill $(docker ps -q) && docker rm $(docker ps -a -q) -->
 ```
 
 ### Remote Caching
