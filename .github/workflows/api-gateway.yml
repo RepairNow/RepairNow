@@ -4,6 +4,7 @@ on:
   push:
     branches: 
       - feature/docker-hub
+      - main
   paths:
       - 'apps/back/api-gateway/**'
       - '.github/workflows/**'
