@@ -10,15 +10,16 @@ runs:
   using: "composite"
   steps:
     - name: Récupérer les entrées dynamiques
-      id: inputs
-      shell: bash
+      id: get_inputs
       run: |
-        echo "::set-output name=dynamicInputs::$(jq -r 'keys | .[]' <<< '${{ inputs.dynamicInputs }}')"
+        echo "::set-output name=dynamicInputs::$(echo "${{ inputs.dynamicInputs }}" | jq -r "to_entries | map(.key + \":\" + .value) | join(\"\n\")")
 
     - name: Afficher la liste
-      shell: bash
       run: |
-        for inputKey in ${{ steps.inputs.outputs.dynamicInputs.split('\n') }}
-        do
-          echo "Hello ${{ inputs.${inputKey} }}"
-        done
+        python3 - <<EOF
+        import os
+        inputs = os.getenv("dynamicInputs").split("\n")
+        for input in inputs:
+            key, value = input.split(":")
+            print(f"Hello {value}")
+        EOF
