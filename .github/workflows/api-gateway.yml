@@ -24,9 +24,9 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
       
       - name: Build and push Docker image
-        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+        uses: docker/build-push-action@v4
         with:
           context: .
           file: ./apps/back/api-gateway/Dockerfile
           push: true
-          tags: $GITHUB_SHA
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/repair-now-auth:$GITHUB_SHA
