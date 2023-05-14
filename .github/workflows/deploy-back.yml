@@ -7,11 +7,16 @@ on:
 
 jobs:
   deploy-api-gateway:
-    - name: Utiliser l'action composite
-      uses: ./.github/actions/deploy
-      with:
-        who-to-greet: |
-          John
-          Jane
-          Alice
+    name: Deploy Api Gateway
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Utiliser l'action composite
+        uses: ./.github/actions/deploy
+        with:
+          who-to-greet: |
+            John
+            Jane
+            Alice
 
