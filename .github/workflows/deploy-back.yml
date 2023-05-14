@@ -18,8 +18,8 @@ jobs:
       - name: Deploy Api Gateway
         uses: ./.github/actions/deploy
         with:
-          who-to-greet: |
-            John
-            Jane
-            Alice
+          who-to-greet:
+            - John
+            - Jane
+            - Alice
 
