@@ -5,7 +5,7 @@ on:
     branches: 
       - feature/docker-hub
       - main
-  paths:
+    paths:
       - 'apps/back/api-gateway/**'
       - '.github/workflows/**'
 

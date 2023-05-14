@@ -1,0 +1,110 @@
+# name: Build and Deploy to GKE
+
+# on:
+#   push:
+#     branches:
+#       - main
+#     paths:
+#       - 'apps/back/**'
+
+# env:
+#   PROJECT_ID: ${{ secrets.GCLOUD_PROJECT_ID }}
+#   GAR_LOCATION: europe-west9
+#   GKE_CLUSTER: repair-now
+#   GKE_ZONE: europe-west9
+#   IMAGE: production
+
+# jobs:
+#   setup-build-publish-deploy:
+#     name: Setup, Build, Publish, and Deploy
+#     runs-on: ubuntu-latest
+#     environment: production
+
+#     permissions:
+#       contents: 'read'
+#       id-token: 'write'
+
+#     steps:
+#     - name: Checkout
+#       uses: actions/checkout@v3
+
+#     - id: 'auth'
+#       uses: 'google-github-actions/auth@v1'
+#       with:
+#         token_format: 'access_token'
+#         credentials_json: '${{ secrets.GKE_SA_KEY }}'
+
+#     - name: Docker configuration
+#       run: |-
+#         echo ${{steps.auth.outputs.access_token}} | docker login -u oauth2accesstoken --password-stdin https://$GAR_LOCATION-docker.pkg.dev
+
+#     - name: Set up GKE credentials
+#       uses: google-github-actions/get-gke-credentials@v1
+#       with:
+#         cluster_name: ${{ env.GKE_CLUSTER }}
+#         location: ${{ env.GKE_ZONE }}
+
+#     - name: create api-gateway .env for PROD
+#       uses: actions/github-script@v4
+#       with:
+#         script: |
+#           const fs = require('fs');
+#           fs.writeFileSync(
+#             './apps/back/api-gateway/.env',
+#             `API_GATEWAY_PORT=3000
+#             JWT_SECRET=${{ secrets.JWT_SECRET }}
+#             AUTH_HOST=auth-svc
+#             AUTH_PORT=3001
+#           `);
+
+#     - name: Build API Gateway
+#       run: |-
+#         docker build \
+#           -f ./apps/back/api-gateway/Dockerfile \
+#           --tag "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/api-gateway/$IMAGE:$GITHUB_SHA" \
+#           --build-arg GITHUB_SHA="$GITHUB_SHA" \
+#           --build-arg GITHUB_REF="$GITHUB_REF" \
+#           .
+#     - name: Publish API Gateway
+#       run: |-
+#         docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/api-gateway/$IMAGE:$GITHUB_SHA"
+
+#     - name: Replace prisma .env content with secret
+#       uses: actions/github-script@v4
+#       with:
+#         script: |
+#           const fs = require('fs');
+#           fs.writeFileSync('./packages/prisma/.env', 'DATABASE_URL=${{ secrets.DATABASE_URL }}');
+    
+#     - name: create auth .env for PROD
+#       uses: actions/github-script@v4
+#       with:
+#         script: |
+#           const fs = require('fs');
+#           fs.writeFileSync(
+#             './apps/back/auth/.env',
+#             `DATABASE_URL=${{ secrets.DATABASE_URL }}
+#             JWT_SECRET=${{ secrets.JWT_SECRET }}
+#             AUTH_PORT=3001
+#           `);
+
+#     - name: Build Auth
+#       run: |-
+#         docker build \
+#           -f ./apps/back/auth/Dockerfile \
+#           --tag "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/auth/$IMAGE:$GITHUB_SHA" \
+#           --build-arg GITHUB_SHA="$GITHUB_SHA" \
+#           --build-arg GITHUB_REF="$GITHUB_REF" \
+#           .
+
+#     - name: Publish Auth
+#       run: |-
+#         docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/auth/$IMAGE:$GITHUB_SHA"
+
+#     - name: Deploy microservices to GKE cluster
+#       run: |
+#         ls ./k8s/repair-now
+#         helm upgrade repair-now ./k8s/repair-now \
+#         --set GITHUB_SHA=$GITHUB_SHA \
+#         --set GCLOUD_PROJECT_ID=$PROJECT_ID \
+#         --install \
