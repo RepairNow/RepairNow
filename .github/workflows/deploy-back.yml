@@ -7,4 +7,4 @@ on:
 
 jobs:
   deploy-api-gateway:
-    extends: ./.github/workflows/deployments/api-gateway.yml
+    uses: ./.github/workflows/deployments/api-gateway.yml
