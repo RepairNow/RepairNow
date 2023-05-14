@@ -4,10 +4,8 @@ on:
   push:
     branches:
       - main
-      - feature/swagger-config
     paths:
       - 'apps/back/**'
-      - '.github/workflows/deploy-back.yml'
 
 env:
   PROJECT_ID: ${{ secrets.GCLOUD_PROJECT_ID }}
