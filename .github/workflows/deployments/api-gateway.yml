@@ -6,7 +6,7 @@ on:
       - 'feature/docker-hub'
 
 jobs:
-  docker:
+  deploy-api-gateway:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
