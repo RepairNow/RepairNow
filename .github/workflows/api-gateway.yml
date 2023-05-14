@@ -29,4 +29,4 @@ jobs:
           context: .
           file: ./apps/back/api-gateway/Dockerfile
           push: true
-          tags: "${{ secrets.DOCKER_HUB_USERNAME }}/repair-now-auth:$GITHUB_SHA"
+          tags: "${{ secrets.DOCKER_HUB_USERNAME }}/repair-now-auth:${GITHUB_SHA}"
