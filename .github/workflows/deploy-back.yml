@@ -25,10 +25,10 @@ jobs:
       id-token: 'write'
 
     steps:
-    - name: Checkout project
+    - name: Checkout
       uses: actions/checkout@v3
 
-    - name: Authenticate to Google Cloud
+    - id: 'auth'
       uses: 'google-github-actions/auth@v1'
       with:
         token_format: 'access_token'
@@ -44,7 +44,20 @@ jobs:
         cluster_name: ${{ env.GKE_CLUSTER }}
         location: ${{ env.GKE_ZONE }}
 
-    - name: Build API Gateway Image
+    - name: create api-gateway .env for PROD
+      uses: actions/github-script@v4
+      with:
+        script: |
+          const fs = require('fs');
+          fs.writeFileSync(
+            './apps/back/api-gateway/.env',
+            `API_GATEWAY_PORT=3000
+            JWT_SECRET=${{ secrets.JWT_SECRET }}
+            AUTH_HOST=auth-svc
+            AUTH_PORT=3001
+          `);
+
+    - name: Build API Gateway
       run: |-
         docker build \
           -f ./apps/back/api-gateway/Dockerfile \
@@ -52,7 +65,7 @@ jobs:
           --build-arg GITHUB_SHA="$GITHUB_SHA" \
           --build-arg GITHUB_REF="$GITHUB_REF" \
           .
-    - name: Publish Api Gateway Image to GAR (Google Artifact Registry)
+    - name: Publish API Gateway
       run: |-
         docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/api-gateway/$IMAGE:$GITHUB_SHA"
 
@@ -63,7 +76,19 @@ jobs:
           const fs = require('fs');
           fs.writeFileSync('./packages/prisma/.env', 'DATABASE_URL=${{ secrets.DATABASE_URL }}');
     
-    - name: Build Auth Image
+    - name: create auth .env for PROD
+      uses: actions/github-script@v4
+      with:
+        script: |
+          const fs = require('fs');
+          fs.writeFileSync(
+            './apps/back/auth/.env',
+            `DATABASE_URL=${{ secrets.DATABASE_URL }}
+            JWT_SECRET=${{ secrets.JWT_SECRET }}
+            AUTH_PORT=3001
+          `);
+
+    - name: Build Auth
       run: |-
         docker build \
           -f ./apps/back/auth/Dockerfile \
@@ -72,14 +97,14 @@ jobs:
           --build-arg GITHUB_REF="$GITHUB_REF" \
           .
 
-    - name: Publish Auth Image to GAR (Google Artifact Registry)
+    - name: Publish Auth
       run: |-
         docker push "$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/auth/$IMAGE:$GITHUB_SHA"
 
-    - name: Deploy microservices to GKE cluster (Google Kubernetes Engine)
+    - name: Deploy microservices to GKE cluster
       run: |
-        helm upgrade --install repair-now ./k8s/repair-now \
+        ls ./k8s/repair-now
+        helm upgrade repair-now ./k8s/repair-now \
         --set GITHUB_SHA=$GITHUB_SHA \
-        --set DATABASE_URL=${{ secrets.DATABASE_URL }} \
         --set GCLOUD_PROJECT_ID=$PROJECT_ID \
-        --set JWT_SECRET=${{ secrets.JWT_SECRET }} \
+        --install \

@@ -13,6 +13,7 @@ async function bootstrap() {
     .setTitle('Repair Now API Doc')
     .setDescription('The Repair Now API documentation')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api', app, document);
