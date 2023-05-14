@@ -87,7 +87,6 @@ jobs:
             './apps/back/auth/.env',
             `DATABASE_URL=${{ secrets.DATABASE_URL }}
             JWT_SECRET=${{ secrets.JWT_SECRET }}
-            AUTH_HOST=auth-svc
             AUTH_PORT=3001
           `);
 
