@@ -109,7 +109,5 @@ jobs:
         ls ./k8s/repair-now
         helm upgrade repair-now ./k8s/repair-now \
         --set GITHUB_SHA=$GITHUB_SHA \
-        --set DATABASE_URL=${{ secrets.DATABASE_URL }} \
         --set GCLOUD_PROJECT_ID=$PROJECT_ID \
-        --set JWT_SECRET=${{ secrets.JWT_SECRET }} \
         --install \
