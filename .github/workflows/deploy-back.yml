@@ -12,7 +12,10 @@ jobs:
     environment: production
 
     steps:
-      - name: Utiliser l'action composite
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Deploy Api Gateway
         uses: ./.github/actions/deploy
         with:
           who-to-greet: |
