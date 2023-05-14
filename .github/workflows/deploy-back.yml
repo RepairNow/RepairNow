@@ -106,7 +106,7 @@ jobs:
 
     - name: Deploy microservices to GKE cluster
       run: |
-        ls .k8s/repar-now
+        ls .k8s/repair-now
         helm upgrade --install repair-now ./k8s/repair-now \
         --set GITHUB_SHA=$GITHUB_SHA \
         --set DATABASE_URL=${{ secrets.DATABASE_URL }} \
