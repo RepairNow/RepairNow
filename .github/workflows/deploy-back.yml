@@ -1,0 +1,10 @@
+name: Deploy API Gateway
+
+on:
+  push:
+    branches:
+      - 'feature/docker-hub'
+
+jobs:
+  deploy-api-gateway:
+    extends: ./.github/workflows/deployments/api-gateway.yml
