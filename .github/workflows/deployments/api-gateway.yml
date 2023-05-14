@@ -6,7 +6,7 @@ on:
       - feature/docker-hub
   paths:
       - 'apps/back/api-gateway/**'
-      - '.github/workflows/**'
+      - '.github/workflows/deployments/**'
 
 jobs:
   push_to_registry:
