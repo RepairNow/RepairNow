@@ -46,6 +46,19 @@ jobs:
         cluster_name: ${{ env.GKE_CLUSTER }}
         location: ${{ env.GKE_ZONE }}
 
+    - name: create api-gateway .env for PROD
+      uses: actions/github-script@v4
+      with:
+        script: |
+          const fs = require('fs');
+          fs.writeFileSync(
+            './apps/back/api-gateway/.env',
+            `API_GATEWAY_PORT=3000
+            JWT_SECRET=${{ secrets.JWT_SECRET }}
+            AUTH_HOST=auth-svc
+            AUTH_PORT=3001
+          `);
+
     - name: Build API Gateway
       run: |-
         docker build \
@@ -65,6 +78,19 @@ jobs:
           const fs = require('fs');
           fs.writeFileSync('./packages/prisma/.env', 'DATABASE_URL=${{ secrets.DATABASE_URL }}');
     
+    - name: create auth .env for PROD
+      uses: actions/github-script@v4
+      with:
+        script: |
+          const fs = require('fs');
+          fs.writeFileSync(
+            './apps/back/auth/.env',
+            `DATABASE_URL=${{ secrets.DATABASE_URL }}
+            JWT_SECRET=${{ secrets.JWT_SECRET }}
+            AUTH_HOST=auth-svc
+            AUTH_PORT=3001
+          `);
+
     - name: Build Auth
       run: |-
         docker build \
