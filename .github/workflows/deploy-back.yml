@@ -7,4 +7,11 @@ on:
 
 jobs:
   deploy-api-gateway:
-    uses: ./.github/workflows/deployments/api-gateway.yml
+    - name: Utiliser l'action composite
+      uses: ./.github/actions/deploy
+      with:
+        who-to-greet: |
+          John
+          Jane
+          Alice
+

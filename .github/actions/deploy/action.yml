@@ -1,0 +1,17 @@
+name: 'Hello World'
+description: 'Greet someone'
+inputs:
+  who-to-greet:
+    description: 'Who to greet'
+    required: true
+    default: ''
+
+runs:
+  using: "composite"
+  steps:
+    - name: Afficher la liste
+      run: |
+        for item in ${{ inputs.who-to-greet }}
+        do
+          echo "Hello $item"
+        done
