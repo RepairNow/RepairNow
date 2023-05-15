@@ -12,9 +12,10 @@ runs:
     - name: Afficher la liste
       shell: bash
       run: |
-        IFS=$'\n'
-        for input in ${{ inputs.config.split('\n') }}; do
-          key=$(echo "$input" | awk -F ':' '{print $1}' | awk '{$1=$1};1')
-          value=$(echo "$input" | awk -F ':' '{print $2}' | awk '{$1=$1};1')
-          echo "Key: $key, Value: $value"
-        done
+        while read -r input; do
+          if [[ "$input" =~ ([^:]+):(.+) ]]; then
+            key="${BASH_REMATCH[1]}"
+            value="${BASH_REMATCH[2]}"
+            echo "Key: $key, Value: $value"
+          fi
+        done <<< "${{ inputs.config }}"
