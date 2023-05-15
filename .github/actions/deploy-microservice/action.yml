@@ -23,8 +23,6 @@ runs:
       shell: bash
       run: |
         echo "The value of MY_SECRET is $GCLOUD_PROJECT_ID"
-      env:
-        GCLOUD_PROJECT_ID: ${{ secrets.GCLOUD_PROJECT_ID }}
 
     # - id: 'auth'
     #   uses: 'google-github-actions/auth@v1'
