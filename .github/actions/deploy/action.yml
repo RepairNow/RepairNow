@@ -13,8 +13,8 @@ runs:
       shell: bash
       run: |
         IFS=$'\n'
-        for input in ${{ inputs.config }}; do
-          key=$(echo "$input" | cut -d ':' -f1)
-          value=$(echo "$input" | cut -d ':' -f2)
+        for input in ${{ inputs.config.split('\n') }}; do
+          key=$(echo "$input" | awk -F ':' '{print $1}' | awk '{$1=$1};1')
+          value=$(echo "$input" | awk -F ':' '{print $2}' | awk '{$1=$1};1')
           echo "Key: $key, Value: $value"
         done
