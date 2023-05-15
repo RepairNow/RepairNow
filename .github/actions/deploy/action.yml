@@ -10,12 +10,18 @@ runs:
   using: "composite"
   steps:
     - name: Afficher la liste
-      shell: bash
+      shell: python3
       run: |
-        while read -r input; do
-          if [[ "$input" =~ ([^:]+):(.+) ]]; then
-            key="${BASH_REMATCH[1]}"
-            value="${BASH_REMATCH[2]}"
-            echo "Key: $key, Value: $value"
-          fi
-        done <<< "${{ inputs.config }}"
+        import sys
+        for line in sys.stdin:
+            key, value = line.strip().split(':', 1)
+            print(f"Key: {key}, Value: {value}")
+        EOF
+      # run: |
+      #   while read -r input; do
+      #     if [[ "$input" =~ ([^:]+):(.+) ]]; then
+      #       key="${BASH_REMATCH[1]}"
+      #       value="${BASH_REMATCH[2]}"
+      #       echo "Key: $key, Value: $value"
+      #     fi
+      #   done <<< "${{ inputs.config }}"
