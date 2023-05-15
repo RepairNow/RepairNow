@@ -19,26 +19,21 @@ runs:
       run: |
         cat ./apps/back/api-gateway/.env
 
-    - name: Access GitHub Secret
-      shell: bash
+    - id: 'auth'
+      uses: 'google-github-actions/auth@v1'
+      with:
+        token_format: 'access_token'
+        credentials_json: $GKE_SA_KEY
+
+    - name: Set up GKE credentials
+      uses: google-github-actions/get-gke-credentials@v1
+      with:
+        cluster_name: $GKE_CLUSTER_NAME
+        location: $GKE_CLUSTER_ZONE
+
+    - name: Deploy microservices Gto GKE cluster
       run: |
-        echo "The value of MY_SECRET is $GCLOUD_PROJECT_ID"
-
-    # - id: 'auth'
-    #   uses: 'google-github-actions/auth@v1'
-    #   with:
-    #     token_format: 'access_token'
-    #     credentials_json: '${{ secrets.GKE_SA_KEY }}'
-
-    # - name: Set up GKE credentials
-    #   uses: google-github-actions/get-gke-credentials@v1
-    #   with:
-    #     cluster_name: ${{ secrets.GKE_CLUSTER_NAME }}
-    #     location: ${{ secrets.GKE_CLUSTER_ZONE }}
-
-    # - name: Deploy microservices Gto GKE cluster
-    #   run: |
-    #     helm upgrade repair-now ./k8s/repair-now \
-    #     --set GITHUB_SHA=$GITHUB_SHA \
-    #     --set GCLOUD_PROJECT_ID=${{ secrets.GCLOUD_PROJECT_ID }} \
-    #     --install \
+        helm upgrade repair-now ./k8s/repair-now \
+        --set GITHUB_SHA=$GITHUB_SHA \
+        --set GCLOUD_PROJECT_ID=$GCLOUD_PROJECT_ID \
+        --install \
