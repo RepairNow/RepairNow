@@ -16,7 +16,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Deploy Api Gateway
-        uses: ./.github/actions/deploy
+        uses: ./.github/actions/deploy-microservice
         with:
           config: |
             API_GATEWAY_PORT=3000
