@@ -1,7 +1,7 @@
 name: 'Hello World'
 description: 'Greet someone'
 inputs:
-  dynamicInputs:
+  config:
     description: 'Dynamic inputs'
     required: true
     default: ''
@@ -9,17 +9,12 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Récupérer les entrées dynamiques
-      id: get_inputs
-      run: |
-        echo "::set-output name=dynamicInputs::$(echo "${{ inputs.dynamicInputs }}" | jq -r "to_entries | map(.key + \":\" + .value) | join(\"\n\")")
-
     - name: Afficher la liste
       run: |
-        python3 - <<EOF
-        import os
-        inputs = os.getenv("dynamicInputs").split("\n")
-        for input in inputs:
-            key, value = input.split(":")
-            print(f"Hello {value}")
-        EOF
+        run: |
+        IFS=$'\n'
+        for input in ${{ inputs.config }}; do
+          key=$(echo "$input" | cut -d ':' -f1)
+          value=$(echo "$input" | cut -d ':' -f2)
+          echo "Key: $key, Value: $value"
+        done
