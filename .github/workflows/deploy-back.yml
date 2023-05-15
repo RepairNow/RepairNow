@@ -19,7 +19,7 @@ jobs:
         uses: ./.github/actions/deploy
         with:
           config: |
-            CONFIG_1=value1
-            CONFIG_2=value2
-            CONFIG_3=value3
-
+            API_GATEWAY_PORT=3000
+            JWT_SECRET=${{ secrets.JWT_SECRET }}
+            AUTH_HOST=auth-svc
+            AUTH_PORT=3001
