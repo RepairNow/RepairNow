@@ -19,7 +19,7 @@ jobs:
         uses: ./.github/actions/deploy
         with:
           config: |
-            - name1: John
-            - name2: Jane
-            - name3: Alice
+            name1: John
+            name2: Jane
+            name3: Alice
 
