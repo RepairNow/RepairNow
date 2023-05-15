@@ -22,4 +22,8 @@ jobs:
             name1: John
             name2: Jane
             name3: Alice
+      
+      - name: Show Results
+        run: |
+          echo "${{ steps.deploy-action.outputs.results }}"
 
