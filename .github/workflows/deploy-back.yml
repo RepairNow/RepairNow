@@ -19,11 +19,7 @@ jobs:
         uses: ./.github/actions/deploy
         with:
           config: |
-            name1: John
-            name2: Jane
-            name3: Alice
-      
-      - name: Show Results
-        run: |
-          echo "${{ steps.deploy-action.outputs.results }}"
+            CONFIG_1=value1
+            CONFIG_2=value2
+            CONFIG_3=value3
 
