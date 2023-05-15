@@ -32,6 +32,7 @@ runs:
         location: $GKE_CLUSTER_ZONE
 
     - name: Deploy microservices Gto GKE cluster
+      shell: bash
       run: |
         helm upgrade repair-now ./k8s/repair-now \
         --set GITHUB_SHA=$GITHUB_SHA \
