@@ -12,7 +12,6 @@ runs:
     - name: Afficher la liste
       shell: bash
       run: |
-        run: |
         IFS=$'\n'
         for input in ${{ inputs.config }}; do
           key=$(echo "$input" | cut -d ':' -f1)
