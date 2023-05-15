@@ -16,7 +16,7 @@ runs:
         import sys
         for line in sys.stdin:
             key, value = line.strip().split(':', 1)
-            print(f"Key: {key}, Value: {value}")
+            sys.stdout.write(f"Key: {key}, Value: {value}\n")
         EOF
       # run: |
       #   while read -r input; do
