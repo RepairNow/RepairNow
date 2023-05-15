@@ -5,6 +5,12 @@ on:
     branches:
       - 'feature/docker-hub'
 
+env:
+  GCLOUD_PROJECT_ID: ${{ secrets.GCLOUD_PROJECT_ID }}
+  GKE_SA_KEY: ${{ secrets.GKE_SA_KEY }}
+  GKE_CLUSTER_NAME: ${{ secrets.GKE_CLUSTER_NAME }}
+  GKE_CLUSTER_ZONE: ${{ secrets.GKE_CLUSTER_ZONE }}
+
 jobs:
   deploy-api-gateway:
     name: Deploy Api Gateway

@@ -38,7 +38,7 @@ runs:
     #     cluster_name: ${{ secrets.GKE_CLUSTER_NAME }}
     #     location: ${{ secrets.GKE_CLUSTER_ZONE }}
 
-    # - name: Deploy microservices to GKE cluster
+    # - name: Deploy microservices Gto GKE cluster
     #   run: |
     #     helm upgrade repair-now ./k8s/repair-now \
     #     --set GITHUB_SHA=$GITHUB_SHA \
