@@ -20,6 +20,7 @@ runs:
         cat ./apps/back/api-gateway/.env
 
     - name: Access GitHub Secret
+      shell: bash
       run: |
         echo "The value of MY_SECRET is ${{ secrets.GCLOUD_PROJECT_ID }}"
 
