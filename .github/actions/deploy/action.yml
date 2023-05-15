@@ -10,8 +10,9 @@ runs:
   using: "composite"
   steps:
     - name: Afficher la liste
-      shell: python3
+      shell: bash
       run: |
+        python3 - <<EOF
         import sys
         for line in sys.stdin:
             key, value = line.strip().split(':', 1)
