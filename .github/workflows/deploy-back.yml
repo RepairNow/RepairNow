@@ -38,6 +38,7 @@ jobs:
       - name: Detect Changed Folders
         id: detect-changed-folders
         run: |
+          python3 - << EOF
           import os
 
           folders = ["apps/back/api-gateway", "apps/back/auth"]
@@ -55,10 +56,12 @@ jobs:
 
           # Set output
           print(f"::set-output name=test::{unique_changed}")
+          EOF
 
       - name: Read Output
         run: |
           echo "Changed folders: ${{ steps.detect-changed-folders.outputs.test }}"
+
 
     # steps:
     #   # For pull requests it's not necessary to checkout the code
