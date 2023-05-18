@@ -39,7 +39,7 @@ jobs:
         id: set-output
         run: |
           changed_files="${{ steps.changed-files.outputs.files }}"
-          folders=("./apps/back/api-gateway", "./apps/back/auth")
+          folders=("./apps/back/api-gateway", "./apps/back/auth", "./.github")
           changed_folders=""
           for folder in $folders; do
             if [[ $changed_files =~ ^$folder/ ]]; then
