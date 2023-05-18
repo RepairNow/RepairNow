@@ -22,7 +22,6 @@ jobs:
     name: Deploy Api Gateway
     runs-on: ubuntu-latest
     environment: production
-    if: ${{ contains(github.event.head_commit.modified, 'apps/back/api-gateway/') }}
 
     steps:
       - name: Print github.event
