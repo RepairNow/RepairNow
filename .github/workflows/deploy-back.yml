@@ -26,6 +26,7 @@ jobs:
       - name: Deploy Api Gateway
         uses: ./.github/actions/deploy-microservice
         with:
+          microservice: api-gateway
           config: |
             API_GATEWAY_PORT=3000
             JWT_SECRET=${{ secrets.JWT_SECRET }}
