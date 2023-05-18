@@ -33,12 +33,12 @@ jobs:
 
       - name: Find changed files
         id: changed-files
-        uses: tj-actions/changed-files@v5
+        uses: tj-actions/changed-files@v35
 
       - name: Set output
         id: set-output
         run: |
-          changed_files="${{ steps.changed-files.outputs.files }}"
+          changed_files="${{ steps.changed-files.outputs.all_changed_files }}"
           folders=("./apps/back/api-gateway/**", "./apps/back/auth/**", "./.github/**")
           changed_folders=""
           for folder in $folders; do
