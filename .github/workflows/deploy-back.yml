@@ -38,28 +38,20 @@ jobs:
       - name: Set output
         id: set-output
         run: |
-          echo "::set-output name=changed::${{ steps.changed-files.outputs.all_changed_files }}"
-          changed_files="${{ steps.changed-files.outputs.all_changed_files }}"
+          # Liste des dossiers à vérifier
+          folder_to_check=("apps/back/api-gateway" "apps/back/auth" "autre/dossier")
+
+          # Parcourir les fichiers modifiés
           for file in $changed_files; do
-            # Vérifier si le fichier commence par le chemin spécifié
-            if [[ $file == $folder_to_check* ]]; then
-              echo "Le fichier $file commence par $folder_to_check"
-              # Faites quelque chose si le fichier correspond
-            fi
+            # Parcourir la liste des dossiers à vérifier
+            for folder in "${folder_to_check[@]}"; do
+              # Vérifier si le fichier commence par le chemin spécifié
+              if [[ $file == $folder* ]]; then
+                echo "Le fichier $file commence par $folder"
+                # Faites quelque chose si le fichier correspond à l'un des dossiers
+              fi
+            done
           done
-          # changed_files="${{ steps.changed-files.outputs.all_changed_files }}"
-          # folders=("./apps/back/api-gateway/**", "./apps/back/auth/**", "./.github/**")
-          # changed_folders=""
-          # for folder in $folders; do
-          #   if [[ $changed_files =~ ^$folder/ ]]; then
-          #     changed_folders+=" $folder"
-          #   fi
-          # done
-          # if [[ -n "$changed_folders" ]]; then
-          #   echo "::set-output name=changed::$changed_folders"
-          # else
-          #   echo "::set-output name=changed::none"
-          # fi
 
       - name: Read output
         run: |
