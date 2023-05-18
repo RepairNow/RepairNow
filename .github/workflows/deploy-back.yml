@@ -23,62 +23,72 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: read
-    outputs:
-      api-gateway: ${{ steps.filter.outputs.api-gateway }}
-      auth: ${{ steps.filter.outputs.auth }}
 
     steps:
-      # For pull requests it's not necessary to checkout the code
       - name: Checkout
         if: github.event_name != 'pull_request'
         uses: actions/checkout@v3
 
-      - uses: dorny/paths-filter@v2
+      - name: Filter changes
         id: filter
+        uses: dorny/paths-filter@v2
         with:
           filters: |
             api-gateway:
-              - './apps/back/api-gateway/**'
+              - 'apps/back/api-gateway/**'
             auth:
-              - './apps/back/auth/**'
+              - 'apps/back/auth/**'
 
-  deploy-api-gateway:
-    name: Deploy Api Gateway
-    runs-on: ubuntu-latest
-    environment: production
-    needs: detect-changes
-    if: ${{ needs.detect-changes.outputs.api-gateway == 'true' }}
+      - name: Set output
+        id: set-output
+        run: |
+          if [[ -n "${{ steps.filter.outputs.api-gateway }}" && -n "${{ steps.filter.outputs.auth }}" ]]; then
+            echo "::set-output name=changed::both"
+          elif [[ -n "${{ steps.filter.outputs.api-gateway }}" ]]; then
+            echo "::set-output name=changed::api-gateway"
+          elif [[ -n "${{ steps.filter.outputs.auth }}" ]]; then
+            echo "::set-output name=changed::auth"
+          else
+            echo "::set-output name=changed::none"
+          %}
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+  # deploy-api-gateway:
+  #   name: Deploy Api Gateway
+  #   runs-on: ubuntu-latest
+  #   environment: production
+  #   needs: detect-changes
+  #   if: ${{ needs.detect-changes.outputs.api-gateway == 'true' }}
 
-      - name: Deploy Api Gateway
-        uses: ./.github/actions/deploy-microservice
-        with:
-          microservice: api-gateway
-          config: |
-            API_GATEWAY_PORT=3000
-            JWT_SECRET=${{ secrets.JWT_SECRET }}
-            AUTH_HOST=auth-svc
-            AUTH_PORT=3001
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
 
-  deploy-auth:
-    name: Deploy Auth
-    runs-on: ubuntu-latest
-    environment: production
-    needs: detect-changes
-    if: ${{ needs.detect-changes.outputs.auth == 'true' }}
+  #     - name: Deploy Api Gateway
+  #       uses: ./.github/actions/deploy-microservice
+  #       with:
+  #         microservice: api-gateway
+  #         config: |
+  #           API_GATEWAY_PORT=3000
+  #           JWT_SECRET=${{ secrets.JWT_SECRET }}
+  #           AUTH_HOST=auth-svc
+  #           AUTH_PORT=3001
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+  # deploy-auth:
+  #   name: Deploy Auth
+  #   runs-on: ubuntu-latest
+  #   environment: production
+  #   needs: detect-changes
+  #   if: ${{ needs.detect-changes.outputs.auth == 'true' }}
 
-      - name: Deploy Auth
-        uses: ./.github/actions/deploy-microservice
-        with:
-          microservice: auth
-          config: |
-            DATABASE_URL=${{ secrets.DATABASE_URL }}
-            JWT_SECRET=${{ secrets.JWT_SECRET }}
-            AUTH_PORT=3001
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
+
+  #     - name: Deploy Auth
+  #       uses: ./.github/actions/deploy-microservice
+  #       with:
+  #         microservice: auth
+  #         config: |
+  #           DATABASE_URL=${{ secrets.DATABASE_URL }}
+  #           JWT_SECRET=${{ secrets.JWT_SECRET }}
+  #           AUTH_PORT=3001
