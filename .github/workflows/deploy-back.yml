@@ -24,8 +24,8 @@ jobs:
     environment: production
 
     steps:
-      - name: Print github.event
-        run: echo "${{ toJson(github.event) }}"
+      - name: Print steps context
+        run: echo "${{ toJson(steps) }}"
 
 
 
