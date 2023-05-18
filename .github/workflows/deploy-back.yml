@@ -50,7 +50,7 @@ jobs:
           # Parcourir les dossiers à vérifier
           for folder in "${folders[@]}"; do
             # Vérifier si des fichiers modifiés ont été trouvés dans le dossier
-            if git diff --name-only "$current_branch" -- "$folder" | grep -qE '^'; then
+            if git diff-tree --no-commit-id --name-only -r "$current_branch" -- "$folder" | grep -qE '^'; then
               changed+=("$folder")
             fi
           done
@@ -62,12 +62,6 @@ jobs:
 
           # Définir la sortie test avec les dossiers modifiés
           echo "::set-output name=test::${changed[*]}"
-
-
-
-
-
-
 
 
       - name: Read output
