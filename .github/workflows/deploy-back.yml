@@ -18,7 +18,8 @@ env:
 
 jobs:
   # JOB to run change detection
-  changes:
+  detect-changes:
+    name: Detect changes
     runs-on: ubuntu-latest
     permissions:
       pull-requests: read
@@ -45,8 +46,8 @@ jobs:
     name: Deploy Api Gateway
     runs-on: ubuntu-latest
     environment: production
-    needs: changes
-    if: ${{ needs.changes.outputs.api-gateway == 'true' }}
+    needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.api-gateway == 'true' }}
 
     steps:
       - name: Checkout
@@ -66,8 +67,8 @@ jobs:
     name: Deploy Auth
     runs-on: ubuntu-latest
     environment: production
-    needs: changes
-    if: ${{ needs.changes.outputs.auth == 'true' }}
+    needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.auth == 'true' }}
 
     steps:
       - name: Checkout
