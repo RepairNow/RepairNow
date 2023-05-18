@@ -38,19 +38,20 @@ jobs:
       - name: Set output
         id: set-output
         run: |
-          changed_files="${{ steps.changed-files.outputs.all_changed_files }}"
-          folders=("./apps/back/api-gateway/**", "./apps/back/auth/**", "./.github/**")
-          changed_folders=""
-          for folder in $folders; do
-            if [[ $changed_files =~ ^$folder/ ]]; then
-              changed_folders+=" $folder"
-            fi
-          done
-          if [[ -n "$changed_folders" ]]; then
-            echo "::set-output name=changed::$changed_folders"
-          else
-            echo "::set-output name=changed::none"
-          fi
+          echo "::set-output name=changed::${{ steps.changed-files.outputs.all_changed_files }}"
+          # changed_files="${{ steps.changed-files.outputs.all_changed_files }}"
+          # folders=("./apps/back/api-gateway/**", "./apps/back/auth/**", "./.github/**")
+          # changed_folders=""
+          # for folder in $folders; do
+          #   if [[ $changed_files =~ ^$folder/ ]]; then
+          #     changed_folders+=" $folder"
+          #   fi
+          # done
+          # if [[ -n "$changed_folders" ]]; then
+          #   echo "::set-output name=changed::$changed_folders"
+          # else
+          #   echo "::set-output name=changed::none"
+          # fi
 
       - name: Read output
         run: |
