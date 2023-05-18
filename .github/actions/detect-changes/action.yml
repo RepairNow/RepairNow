@@ -15,6 +15,7 @@ runs:
 
     - name: Detect Changed Folders
       id: detect-changed-folders
+      shell: bash
       run: |
         python3 - << EOF
         import os
