@@ -52,6 +52,10 @@ jobs:
             echo "::set-output name=changed::none"
           fi
 
+      - name: Read output
+        run: |
+          echo "Changed folders: ${{ steps.set-output.outputs.changed }}"
+
     # steps:
     #   # For pull requests it's not necessary to checkout the code
     #   - name: Checkout
