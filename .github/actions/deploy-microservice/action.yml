@@ -31,7 +31,7 @@ runs:
         context: .
         file: ./apps/back/api-gateway/Dockerfile
         push: true
-        tags: "${{ env.DOCKER_HUB_USERNAME }}/repair-now-api-gateway:$GITHUB_SHA"
+        tags: "${{ env.DOCKER_HUB_USERNAME }}/repair-now-api-gateway:${{ github.sha }}"
 
     # - id: 'auth'
     #   uses: 'google-github-actions/auth@v1'
