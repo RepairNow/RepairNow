@@ -65,11 +65,11 @@ jobs:
             done
           done
 
-          echo "changed=${changed[*]" >> $GITHUB_OUTPUT
+          echo "::set-output name=test::${changed[*]}"
 
       - name: Read output
         run: |
-          echo "Changed folders: ${{ steps.set-output.outputs.changed }}"
+          echo "Changed folders: ${{ steps.set-output.outputs.test }}"
 
     # steps:
     #   # For pull requests it's not necessary to checkout the code

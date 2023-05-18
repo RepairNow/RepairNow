@@ -20,7 +20,7 @@ export class AuthController {
 
   @Get()
   getHello(): string {
-    console.log('getHellsery');
+    console.log('getHellseertry');
     return this.authService.getHello();
   }
 
