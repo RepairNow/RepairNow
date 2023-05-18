@@ -38,6 +38,7 @@ jobs:
       - name: Set output
         id: set-output
         run: |
+          changed_files="${{ steps.changed-files.outputs.all_changed_files }}"
           # Liste des dossiers à vérifier
           folder_to_check=("apps/back/api-gateway" "apps/back/auth" "autre/dossier")
 
