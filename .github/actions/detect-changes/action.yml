@@ -40,4 +40,4 @@ runs:
     - name: Read Output
       shell: bash
       run: |
-        echo "Changed folders: ${{ steps.detect-changed-folders.outputs.test }}"
+        echo "Changed folders: ${{ steps.detect-changed-folders.outputs.changed-folders }}"
