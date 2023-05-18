@@ -38,5 +38,6 @@ runs:
         EOF
 
     - name: Read Output
+      shell: bash
       run: |
         echo "Changed folders: ${{ steps.detect-changed-folders.outputs.test }}"
