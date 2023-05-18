@@ -42,7 +42,7 @@ jobs:
           current_branch=$(git rev-parse --abbrev-ref HEAD)
 
           # Liste des dossiers à vérifier
-          folders=("apps/back/api-gateway" "apps/back/auth" "autre/dossier")
+          folders=("apps/back/api-gateway" "apps/back/auth")
 
           # Liste des dossiers modifiés
           changed=()
