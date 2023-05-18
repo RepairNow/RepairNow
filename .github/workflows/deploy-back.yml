@@ -6,6 +6,7 @@ on:
       - 'feature/docker-hub'
     paths:
       - 'apps/back/**'
+      - '.github/workflows/deploy-back.yml'
 
 env:
   GCLOUD_PROJECT_ID: ${{ secrets.GCLOUD_PROJECT_ID }}
@@ -24,34 +25,39 @@ jobs:
     if: ${{ contains(github.event.head_commit.modified, 'apps/back/api-gateway/') }}
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - name: Print github.event
+        run: echo "${{ toJson(github.event) }}"
 
-      - name: Deploy Api Gateway
-        uses: ./.github/actions/deploy-microservice
-        with:
-          microservice: api-gateway
-          config: |
-            API_GATEWAY_PORT=3000
-            JWT_SECRET=${{ secrets.JWT_SECRET }}
-            AUTH_HOST=auth-svc
-            AUTH_PORT=3001
 
-  deploy-auth:
-    name: Deploy Auth
-    runs-on: ubuntu-latest
-    environment: production
-    if: ${{ contains(github.event.head_commit.modified, 'apps/back/auth/') }}
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
 
-      - name: Deploy Auth
-        uses: ./.github/actions/deploy-microservice
-        with:
-          microservice: auth
-          config: |
-            DATABASE_URL=${{ secrets.DATABASE_URL }}
-            JWT_SECRET=${{ secrets.JWT_SECRET }}
-            AUTH_PORT=3001
+  #     - name: Deploy Api Gateway
+  #       uses: ./.github/actions/deploy-microservice
+  #       with:
+  #         microservice: api-gateway
+  #         config: |
+  #           API_GATEWAY_PORT=3000
+  #           JWT_SECRET=${{ secrets.JWT_SECRET }}
+  #           AUTH_HOST=auth-svc
+  #           AUTH_PORT=3001
+
+  # deploy-auth:
+  #   name: Deploy Auth
+  #   runs-on: ubuntu-latest
+  #   environment: production
+  #   if: ${{ contains(github.event.head_commit.modified, 'apps/back/auth/') }}
+
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v3
+
+  #     - name: Deploy Auth
+  #       uses: ./.github/actions/deploy-microservice
+  #       with:
+  #         microservice: auth
+  #         config: |
+  #           DATABASE_URL=${{ secrets.DATABASE_URL }}
+  #           JWT_SECRET=${{ secrets.JWT_SECRET }}
+  #           AUTH_PORT=3001
