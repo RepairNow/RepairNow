@@ -42,30 +42,31 @@ jobs:
           changed_files="${{ steps.changed-files.outputs.all_changed_files }}"
 
           # Liste des dossiers à vérifier
-          folder_to_check=("apps/back/api-gateway" "apps/back/auth" "autre/dossier")
+          folder_to_check=("apps/back/api-gateway" "apps/back/auth")
 
-          # Liste des dossiers modifiés correspondants
+          # Liste des dossiers modifiés
           changed=()
 
-          # Parcourir les fichiers modifiés
-          for file in $changed_files; do
-            # Parcourir la liste des dossiers à vérifier
-            for folder in "${folder_to_check[@]}"; do
-              # Vérifier si le fichier commence par le chemin spécifié
-              if [[ $file == $folder* ]]; then
-                echo "Le fichier $file commence par $folder"
-                # Vérifier si le dossier n'est pas déjà présent dans la liste des dossiers modifiés
-                if [[ ! " ${changed[@]} " =~ " ${folder} " ]]; then
-                  # Ajouter le dossier à la liste des dossiers modifiés
-                  changed+=("$folder")
-                fi
-                # Sortir de la boucle interne une fois qu'une correspondance est trouvée
-                break
-              fi
-            done
+          # Parcourir les dossiers à vérifier
+          for folder in "${folder_to_check[@]}"; do
+            # Filtrer les fichiers modifiés en fonction du chemin du dossier
+            filtered_files=$(echo "$changed_files" | grep "^$folder")
+            # Vérifier si des fichiers modifiés ont été trouvés
+            if [[ -n "$filtered_files" ]]; then
+              changed+=("$folder")
+              # Décommentez la ligne suivante si vous souhaitez afficher les fichiers modifiés pour chaque dossier
+              # echo "$filtered_files" | while IFS= read -r file; do echo "Fichier modifié : $file"; done
+            fi
           done
 
+          # Afficher les dossiers modifiés
+          for folder in "${changed[@]}"; do
+            echo "Dossier modifié : $folder"
+          done
+
+          # Définir la sortie test avec les dossiers modifiés
           echo "::set-output name=test::${changed[*]}"
+
 
       - name: Read output
         run: |
