@@ -26,42 +26,9 @@ jobs:
       pull-requests: read
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: Find changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v35
-
-      - name: Detect Changed Folders
-        id: detect-changed-folders
-        run: |
-          python3 - << EOF
-          import os
-
-          folders = ["apps/back/api-gateway", "apps/back/auth"]
-
-          changed = set()
-
-          for folder in folders:
-              for root, dirs, files in os.walk(folder):
-                  for file in files:
-                      changed.add(folder)
-                      break
-
-          unique_changed = ",".join(changed)
-          print(f"Changed folders: {unique_changed}")
-
-          # Set output
-          print(f"::set-output name=test::{unique_changed}")
-          EOF
-
-      - name: Read Output
-        run: |
-          echo "Changed folders: ${{ steps.detect-changed-folders.outputs.test }}"
-
+      - name: Detect Changes
+        uses: ./.github/actions/detect-changes
+        id: detect-changes
 
     # steps:
     #   # For pull requests it's not necessary to checkout the code
