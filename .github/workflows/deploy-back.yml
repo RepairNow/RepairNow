@@ -19,6 +19,7 @@ jobs:
     name: Deploy Api Gateway
     runs-on: ubuntu-latest
     environment: production
+    if: ${{ github.event_path }} == './apps/back/api-gateway/**'
 
     steps:
       - name: Checkout
@@ -38,6 +39,7 @@ jobs:
     name: Deploy Auth
     runs-on: ubuntu-latest
     environment: production
+    if: ${{ github.event_path }} == './apps/back/auth/**'
 
     steps:
       - name: Checkout
