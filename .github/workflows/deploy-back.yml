@@ -6,6 +6,7 @@ on:
       - 'feature/docker-hub'
     paths:
       - 'apps/back/**'
+      - '.github/**'
 
 env:
   GCLOUD_PROJECT_ID: ${{ secrets.GCLOUD_PROJECT_ID }}
@@ -26,31 +27,43 @@ jobs:
 
     steps:
       - name: Checkout
-        if: github.event_name != 'pull_request'
         uses: actions/checkout@v3
 
-      - name: Filter changes
-        id: filter
-        uses: dorny/paths-filter@v2
-        with:
-          filters: |
-            api-gateway:
-              - 'apps/back/api-gateway/**'
-            auth:
-              - 'apps/back/auth/**'
+      - name: Find changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v5
 
       - name: Set output
         id: set-output
         run: |
-          if [[ -n "${{ steps.filter.outputs.api-gateway }}" && -n "${{ steps.filter.outputs.auth }}" ]]; then
-            echo "::set-output name=changed::both"
-          elif [[ -n "${{ steps.filter.outputs.api-gateway }}" ]]; then
-            echo "::set-output name=changed::api-gateway"
-          elif [[ -n "${{ steps.filter.outputs.auth }}" ]]; then
-            echo "::set-output name=changed::auth"
+          changed_files="${{ steps.changed-files.outputs.files }}"
+          folders=("apps/back/api-gateway" "apps/back/auth" "autre/dossier")
+          changed_folders=""
+          for folder in $folders; do
+            if [[ $changed_files =~ ^$folder/ ]]; then
+              changed_folders+=" $folder"
+            fi
+          done
+          if [[ -n "$changed_folders" ]]; then
+            echo "::set-output name=changed::$changed_folders"
           else
             echo "::set-output name=changed::none"
-          %}
+          fi
+
+    # steps:
+    #   # For pull requests it's not necessary to checkout the code
+    #   - name: Checkout
+    #     if: github.event_name != 'pull_request'
+    #     uses: actions/checkout@v3
+
+    #   - uses: dorny/paths-filter@v2
+    #     id: filter
+    #     with:
+    #       filters: |
+    #         api-gateway:
+    #           - './apps/back/api-gateway/**'
+    #         auth:
+    #           - './apps/back/auth/**'
 
   # deploy-api-gateway:
   #   name: Deploy Api Gateway
