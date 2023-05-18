@@ -39,9 +39,9 @@ jobs:
       with:
         filters: |
           gateway:
-            - './app/back/api-gateway/**'
+            - './apps/back/api-gateway/**'
           auth:
-            - './app/back/auth/**'
+            - './apps/back/auth/**'
 
   deploy-api-gateway:
     name: Deploy Api Gateway
