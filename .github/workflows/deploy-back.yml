@@ -37,6 +37,7 @@ jobs:
 
   deploy-api-gateway:
     needs: detect-changes
+    runs-on: ubuntu-latest
     steps:
       - name: Read Output
         run: |
