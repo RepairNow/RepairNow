@@ -65,10 +65,7 @@ jobs:
             done
           done
 
-          # Afficher les dossiers modifiés
-          for folder in "${changed[@]}"; do
-            echo "Dossier modifié : $folder"
-          done
+          echo "changed=${changed[*]" >> $GITHUB_OUTPUT
 
       - name: Read output
         run: |
