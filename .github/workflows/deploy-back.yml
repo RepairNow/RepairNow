@@ -35,38 +35,30 @@ jobs:
         id: changed-files
         uses: tj-actions/changed-files@v35
 
-      - name: Set output
-        id: set-output
+      - name: Detect Changed Folders
+        id: detect-changed-folders
         run: |
-          # Récupérer la branche courante
-          current_branch=$(git rev-parse --abbrev-ref HEAD)
+          import os
 
-          # Liste des dossiers à vérifier
-          folders=("apps/back/api-gateway" "apps/back/auth")
+          folders = ["apps/back/api-gateway", "apps/back/auth"]
 
-          # Liste des dossiers modifiés
-          changed=()
+          changed = set()
 
-          # Parcourir les dossiers à vérifier
-          for folder in "${folders[@]}"; do
-            # Vérifier si des fichiers modifiés ont été trouvés dans le dossier
-            if git diff-tree --no-commit-id --name-only -r "$current_branch" -- "$folder" | grep -qE '^'; then
-              changed+=("$folder")
-            fi
-          done
+          for folder in folders:
+              for root, dirs, files in os.walk(folder):
+                  for file in files:
+                      changed.add(folder)
+                      break
 
-          # Afficher les dossiers modifiés
-          for folder in "${changed[@]}"; do
-            echo "Dossier modifié : $folder"
-          done
+          unique_changed = ",".join(changed)
+          print(f"Changed folders: {unique_changed}")
 
-          # Définir la sortie test avec les dossiers modifiés
-          echo "::set-output name=test::${changed[*]}"
+          # Set output
+          print(f"::set-output name=test::{unique_changed}")
 
-
-      - name: Read output
+      - name: Read Output
         run: |
-          echo "Changed folders: ${{ steps.set-output.outputs.test }}"
+          echo "Changed folders: ${{ steps.detect-changed-folders.outputs.test }}"
 
     # steps:
     #   # For pull requests it's not necessary to checkout the code
