@@ -35,6 +35,13 @@ jobs:
         uses: ./.github/actions/detect-changes
         id: detect-changes
 
+  deploy-api-gateway:
+    needs: detect-changes
+    steps:
+      - name: Read Output
+        run: |
+          echo "Changed folders: ${{ needs.detect-changes.outputs.changed-folders }}"
+
     # steps:
     #   # For pull requests it's not necessary to checkout the code
     #   - name: Checkout
