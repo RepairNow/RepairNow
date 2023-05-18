@@ -21,6 +21,9 @@ jobs:
     environment: production
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
       - name: Deploy Api Gateway
         uses: ./.github/actions/deploy-microservice
         with:
@@ -37,6 +40,9 @@ jobs:
     environment: production
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
       - name: Deploy Auth
         uses: ./.github/actions/deploy-microservice
         with:
