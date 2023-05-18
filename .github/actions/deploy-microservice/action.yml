@@ -24,6 +24,9 @@ runs:
       with:
         username: "$DOCKER_HUB_USERNAME"
         password: "$DOCKER_HUB_PASSWORD"
+      env:
+        DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+        DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
     - name: Build and push image to Docker Hub
       uses: docker/build-push-action@v4
