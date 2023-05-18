@@ -49,11 +49,13 @@ jobs:
 
           # Parcourir les dossiers à vérifier
           for folder in "${folders[@]}"; do
-            # Vérifier si un fichier modifié commence par le chemin du dossier
-            if echo "$changed_files" | grep -q "^$folder"; then
+            # Rechercher les fichiers modifiés dans le dossier
+            found_files=$(find "$folder" -type f -newermt "1 minute ago" 2>/dev/null)
+            # Vérifier si des fichiers modifiés ont été trouvés
+            if [[ -n "$found_files" ]]; then
               changed+=("$folder")
               # Décommentez la ligne suivante si vous souhaitez afficher les fichiers modifiés pour chaque dossier
-              # echo "$changed_files" | grep "^$folder"
+              # echo "$found_files" | while IFS= read -r file; do echo "Fichier modifié : $file"; done
             fi
           done
 
@@ -62,8 +64,9 @@ jobs:
             echo "Dossier modifié : $folder"
           done
 
-          # Définir la sortie test avec les dossiers modifiés
+          # Définir la sortie GITHUB_OUTPUT avec les dossiers modifiés
           echo "::set-output name=test::${changed[*]}"
+
 
 
 
