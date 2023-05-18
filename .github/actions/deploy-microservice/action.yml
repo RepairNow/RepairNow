@@ -13,9 +13,16 @@ inputs:
 runs:
   using: "composite"
   steps:
+    - uses: dorny/paths-filter@v2
+      id: changes
+      with:
+        filters: |
+          src:
+            - './apps/back/${{ inputs.microservice }}/**'
+
     - name: Checkout
       uses: actions/checkout@v3
-      
+
     - name: Replace microservice .env content
       shell: bash
       run: |
