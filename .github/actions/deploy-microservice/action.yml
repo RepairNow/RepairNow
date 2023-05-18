@@ -66,5 +66,5 @@ runs:
       run: |
         helm upgrade repair-now ./k8s/repair-now \
         --set GITHUB_SHA=${{ github.sha }} \
-        --set GCLOUD_PROJECT_ID=${{ env.GCLOUD_PROJECT_ID }} \
+        --set DOCKER_HUB_USERNAME=${{ env.DOCKER_HUB_USERNAME }} \
         --install \
