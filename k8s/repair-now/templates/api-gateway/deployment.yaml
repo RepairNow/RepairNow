@@ -15,7 +15,7 @@ spec:
         app: api-gateway
     spec:
       containers:
-      - image: europe-west9-docker.pkg.dev/{{ .Values.GCLOUD_PROJECT_ID }}/api-gateway/production:{{ .Values.GITHUB_SHA }}
+      - image: {{ .Values.DOCKER_HUB_USERNAME }}/repair-now-api-gateway:{{ .Values.GITHUB_SHA }}
         name: api-gateway
         ports:
         - containerPort: 3000
