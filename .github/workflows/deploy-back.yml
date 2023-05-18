@@ -39,6 +39,14 @@ jobs:
         id: set-output
         run: |
           echo "::set-output name=changed::${{ steps.changed-files.outputs.all_changed_files }}"
+          changed_files="${{ steps.changed-files.outputs.all_changed_files }}"
+          for file in $changed_files; do
+            # Vérifier si le fichier commence par le chemin spécifié
+            if [[ $file == $folder_to_check* ]]; then
+              echo "Le fichier $file commence par $folder_to_check"
+              # Faites quelque chose si le fichier correspond
+            fi
+          done
           # changed_files="${{ steps.changed-files.outputs.all_changed_files }}"
           # folders=("./apps/back/api-gateway/**", "./apps/back/auth/**", "./.github/**")
           # changed_folders=""
