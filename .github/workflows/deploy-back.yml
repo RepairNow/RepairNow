@@ -3,7 +3,7 @@ name: Deploy Back
 on:
   push:
     branches:
-      - 'feature/docker-hub'
+      - main
     paths:
       - 'apps/back/**'
 
@@ -17,27 +17,19 @@ env:
   DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
 jobs:
-  # JOB to run change detection
-  changes:
+  detect-changes:
+    name: Detect changes
     runs-on: ubuntu-latest
-    # Required permissions
-    permissions:
-      pull-requests: read
-    # Set job outputs to values from filter step
     outputs:
       gateway: ${{ steps.filter.outputs.gateway }}
       auth: ${{ steps.filter.outputs.auth }}
 
     steps:
-    # For pull requests it's not necessary to checkout the code
-    - name: Checkout
-      if: github.event_name != 'pull_request'
-      uses: actions/checkout@v3
-
+    - uses: actions/checkout@v3
     - uses: dorny/paths-filter@v2
       id: filter
       with:
-        base: ${{ github.ref }}
+        base: main
         filters: |
           gateway:
             - './apps/back/api-gateway/**'
@@ -48,8 +40,8 @@ jobs:
     name: Deploy Api Gateway
     runs-on: ubuntu-latest
     environment: production
-    needs: changes
-    if: ${{ needs.changes.outputs.gateway == 'true' }}
+    needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.gateway == 'true' }}
 
     steps:
       - name: Checkout
@@ -69,8 +61,8 @@ jobs:
     name: Deploy Auth
     runs-on: ubuntu-latest
     environment: production
-    needs: changes
-    if: ${{ needs.changes.outputs.auth == 'true' }}
+    needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.auth == 'true' }}
 
     steps:
       - name: Checkout

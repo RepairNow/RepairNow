@@ -23,7 +23,7 @@ async function bootstrap() {
     port,
     function () {
       console.log(
-        'Hey ya ! ApiGateway is listening on port ' +
+        'Hey hey ! ApiGateway is listening on port ' +
         port,
       );
     },
