@@ -29,6 +29,9 @@ jobs:
       auth: ${{ steps.filter.outputs.auth }}
     steps:
     # For pull requests it's not necessary to checkout the code
+    - name: Checkout
+      if: github.event_name != 'pull_request'
+      uses: actions/checkout@v2
     - uses: dorny/paths-filter@v2
       id: filter
       with:
