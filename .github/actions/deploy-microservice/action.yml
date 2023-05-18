@@ -1,5 +1,5 @@
-name: 'Hello World'
-description: 'Greet someone'
+name: 'Deploy Microservice'
+description: 'Deploy microservice to GKE cluster'
 inputs:
   microservice:
     description: 'Microservice to deploy'
@@ -23,38 +23,36 @@ runs:
       run: |
         cat ./apps/back/${{ inputs.microservice }}/.env
 
-    # - name: Login to Docker Hub
-    #   uses: docker/login-action@v2
-    #   with:
-    #     username: ${{ env.DOCKER_HUB_USERNAME }}
-    #     password: ${{ env.DOCKER_HUB_PASSWORD }}
+    - name: Login to Docker Hub
+      uses: docker/login-action@v2
+      with:
+        username: ${{ env.DOCKER_HUB_USERNAME }}
+        password: ${{ env.DOCKER_HUB_PASSWORD }}
 
-    # - name: Build and push image to Docker Hub
-    #   uses: docker/build-push-action@v4
-    #   with:
-    #     context: .
-    #     file: ./apps/back/api-gateway/Dockerfile
-    #     push: true
-    #     tags: "${{ env.DOCKER_HUB_USERNAME }}/repair-now-api-gateway:${{ github.sha }}"
+    - name: Build and push image to Docker Hub
+      uses: docker/build-push-action@v4
+      with:
+        context: .
+        file: ./apps/back/${{ inputs.microservice }}/Dockerfile
+        push: true
+        tags: "${{ env.DOCKER_HUB_USERNAME }}/repair-now-${{ inputs.microservice }}:${{ github.sha }}"
 
-    # - id: 'auth'
-    #   uses: 'google-github-actions/auth@v1'
-    #   with:
-    #     token_format: 'access_token'
-    #     credentials_json: $GKE_SA_KEY
+    - id: 'auth'
+      uses: 'google-github-actions/auth@v1'
+      with:
+        token_format: 'access_token'
+        credentials_json: $GKE_SA_KEY
 
-    # - name: Set up GKE credentials
-    #   uses: google-github-actions/get-gke-credentials@v1
-    #   with:
-    #     cluster_name: $GKE_CLUSTER_NAME
-    #     location: $GKE_CLUSTER_ZONE
+    - name: Set up GKE credentials
+      uses: google-github-actions/get-gke-credentials@v1
+      with:
+        cluster_name: $GKE_CLUSTER_NAME
+        location: $GKE_CLUSTER_ZONE
 
-    
-
-    # - name: Deploy microservices Gto GKE cluster
-    #   shell: bash
-    #   run: |
-    #     helm upgrade repair-now ./k8s/repair-now \
-    #     --set GITHUB_SHA=$GITHUB_SHA \
-    #     --set GCLOUD_PROJECT_ID=$GCLOUD_PROJECT_ID \
-    #     --install \
+    - name: Deploy microservices Gto GKE cluster
+      shell: bash
+      run: |
+        helm upgrade repair-now ./k8s/repair-now \
+        --set GITHUB_SHA=$GITHUB_SHA \
+        --set GCLOUD_PROJECT_ID=$GCLOUD_PROJECT_ID \
+        --install \
