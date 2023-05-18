@@ -42,7 +42,7 @@ jobs:
           changed_files="${{ steps.changed-files.outputs.all_changed_files }}"
 
           # Liste des dossiers à vérifier
-          folder_to_check=("apps/back/api-gateway" "apps/back/auth")
+          folder_to_check=("apps/back/api-gateway" "apps/back/auth" "autre/dossier")
 
           # Liste des dossiers modifiés
           changed=()
@@ -50,7 +50,7 @@ jobs:
           # Parcourir les dossiers à vérifier
           for folder in "${folder_to_check[@]}"; do
             # Filtrer les fichiers modifiés en fonction du chemin du dossier
-            filtered_files=$(echo "$changed_files" | grep "^$folder")
+            filtered_files=$(echo "$changed_files" | grep -F "^$folder")
             # Vérifier si des fichiers modifiés ont été trouvés
             if [[ -n "$filtered_files" ]]; then
               changed+=("$folder")
@@ -66,6 +66,7 @@ jobs:
 
           # Définir la sortie test avec les dossiers modifiés
           echo "::set-output name=test::${changed[*]}"
+
 
 
       - name: Read output
