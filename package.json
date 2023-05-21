@@ -10,8 +10,8 @@
   "scripts": {
     "build": "turbo run build",
     "clean": "turbo run clean && rm -rf node_modules",
-    "dev": "turbo run dev --concurrency=11",
-    "dev:back": "turbo run dev --filter=./apps/back/*",
+    "dev": "turbo run dev --concurrency=100",
+    "dev:back": "turbo run dev --filter=./apps/back/* --filter=./packages/* --concurrency=100",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "lint": "turbo run lint",
     "test": "turbo run test"

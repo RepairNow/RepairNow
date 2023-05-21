@@ -15,14 +15,7 @@ spec:
         app: auth
     spec:
       containers:
-      - image: europe-west9-docker.pkg.dev/{{ .Values.GCLOUD_PROJECT_ID }}/auth/production:{{ .Values.GITHUB_SHA }}
+      - image: {{ .Values.DOCKER_HUB_USERNAME }}/repair-now-auth:{{ .Values.GITHUB_SHA }}
         name: auth
-        env:
-        - name: AUTH_PORT
-          value: '3001'
-        - name: AUTH_HOST
-          value: auth-svc
-        - name: DATABASE_URL
-          value: {{ .Values.DATABASE_URL }}
         ports:
         - containerPort: 3001

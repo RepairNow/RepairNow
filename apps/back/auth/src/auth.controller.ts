@@ -10,9 +10,11 @@ import {
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { MessagePattern } from '@nestjs/microservices';
-import { SignWithEmailDto } from './dto/sign-with-email.dto';
 import { RpcValidationFilter } from './filters/rpc-validation.filter';
 // import { Public } from './auth.module';
+import { SignWithEmailDto } from '@repairnow/dto';
+// Avant le merge de master ici, il y avait:
+// import { SignWithEmailDto } from './dto/sign-with-email.dto';
 
 @Controller()
 export class AuthController {
@@ -20,6 +22,7 @@ export class AuthController {
 
   @Get()
   getHello(): string {
+    console.log('Hello World !');
     return this.authService.getHello();
   }
 

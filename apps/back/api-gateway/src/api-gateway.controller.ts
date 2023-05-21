@@ -1,6 +1,7 @@
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import { ApiGatewayService } from './api-gateway.service';
 import { AuthGuard } from './guards/auth.guard';
+import { ApiBearerAuth, SignWithEmailDto } from '@repairnow/dto';
 
 @Controller('/')
 export class ApiGatewayController {
@@ -27,6 +28,8 @@ export class ApiGatewayController {
     return this.apiGatewayService.callAuth();
   }
 
+  // TODO: Voir d'où ça vient?
+  @ApiBearerAuth()
   @UseGuards(AuthGuard)
   @Get('me')
   async getMe(@Req() req) {
@@ -41,12 +44,12 @@ export class ApiGatewayController {
   }
 
   @Post('signIn')
-  signIn(@Body() signInDto: { email: string; password: string }) {
+  signIn(@Body() signInDto: SignWithEmailDto) {
     return this.apiGatewayService.signIn(signInDto.email, signInDto.password);
   }
 
   @Post('signUp')
-  signUp(@Body() signInDto: { email: string; password: string }) {
+  signUp(@Body() signInDto: SignWithEmailDto) {
     return this.apiGatewayService.signUp(signInDto.email, signInDto.password);
   }
 }

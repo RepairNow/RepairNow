@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class ApiGatewayService {
-  constructor(@Inject('AUTH_SERVICE') private authClient: ClientProxy) {}
+  constructor(@Inject('AUTH_SERVICE') private authClient: ClientProxy) { }
 
   signIn(email: string, password: string): Observable<string> {
     return this.authClient.send(

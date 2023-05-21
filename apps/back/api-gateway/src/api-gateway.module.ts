@@ -11,7 +11,6 @@ import { JwtModule } from '@nestjs/jwt';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: `${process.cwd()}/env/${process.env.NODE_ENV}.env`,
     }),
     ClientsModule.registerAsync([
       {
@@ -19,18 +18,20 @@ import { JwtModule } from '@nestjs/jwt';
         useFactory: (configService: ConfigService) => ({
           transport: Transport.TCP,
           options: {
-            host: configService.get('AUTH_HOST') || 'localhost',
-            port: configService.get('AUTH_PORT') || 3001,
+            host: configService.get('AUTH_HOST'),
+            port: configService.get('AUTH_PORT'),
           },
         }),
         inject: [ConfigService],
       },
     ]),
-    JwtModule.register({
-      global: true,
-      // TODO: Store this secret differently
-      secret: 'CHANGE_ME',
-      signOptions: { expiresIn: '6s' },
+    JwtModule.registerAsync({
+      useFactory: (configService: ConfigService) => ({
+        global: true,
+        secret: configService.get('JWT_SECRET'),
+        signOptions: { expiresIn: '1h' },
+      }),
+      inject: [ConfigService],
     }),
   ],
   controllers: [ApiGatewayController],
