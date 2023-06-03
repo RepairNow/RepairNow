@@ -33,10 +33,14 @@
 				<v-spacer />
 
 				<v-btn
+					v-if="dataUser.isLogged"
 					variant="text"
 					icon="mdi-menu"
 					@click.stop="handleClickDrawer('drawerRight')"
-					color="lightBlack"></v-btn>
+					color="lightBlack" />
+				<router-link v-else to="/login">
+					<v-btn variant="text" icon="mdi-login" color="lightBlack" />
+				</router-link>
 			</v-app-bar>
 
 			<v-navigation-drawer
@@ -50,6 +54,7 @@
 			</v-navigation-drawer>
 
 			<v-navigation-drawer
+				v-if="dataUser.isLogged"
 				v-model="drawerRight"
 				location="bottom"
 				temporary
@@ -157,7 +162,9 @@ const items = [
 	{ title: "Cours particulier", icon: "mdi-email" },
 ];
 
+// TODO: This data is only used for the example, remove it when the app is ready (backend connected)
 const dataUser = {
 	firstname: "John",
+	isLogged: false,
 };
 </script>
