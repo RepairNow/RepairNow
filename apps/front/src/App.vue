@@ -165,6 +165,6 @@ const items = [
 // TODO: This data is only used for the example, remove it when the app is ready (backend connected)
 const dataUser = {
 	firstname: "John",
-	isLogged: false,
+	isLogged: true,
 };
 </script>
