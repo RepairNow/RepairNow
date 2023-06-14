@@ -1,0 +1,78 @@
+name: Deploy Back
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'apps/back/**'
+
+env:
+  GCLOUD_PROJECT_ID: ${{ secrets.GCLOUD_PROJECT_ID }}
+  GKE_SA_KEY: ${{ secrets.GKE_SA_KEY }}
+  GKE_CLUSTER_NAME: ${{ secrets.GKE_CLUSTER_NAME }}
+  GKE_CLUSTER_ZONE: ${{ secrets.GKE_CLUSTER_ZONE }}
+  DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+  DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
+  DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+jobs:
+  detect-changes:
+    name: Detect changes
+    runs-on: ubuntu-latest
+    outputs:
+      gateway: ${{ steps.filter.outputs.gateway }}
+      auth: ${{ steps.filter.outputs.auth }}
+
+    steps:
+    - uses: actions/checkout@v3
+    - uses: dorny/paths-filter@v2
+      id: filter
+      with:
+        base: main
+        filters: |
+          gateway:
+            - './apps/back/api-gateway/**'
+          auth:
+            - './apps/back/auth/**'
+
+  deploy-api-gateway:
+    name: Deploy Api Gateway
+    runs-on: ubuntu-latest
+    environment: production
+    needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.gateway == 'true' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Deploy Api Gateway
+        uses: ./.github/actions/deploy-microservice
+        with:
+          microservice: api-gateway
+          config: |
+            API_GATEWAY_PORT=3000
+            JWT_SECRET=${{ secrets.JWT_SECRET }}
+            AUTH_HOST=auth-svc
+            AUTH_PORT=3001
+
+  deploy-auth:
+    name: Deploy Auth
+    runs-on: ubuntu-latest
+    environment: production
+    needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.auth == 'true' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Deploy Auth
+        uses: ./.github/actions/deploy-microservice
+        with:
+          microservice: auth
+          config: |
+            DATABASE_URL=${{ secrets.DATABASE_URL }}
+            JWT_SECRET=${{ secrets.JWT_SECRET }}
+            AUTH_PORT=3001

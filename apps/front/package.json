@@ -5,6 +5,7 @@
 	"scripts": {
 		"dev": "vite",
 		"build": "vue-tsc && vite build",
+		"clean": "rimraf .turbo node_modules dist",
 		"preview": "vite preview"
 	},
 	"dependencies": {
@@ -30,6 +31,7 @@
 		"vue-tsc": "^1.2.0",
 		"eslint": "7.32.0",
 		"eslint-config-custom": "*",
+		"rimraf": "^3.0.2",
 		"tsconfig": "*"
 	}
 }

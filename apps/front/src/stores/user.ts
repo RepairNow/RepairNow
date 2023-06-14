@@ -1,11 +1,13 @@
 import { defineStore } from "pinia";
 
-interface User {}
+interface User {
+	id: string;
+}
 
 export const useUserStore = defineStore("user", () => {
-	const user = ref<User>({
+	const user: User = {
 		id: "fefefe",
-	});
+	};
 
 	async function signin() {
 		console.log("signin");

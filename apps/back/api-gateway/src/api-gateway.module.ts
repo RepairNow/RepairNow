@@ -3,12 +3,14 @@ import { ApiGatewayController } from './api-gateway.controller';
 import { ApiGatewayService } from './api-gateway.service';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { StatusInterceptor } from './interceptors/status.interceptor';
+import { JwtModule } from '@nestjs/jwt';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: `${process.cwd()}/env/${process.env.NODE_ENV}.env`,
+      isGlobal: true
     }),
     ClientsModule.registerAsync([
       {
@@ -17,14 +19,29 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
           transport: Transport.TCP,
           options: {
             host: configService.get('AUTH_HOST'),
-            port: configService.get('AUTH_PORT'),
+            port: configService.get('AUTH_PORT')
           },
         }),
         inject: [ConfigService],
       },
     ]),
+    JwtModule.registerAsync({
+      useFactory: (configService: ConfigService) => ({
+        global: true,
+        secret: configService.get('JWT_SECRET'),
+        signOptions: { expiresIn: '1h' }
+      }),
+      inject: [ConfigService],
+    }),
   ],
   controllers: [ApiGatewayController],
-  providers: [ApiGatewayService],
+  providers: [
+    ApiGatewayService,
+    // list of global interceptors, not needed if you use the interceptor only in one controller
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: StatusInterceptor,
+    },
+  ],
 })
-export class ApiGatewayModule {}
+export class ApiGatewayModule { }

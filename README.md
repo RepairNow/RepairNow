@@ -40,10 +40,10 @@ yarn install
 docker compose -f docker-compose-bdd.yml up -d
 ```
 
-3 - Update BDD
+3 - Update BDD (init Tables)
 
 ```
-yarn workspace prisma-pg db:push:dev
+yarn workspace @repairnow/prisma db:push
 ```
 
 4 - Launch all projects
@@ -52,9 +52,17 @@ yarn workspace prisma-pg db:push:dev
 yarn run dev
 ```
 
-### Docker - PROD
+5 - (Optionnal) Observe Tables with Prisma studio (adminer like)
 
-This repo is configured to be built with Docker, and Docker compose. To build all apps in this repo:
+```
+yarn workspace @repairnow/prisma studio
+```
+
+### Google Kubernetes Engine (GKE) - PROD
+
+All backend microservices are automatically deployed to a Google Kubernetes Engine (GKE) cluster via a github action pipeline (see .github/workflows folder)
+
+<!-- This repo is configured to be built with Docker, and Docker compose. To build all apps in this repo:
 
 ```
 # Create a network, which allows containers to communicate
@@ -77,7 +85,7 @@ To shutdown all running containers:
 
 ```
 # Stop all running containers
-docker kill $(docker ps -q) && docker rm $(docker ps -a -q)
+docker kill $(docker ps -q) && docker rm $(docker ps -a -q) -->
 ```
 
 ### Remote Caching
