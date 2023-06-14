@@ -13,7 +13,11 @@ const sendEvent = (data) => {
   });
 };
 
-const eventListeners = {};
+const eventListeners = {
+    click: 'click',
+    mouseEvent: 'mouseEvent' // Throttling - Debounce
+};
+
 const SEND_EVENT = Symbol();
 
 export default {
@@ -27,14 +31,28 @@ export default {
 
     Vue.directive("tracker", {
       mounted(el, binding) {
-        console.log(binding);
-        eventListeners[binding.value] = () => {
-          sendEvent({
-            tag: binding.value,
-            event_type: "click",
-          });
-        };
-        el.addEventListener("click", eventListeners[binding.value]);
+        console.log(binding.modifiers);
+        const bindingKeysEvent = Object.keys(binding.modifiers);
+        for (const eventKeys of bindingKeysEvent) {
+            switch(eventKeys) {
+                case 'click':
+                    console.log('tracking set on click of event')
+                    eventListeners[binding.value.modifiers] = () => {
+                    sendEvent({
+                        tag: binding.value,
+                        event_type: "click",
+                    });
+                    };
+                    el.addEventListener("click", eventListeners[binding.value]);
+                    break;
+                case 'mouse':
+                    console.log('tacking set on mouseevent');
+                    break
+                default:
+                    console.error(`this event is not supported ${eventKeys}`)
+                    break
+            }
+        }
       },
       unmounted(el, binding) {
         el.removeEventListener("click", eventListeners[binding.value]);
