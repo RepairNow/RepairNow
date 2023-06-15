@@ -1,4 +1,4 @@
-import { ReviewI } from "./review"
+import { MissionI } from "./mission"
 import { ChatI } from "./chat"
 import { EstimateI } from "./estimate"
 import { UserI } from "./user"
@@ -31,7 +31,7 @@ export interface AnnouncementI {
     address: string
     startTime: Date
     endTime: Date
-    review: ReviewI
+    mission: MissionI
     chat: ChatI
     estimate: EstimateI[]
 }

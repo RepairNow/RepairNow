@@ -32,3 +32,19 @@ export interface UserI {
     password: string
     jobs: JobI[]
 }
+
+export interface Signin {
+    email: string
+    password: string
+}
+
+export interface Signup {
+    firstname: string
+    lastname: string
+    email: string
+    password: string
+}
+
+export interface TokenI {
+    token: string
+}
