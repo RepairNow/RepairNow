@@ -11,15 +11,161 @@ datasource db {
 }
 
 model User {
-  id          String   @id @default(uuid()) @db.Uuid
-  email       String   @unique
-  password    String
-  role        String   @default("CLIENT")
-  avatar      String?
-  birthdate   DateTime?
-  phoneNumber String?  @unique
-  firstname   String?
-  lastname    String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @default(now()) @updatedAt
+  id            String         @id @default(uuid()) @db.Uuid
+  email         String         @unique
+  password      String
+  role          String         @default("CLIENT")
+  avatar        String?
+  birthdate     DateTime?
+  phoneNumber   String?        @unique
+  firstname     String?
+  lastname      String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @default(now()) @updatedAt
+  Wallet        Wallet?        @ignore
+  jobs          Job[]          @ignore
+  notifications Notification[] @ignore
+  estimations   Estimation[]   @ignore
+  Partnership   Partnership[]
+  Announcement  Announcement[]
+  Message       Message[]
+  Mission       Mission[]
+  Geolocation   Geolocation[]
+
+  @@map(name: "u_user")
+}
+
+model Wallet {
+  id                String              @id @default(uuid()) @db.Uuid
+  amount            String
+  user              User                @relation(fields: [userId], references: [id])
+  userId            String              @unique @db.Uuid
+  walletTransaction WalletTransaction[] @ignore
+
+  @@map(name: "u_wallet")
+}
+
+model WalletTransaction {
+  id             String  @id @default(uuid()) @db.Uuid
+  status         Boolean
+  validationCode Int
+  mission        Mission @relation(fields: [missionId], references: [id])
+  missionId      String  @unique @db.Uuid
+  wallet         Wallet  @relation(fields: [walletId], references: [id])
+  walletId       String  @db.Uuid
+
+  @@map(name: "u_wallet_transaction")
+}
+
+model Notification {
+  id      String @id @default(uuid()) @db.Uuid
+  user    User   @relation(fields: [userId], references: [id])
+  userId  String @db.Uuid
+  title   String
+  content String
+
+  @@map(name: "u_notification")
+}
+
+model Partnership {
+  id     String @id @default(uuid()) @db.Uuid
+  title  String
+  user   User   @relation(fields: [userId], references: [id])
+  userId String @db.Uuid
+
+  @@map(name: "u_partnership")
+}
+
+model Job {
+  id    String @id @default(uuid()) @db.Uuid
+  title String
+  users User[] @ignore
+
+  @@map(name: "j_job")
+}
+
+model Announcement {
+  id          String       @id @default(uuid()) @db.Uuid
+  user        User         @relation(fields: [userId], references: [id])
+  userId      String       @db.Uuid
+  title       String
+  description String
+  images      String[]
+  address     String
+  startTime   DateTime     @default(now())
+  endTime     DateTime     @default(now())
+  mission     Mission?     @ignore
+  geolocation Geolocation? @ignore
+  Estimation  Estimation[]
+
+  @@map(name: "m_announcement")
+}
+
+model Estimation {
+  id             String       @id @default(uuid()) @db.Uuid
+  announcement   Announcement @relation(fields: [announcementId], references: [id])
+  announcementId String       @db.Uuid
+  prestataire    User         @relation(fields: [prestataireId], references: [id])
+  prestataireId  String       @db.Uuid
+  price          Float
+  description    String
+  images         String[]
+  status         String
+
+  @@map(name: "m_estimation")
+}
+
+model Chat {
+  id      String    @id @default(uuid()) @db.Uuid
+  status  Boolean
+  Message Message[]
+
+  @@map(name: "m_chat")
+}
+
+model Message {
+  id       String  @id @default(uuid()) @db.Uuid
+  message  String
+  sender   User    @relation(fields: [senderId], references: [id])
+  senderId String  @db.Uuid
+  Chat     Chat    @relation(fields: [chatId], references: [id])
+  chatId   String  @db.Uuid
+  read     Boolean
+
+  @@map(name: "m_message")
+}
+
+model Mission {
+  id                String             @id @default(uuid()) @db.Uuid
+  prestataire       User               @relation(fields: [prestataireId], references: [id])
+  prestataireId     String             @db.Uuid
+  announcement      Announcement       @relation(fields: [announcementId], references: [id])
+  announcementId    String             @unique @db.Uuid
+  status            String
+  walletTransaction WalletTransaction? @ignore
+  Review            Review[]
+
+  @@map(name: "m_mission")
+}
+
+model Review {
+  id        String  @id @default(uuid()) @db.Uuid
+  rating    Int
+  comment   String
+  mission   Mission @relation(fields: [missionId], references: [id])
+  missionId String  @db.Uuid
+
+  @@map(name: "m_Review")
+}
+
+model Geolocation {
+  id             String       @id @default(uuid()) @db.Uuid
+  x              Float
+  y              Float
+  announcement   Announcement @relation(fields: [announcementId], references: [id])
+  announcementId String       @unique @db.Uuid
+  user           User         @relation(fields: [userId], references: [id])
+  userId         String       @db.Uuid
+
+  @@map(name: "m_geolocation")
 }
