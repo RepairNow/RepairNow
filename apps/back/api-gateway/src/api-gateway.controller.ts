@@ -14,6 +14,7 @@ export class ApiGatewayController {
   }
 
   @Get('hello')
+  @UseGuards(AuthGuard)
   getHello(): string {
     return this.apiGatewayService.getHello();
   }

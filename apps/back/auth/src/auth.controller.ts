@@ -22,8 +22,8 @@ export class AuthController {
   constructor(private readonly authService: AuthService) { }
 
   @Get()
+  @UseGuards(AuthGuard)
   getHello(): string {
-    console.log('Hello World !');
     return this.authService.getHello();
   }
 
