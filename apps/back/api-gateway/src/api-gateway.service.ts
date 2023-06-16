@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class ApiGatewayService {
-  constructor(@Inject('AUTH_SERVICE') private authClient: ClientProxy) {}
+  constructor(@Inject('AUTH_SERVICE') private authClient: ClientProxy) { }
 
   signIn(email: string, password: string): Observable<string> {
     return this.authClient.send(
@@ -28,26 +28,6 @@ export class ApiGatewayService {
 
   getProfile(): Observable<string> {
     return this.authClient.send({ cmd: 'get_profile' }, {});
-  }
-
-  signIn(email: string, password: string): Observable<string> {
-    return this.authClient.send(
-      { cmd: 'sign_in_email' },
-      {
-        email,
-        password,
-      },
-    );
-  }
-
-  signUp(email: string, password: string): Observable<string> {
-    return this.authClient.send(
-      { cmd: 'sign_up_email' },
-      {
-        email,
-        password,
-      },
-    );
   }
 
   getMe(): Observable<string> {
