@@ -38,11 +38,17 @@ import ContractorPartnership from "@/views/Contractor/Partnership.vue";
 import ContractorProfile from "@/views/Contractor/Profile.vue";
 import ContractorReviews from "@/views/Contractor/Reviews.vue";
 import ContractorWallet from "@/views/Contractor/Wallet.vue";
+import BaseSession from "@/views/Session/Session.vue";
+import BaseClient from "@/views/Client/Client.vue";
+import BaseContractor from "@/views/Contractor/Contractor.vue";
+import BaseAdmin from "@/views/Admin/Admin.vue";
+import Base from "@/views/Base.vue"
 
 const routes = [
 	{
 		name: "home",
 		path: "/",
+		component: Base,
 		children: [
 			{
 				name: "home-page",
@@ -75,6 +81,7 @@ const routes = [
 	{
 		name: "session",
 		path: "/session",
+		component: BaseSession,
 		children: [
 			{
 				name: "login",
@@ -97,6 +104,7 @@ const routes = [
 	{
 		name: "client",
 		path: "/client",
+		component: BaseClient,
 		children: [
 			{
 				name: "client-announcement",
@@ -169,6 +177,7 @@ const routes = [
 	{
 		name: "contractor",
 		path: "/contractor",
+		component: BaseContractor,
 		children: [
 			{
 				name: "contractor-announcement",
@@ -237,6 +246,7 @@ const routes = [
 	{
 		name: "admin",
 		path: "/admin",
+		component: BaseAdmin,
 		children: [
 			{
 				name: "profile",

@@ -1,10 +1,11 @@
 <template>
-	<v-card>
-		<v-layout>
+    <router-view />
+	<!--<v-card>
+		<v-layout>-->
 			<!-- Can be usefull when we will have a capacitor app to have a small header on top of the screen -->
 			<!-- <v-system-bar color="deep-purple darken-3"></v-system-bar> -->
 
-			<v-app-bar color="background">
+	<!--		<v-app-bar color="background">
 				<v-btn
 					variant="text"
 					icon="mdi-home"
@@ -137,7 +138,7 @@
 				<router-view />
 			</v-main>
 		</v-layout>
-	</v-card>
+	</v-card>-->
 </template>
 
 <script lang="ts" setup>

@@ -1,7 +1,5 @@
 <template>
-    <div class="h-screen w-screen">
-        ezaezaeazeaz
-    </div>
+
 </template>
 
 <script setup>
