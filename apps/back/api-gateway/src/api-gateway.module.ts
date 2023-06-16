@@ -24,6 +24,28 @@ import { JwtModule } from '@nestjs/jwt';
         }),
         inject: [ConfigService],
       },
+      {
+        name: 'JOB_SERVICE',
+        useFactory: (configService: ConfigService) => ({
+          transport: Transport.TCP,
+          options: {
+            host: configService.get('AUTH_HOST'),
+            port: configService.get('JOB_PORT')
+          },
+        }),
+        inject: [ConfigService],
+      },
+      {
+        name: 'MISSION_SERVICE',
+        useFactory: (configService: ConfigService) => ({
+          transport: Transport.TCP,
+          options: {
+            host: configService.get('AUTH_HOST'),
+            port: configService.get('MISSION_PORT')
+          },
+        }),
+        inject: [ConfigService],
+      },
     ]),
     JwtModule.registerAsync({
       useFactory: (configService: ConfigService) => ({
