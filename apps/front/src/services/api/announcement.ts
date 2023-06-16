@@ -57,9 +57,9 @@ class Announcement {
         }
     }
 
-    async _getEstimates(): Promise<EstimateI[]> {
+    async _getEstimates(announcementId: string): Promise<EstimateI[]> {
         try {
-            const uri = `${namespace}/estimates`;
+            const uri = `${namespace}/${announcementId}/estimates`;
             const res = await client.get(uri);
             return res.data;
         } catch (err) {
@@ -67,9 +67,9 @@ class Announcement {
         }
     }
 
-    async _getEstimate(estimateId: string): Promise<EstimateI> {
+    async _getEstimate(payload: { estimateId: string, announcementId: string }): Promise<EstimateI> {
         try {
-            const uri = `${namespace}/estimates/${estimateId}`;
+            const uri = `${namespace}/${payload.announcementId}/estimates/${payload.estimateId}`;
             const res = await client.get(uri);
             return res.data;
         } catch (err) {
@@ -79,7 +79,7 @@ class Announcement {
 
     async _createEstimate(payload: CreateEstimate): Promise<EstimateI> {
         try {
-            const uri = `${namespace}/estimates`;
+            const uri = `${namespace}/${payload.announcementId}/estimates`;
             const res = await client.post(uri, payload);
             return res.data;
         } catch (err) {
@@ -89,7 +89,7 @@ class Announcement {
 
     async _updateEstimate(payload: UpdateEstimate): Promise<EstimateI> {
         try {
-            const uri = `${namespace}/estimates/${payload.id}`;
+            const uri = `${namespace}/${payload.announcementId}/estimates/${payload.id}`;
             const res = await client.patch(uri, payload);
             return res.data;
         } catch (err) {
@@ -97,9 +97,9 @@ class Announcement {
         }
     }
 
-    async _deleteEstimate(estimateId: string): Promise<EstimateI> {
+    async _deleteEstimate(payload: { estimateId: string, announcementId: string }): Promise<EstimateI> {
         try {
-            const uri = `${namespace}/estimates/${estimateId}`;
+            const uri = `${namespace}/${payload.announcementId}/estimates/${payload.estimateId}`;
             const res = await client.delete(uri);
             return res.data;
         } catch (err) {
