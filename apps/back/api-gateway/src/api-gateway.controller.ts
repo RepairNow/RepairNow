@@ -14,6 +14,7 @@ export class ApiGatewayController {
   }
 
   @Get('hello')
+  @UseGuards(AuthGuard)
   getHello(): string {
     return this.apiGatewayService.getHello();
   }
@@ -28,27 +29,18 @@ export class ApiGatewayController {
     return this.apiGatewayService.callAuth();
   }
 
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard)
-  @Get('me')
-  async getMe(@Req() req) {
-    // UseGuard will add to the request the user object
-    // Use this user object to get the user info
-    const userInfos = req.user;
-    return userInfos;
-
-    // TO PASS JWT TOKEN TO MICROSERVICES:
-    // const jwt_token = req.token:
-    // return this.apiGatewayService.getMe(jwt_token);
+  @Get('profile')
+  getProfile() {
+    return this.apiGatewayService.getProfile();
   }
 
   @Post('signIn')
-  signIn(@Body() signInDto: SignWithEmailDto) {
+  signIn(@Body() signInDto: { email: string; password: string }) {
     return this.apiGatewayService.signIn(signInDto.email, signInDto.password);
   }
 
   @Post('signUp')
-  signUp(@Body() signInDto: SignWithEmailDto) {
+  signUp(@Body() signInDto: { email: string; password: string }) {
     return this.apiGatewayService.signUp(signInDto.email, signInDto.password);
   }
 }
