@@ -1,6 +1,8 @@
 <template>
-    <div class="h-screen w-screen">
-        ezaezaeazeaz
+    <div>
+        <p v-for="i in 20">
+            HomepageHomepageHomepageHomepageHomepageHomepageHomepageHomepageHomepageHomepageHomepageHomepageHomepageHomepageHomepage
+        </p>
     </div>
 </template>
 

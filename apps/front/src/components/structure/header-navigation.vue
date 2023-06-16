@@ -1,5 +1,5 @@
 <template>
-    <v-card class="tw-hidden sm:tw-flex">
+    <v-card class="tw-hidden sm:tw-flex tw-z-[100]">
         <v-layout>
             <!-- <v-system-bar color="deep-purple darken-3"></v-system-bar> -->
             <v-app-bar
