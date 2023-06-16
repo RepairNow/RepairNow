@@ -1,11 +1,13 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards, Inject } from '@nestjs/common';
 import { ApiGatewayService } from './api-gateway.service';
 import { AuthGuard } from './guards/auth.guard';
-import { ApiBearerAuth, SignWithEmailDto } from '@repairnow/dto';
-
+import { ClientProxy } from '@nestjs/microservices';
+import { Observable } from 'rxjs';
 @Controller('/')
 export class ApiGatewayController {
-  constructor(private readonly apiGatewayService: ApiGatewayService) { }
+  constructor(private readonly apiGatewayService: ApiGatewayService,
+    @Inject('JOB_SERVICE') private jobClient: ClientProxy,
+    @Inject('MISSION_SERVICE') private missionClient: ClientProxy) { }
 
   // Needed for k8s - Don't touch !!!
   @Get()
@@ -18,6 +20,17 @@ export class ApiGatewayController {
   getHello(): string {
     return this.apiGatewayService.getHello();
   }
+
+  @Get('greeting')
+  getGreeting(): Observable<string> {
+    return this.jobClient.send({ cmd: 'greeting' }, {});
+  }
+
+  @Get('mission')
+  getMissions(): Observable<string> {
+    return this.missionClient.send({ cmd: 'findAllMission' }, {});
+  }
+
 
   @Get('users')
   getHelloTwo(): any {
