@@ -1,8 +1,8 @@
 <template>
     <div class="tw-px-8 md:tw-px-32 lg:tw-px-64 tw-mt-6">
-        <div class="tw-h-[800px] tw-bg-[url('/undraw_friendship_mni7.svg')] tw-bg-right tw-bg-contain tw-flex tw-flex-col tw-py-48">
+        <div class="lg:tw-h-[800px] tw-bg-[url('/undraw_friendship_mni7.svg')] tw-bg-right tw-bg-contain tw-flex tw-flex-col tw-py-48">
             <div class="2xl:tw-w-1/2 xl:tw-w-2/3 tw-w-full">
-                <h1 class="tw-text-5xl tw-font-bold">
+                <h1 class="tw-text-3xl lg:tw-text-5xl tw-font-bold">
                     Trouvez le prestataire idéal pour tous les services du quotidien
                 </h1>
                 <v-btn
@@ -11,7 +11,7 @@
                         height="80"
                 >
                     <template #default>
-                        <div class="tw-w-full  tw-pl-4 tw-pr-8 tw-text-lg">
+                        <div class="tw-w-full tw-pl-4 tw-text-lg">
                             Rechercher un service...
                         </div>
                     </template>
@@ -28,7 +28,7 @@
                 </v-btn>
             </div>
         </div>
-        <div class="tw-flex tw-py-10 tw-border-b-2 overflow-auto">
+        <div class="tw-flex tw-py-10 tw-border-b-2 overflow-auto tw-gap-4">
             <div v-for="item in items"
                 class="tw-w-full tw-text-center tw-flex tw-items-center tw-justify-center  tw-gap-2"
             >
