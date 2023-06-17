@@ -23,7 +23,11 @@ const routes = [
 				name: "cesu",
 				path: "cesu",
 				component: () => import("@/views/Cesu.vue"),
-			}
+			},
+			{
+				path: "/:pathMatch(.*)*",
+				component: () => import("@/views/NotFound.vue"),
+			},
 		],
 		meta: {
 			admin: false,
@@ -35,7 +39,7 @@ const routes = [
 	{
 		name: "session",
 		path: "/session",
-		component:  () => import("@/views/Session/Session.vue"),
+		component: () => import("@/views/Session/Session.vue"),
 		children: [
 			{
 				name: "login",
@@ -58,7 +62,7 @@ const routes = [
 	{
 		name: "client",
 		path: "/client",
-		component:  () => import("@/views/Client/Client.vue"),
+		component: () => import("@/views/Client/Client.vue"),
 		children: [
 			{
 				name: "client-announcement",
@@ -131,62 +135,62 @@ const routes = [
 	{
 		name: "contractor",
 		path: "/contractor",
-		component:  () => import("@/views/Contractor/Contractor.vue"),
+		component: () => import("@/views/Contractor/Contractor.vue"),
 		children: [
 			{
 				name: "contractor-announcement",
 				path: "announcement/{id}",
-				component:  () => import("@/views/Contractor/Announcement/Announcement.vue"),
+				component: () => import("@/views/Contractor/Announcement/Announcement.vue"),
 			},
 			{
 				name: "contractor-announcements",
 				path: "announcements",
-				component:  () => import("@/views/Contractor/Announcement/Announcements.vue"),
+				component: () => import("@/views/Contractor/Announcement/Announcements.vue"),
 			},
 			{
 				name: "contractor-mission",
 				path: "mission/{id}",
-				component:  () => import("@/views/Contractor/Mission/Mission.vue"),
+				component: () => import("@/views/Contractor/Mission/Mission.vue"),
 			},
 			{
 				name: "contractor-missions",
 				path: "missions",
-				component:  () => import("@/views/Contractor/Mission/Missions.vue"),
+				component: () => import("@/views/Contractor/Mission/Missions.vue"),
 			},
 			{
 				name: "contractor-chat",
 				path: "chat",
-				component:  () => import("@/views/Contractor/Chat.vue"),
+				component: () => import("@/views/Contractor/Chat.vue"),
 			},
 			{
 				name: "contractor-geo-location",
 				path: "geo-location",
-				component:  () => import("@/views/Contractor/GeoLocation.vue"),
+				component: () => import("@/views/Contractor/GeoLocation.vue"),
 			},
 			{
 				name: "contractor-notifications",
 				path: "notifications",
-				component:  () => import("@/views/Contractor/Notifications.vue"),
+				component: () => import("@/views/Contractor/Notifications.vue"),
 			},
 			{
 				name: "contractor-partnership",
 				path: "partnership",
-				component:  () => import("@/views/Contractor/Partnership.vue"),
+				component: () => import("@/views/Contractor/Partnership.vue"),
 			},
 			{
 				name: "contractor-profile",
 				path: "profile",
-				component:  () => import("@/views/Contractor/Profile.vue"),
+				component: () => import("@/views/Contractor/Profile.vue"),
 			},
 			{
 				name: "contractor-reviews",
 				path: "reviews",
-				component:  () => import("@/views/Contractor/Reviews.vue"),
+				component: () => import("@/views/Contractor/Reviews.vue"),
 			},
 			{
 				name: "contractor-wallet",
 				path: "wallet",
-				component:  () => import("@/views/Contractor/Wallet.vue"),
+				component: () => import("@/views/Contractor/Wallet.vue"),
 			},
 		],
 		meta: {
@@ -200,62 +204,62 @@ const routes = [
 	{
 		name: "admin",
 		path: "/admin",
-		component:  () => import("@/views/Admin/Admin.vue"),
+		component: () => import("@/views/Admin/Admin.vue"),
 		children: [
 			{
 				name: "admin-profile",
 				path: "profile",
-				component:  () => import("@/views/Admin/Profile.vue"),
+				component: () => import("@/views/Admin/Profile.vue"),
 			},
 			{
 				name: "admin-user",
 				path: "user",
-				component:  () => import("@/views/Admin/User/User.vue"),
+				component: () => import("@/views/Admin/User/User.vue"),
 			},
 			{
 				name: "admin-users",
 				path: "users",
-				component:  () => import("@/views/Admin/User/Users.vue"),
+				component: () => import("@/views/Admin/User/Users.vue"),
 			},
 			{
 				name: "admin-announcement",
 				path: "announcement",
-				component:  () => import("@/views/Admin/Announcement/Announcement.vue"),
+				component: () => import("@/views/Admin/Announcement/Announcement.vue"),
 			},
 			{
 				name: "admin-announcements",
 				path: "announcements",
-				component:  () => import("@/views/Admin/Announcement/Announcements.vue"),
+				component: () => import("@/views/Admin/Announcement/Announcements.vue"),
 			},
 			{
 				name: "admin-chat",
 				path: "chat",
-				component:  () => import("@/views/Admin/Chat.vue"),
+				component: () => import("@/views/Admin/Chat.vue"),
 			},
 			{
 				name: "admin-geo-locations",
 				path: "geo-locations",
-				component:  () => import("@/views/Admin/GeoLocations.vue"),
+				component: () => import("@/views/Admin/GeoLocations.vue"),
 			},
 			{
 				name: "admin-notifications",
 				path: "notifications",
-				component:  () => import("@/views/Admin/Notifications.vue"),
+				component: () => import("@/views/Admin/Notifications.vue"),
 			},
 			{
 				name: "admin-partnerships",
 				path: "partnerships",
-				component:  () => import("@/views/Admin/Partnerships.vue"),
+				component: () => import("@/views/Admin/Partnerships.vue"),
 			},
 			{
 				name: "admin-profile",
 				path: "profile",
-				component:  () => import("@/views/Admin/Profile.vue"),
+				component: () => import("@/views/Admin/Profile.vue"),
 			},
 			{
 				name: "admin-reviews",
 				path: "reviews",
-				component:  () => import("@/views/Admin/Reviews.vue"),
+				component: () => import("@/views/Admin/Reviews.vue"),
 			}
 		],
 		meta: {
@@ -264,7 +268,7 @@ const routes = [
 			mobile: false,
 			connected: true
 		}
-	},
+	}
 ];
 
 export default routes;
