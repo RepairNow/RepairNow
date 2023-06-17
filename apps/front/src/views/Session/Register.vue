@@ -13,14 +13,16 @@
             <div class="tw-flex tw-justify-center tw-text-xl tw-font-medium">
                 OU
             </div>
-            <div class="tw-border tw-w-full tw-rounded hover:tw-shadow-lg tw-p-6 tw-gap-y-2 tw-flex tw-flex-col lg:tw-w-96">
-                <v-icon
-                        icon="mdi-briefcase-variant"
-                        size="100"
-                />
-                <span class="tw-font-bold tw-text-lg">Devenir prestataire</span>
-                <p class="tw-text-neutral-500">Augmentez vos revenus en rendant service près de chez vous</p>
-            </div>
+            <router-link :to="{name: 'become-contractor'}">
+                <div class="tw-border tw-w-full tw-rounded hover:tw-shadow-lg tw-p-6 tw-gap-y-2 tw-flex tw-flex-col lg:tw-w-96">
+                    <v-icon
+                            icon="mdi-briefcase-variant"
+                            size="100"
+                    />
+                    <span class="tw-font-bold tw-text-lg">Devenir prestataire</span>
+                    <p class="tw-text-neutral-500">Augmentez vos revenus en rendant service près de chez vous</p>
+                </div>
+            </router-link>
         </div>
         <div class="tw-my-6">
             <p>Vous avez déjà un compte ? Connectez-vous</p>
