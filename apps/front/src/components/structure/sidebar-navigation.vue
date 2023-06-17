@@ -9,6 +9,7 @@
                         v-for="item in items"
                         :value="item.value"
                         class="tw-flex tw-items-center"
+                        :to="{name: item.to}"
                 >
                     <v-icon color="primary" class="tw-mr-2">{{item.icon}}</v-icon>
                     {{item.title}}

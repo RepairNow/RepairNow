@@ -19,21 +19,26 @@
                 <v-spacer></v-spacer>
 
                 <slot name="center">
-                    <v-btn
-                            rounded
-                            color="transparent"
-                            class="tw-bg-primary tw-text-white tw-normal-case tw-absolute tw-right-1/2"
-                            height="50"
-                    >
-                        <v-icon
-                                slot="prependIcon"
-                                color="white"
-                                size="large"
-                                icon="mdi-plus-circle"
-                                class="tw-mr-2"
-                        />
-                        <span class="tw-text-lg tw-font-bold">Obtenir un réparateur</span>
-                    </v-btn>
+                    <services-modal>
+                        <template #button>
+                            <v-btn
+                                    rounded
+                                    color="transparent"
+                                    class="tw-bg-primary tw-text-white tw-normal-case"
+                                    height="50"
+                            >
+                                <v-icon
+                                        slot="prependIcon"
+                                        color="white"
+                                        size="large"
+                                        icon="mdi-plus-circle"
+                                        class="tw-mr-2"
+                                />
+                                <span class="tw-text-lg tw-font-bold">Obtenir un réparateur</span>
+                            </v-btn>
+
+                        </template>
+                    </services-modal>
                 </slot>
 
                 <v-spacer></v-spacer>
@@ -92,6 +97,7 @@
 
 <script setup lang="ts">
 import {ref} from "vue";
+import ServicesModal from "@/components/modal/services/services-modal.vue";
 
 const props = defineProps({
     items: { type: Array }
