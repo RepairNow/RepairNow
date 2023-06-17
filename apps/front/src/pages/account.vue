@@ -4,4 +4,4 @@
 	<div class="tw-p-5">my account datas</div>
 </template>
 
-<script setup></script>
+<script setup lang="ts"></script>

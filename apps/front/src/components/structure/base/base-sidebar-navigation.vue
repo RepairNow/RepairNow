@@ -20,7 +20,7 @@
     />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import SidebarNavigation from "@/components/structure/sidebar-navigation.vue";
 </script>
 

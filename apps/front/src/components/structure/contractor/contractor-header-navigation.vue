@@ -29,7 +29,7 @@
     />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import HeaderNavigation from "@/components/structure/header-navigation.vue";
 
 </script>

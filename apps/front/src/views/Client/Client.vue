@@ -12,7 +12,7 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import MobileDrawer from "@/components/structure/client/client-mobile-drawer.vue";
 import MobileNavigation from "@/components/structure/client/client-mobile-navigation.vue";
 import HeaderNavigation from "@/components/structure/client/client-header-navigation.vue";

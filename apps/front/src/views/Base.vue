@@ -8,7 +8,7 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import MobileDrawer from "@/components/structure/base/base-mobile-drawer.vue";
 import HeaderNavigation from "@/components/structure/base/base-header-navigation.vue";
 </script>

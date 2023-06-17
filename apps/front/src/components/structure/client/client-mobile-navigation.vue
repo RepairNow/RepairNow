@@ -29,7 +29,7 @@
     />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import MobileNavigation from "@/components/structure/mobile-navigation.vue";
 
 </script>
