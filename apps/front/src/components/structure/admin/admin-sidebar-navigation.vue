@@ -5,25 +5,25 @@
                 title: 'Mes demandes',
                 value: 'mes-demandes',
                 icon: 'mdi-bookmark-outline',
-                to: '',
+                to: 'admin-announcements',
             },
             {
                 title: 'Notifications',
                 value: 'notifications',
                 icon: 'mdi-bell-outline',
-                to: '',
+                to: 'admin-notifications',
             },
             {
                 title: 'Messagerie',
                 value: 'messagerie',
                 icon: 'mdi-message-outline',
-                to: '',
+                to: 'admin-chat',
             },
             {
                 title: 'Compte',
                 value: 'compte',
                 icon: 'mdi-account-outline',
-                to: '',
+                to: 'admin-profile',
             },
         ]"
     />

@@ -2,28 +2,19 @@
     <sidebar-navigation
         :items="[
             {
-                title: 'Mes demandes',
-                value: 'mes-demandes',
-                icon: 'mdi-bookmark-outline',
-                to: '',
+                title: 'Devenir prestataire',
+                value: 'devenir-prestataire',
+                to: 'become-contractor',
             },
             {
-                title: 'Notifications',
-                value: 'notifications',
-                icon: 'mdi-bell-outline',
-                to: '',
+                title: 'Connexion',
+                value: 'connexion',
+                to: 'login',
             },
             {
-                title: 'Messagerie',
-                value: 'messagerie',
-                icon: 'mdi-message-outline',
-                to: '',
-            },
-            {
-                title: 'Compte',
-                value: 'compte',
-                icon: 'mdi-account-outline',
-                to: '',
+                title: 'Inscription',
+                value: 'inscription',
+                to: 'register',
             },
         ]"
     />

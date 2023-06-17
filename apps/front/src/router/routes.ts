@@ -203,57 +203,57 @@ const routes = [
 		component:  () => import("@/views/Admin/Admin.vue"),
 		children: [
 			{
-				name: "profile",
+				name: "admin-profile",
 				path: "profile",
 				component:  () => import("@/views/Admin/Profile.vue"),
 			},
 			{
-				name: "user",
+				name: "admin-user",
 				path: "user",
 				component:  () => import("@/views/Admin/User/User.vue"),
 			},
 			{
-				name: "users",
+				name: "admin-users",
 				path: "users",
 				component:  () => import("@/views/Admin/User/Users.vue"),
 			},
 			{
-				name: "announcement",
+				name: "admin-announcement",
 				path: "announcement",
 				component:  () => import("@/views/Admin/Announcement/Announcement.vue"),
 			},
 			{
-				name: "announcement",
+				name: "admin-announcements",
 				path: "announcements",
 				component:  () => import("@/views/Admin/Announcement/Announcements.vue"),
 			},
 			{
-				name: "chat",
+				name: "admin-chat",
 				path: "chat",
 				component:  () => import("@/views/Admin/Chat.vue"),
 			},
 			{
-				name: "geo-locations",
+				name: "admin-geo-locations",
 				path: "geo-locations",
 				component:  () => import("@/views/Admin/GeoLocations.vue"),
 			},
 			{
-				name: "notifications",
+				name: "admin-notifications",
 				path: "notifications",
 				component:  () => import("@/views/Admin/Notifications.vue"),
 			},
 			{
-				name: "partnerships",
+				name: "admin-partnerships",
 				path: "partnerships",
 				component:  () => import("@/views/Admin/Partnerships.vue"),
 			},
 			{
-				name: "profile",
+				name: "admin-profile",
 				path: "profile",
 				component:  () => import("@/views/Admin/Profile.vue"),
 			},
 			{
-				name: "reviews",
+				name: "admin-reviews",
 				path: "reviews",
 				component:  () => import("@/views/Admin/Reviews.vue"),
 			}

@@ -5,25 +5,25 @@
                 title: 'Mes demandes',
                 value: 'mes-demandes',
                 icon: 'mdi-bookmark-outline',
-                to: '',
+                to: 'contractor-announcements',
             },
             {
                 title: 'Notifications',
                 value: 'notifications',
                 icon: 'mdi-bell-outline',
-                to: '',
+                to: 'contractor-notifications',
             },
             {
                 title: 'Messagerie',
                 value: 'messagerie',
                 icon: 'mdi-message-outline',
-                to: '',
+                to: 'contractor-chat',
             },
             {
                 title: 'Compte',
                 value: 'compte',
                 icon: 'mdi-account-outline',
-                to: '',
+                to: 'contractor-profile',
             },
         ]"
     />

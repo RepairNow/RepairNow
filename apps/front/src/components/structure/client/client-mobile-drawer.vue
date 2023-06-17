@@ -1,29 +1,29 @@
 <template>
     <mobile-drawer
-            :items="[
+        :items="[
             {
                 title: 'Mes demandes',
                 value: 'mes-demandes',
                 icon: 'mdi-bookmark-outline',
-                to: '',
+                to: 'client-announcements',
             },
             {
                 title: 'Notifications',
                 value: 'notifications',
                 icon: 'mdi-bell-outline',
-                to: '',
+                to: 'client-notifications',
             },
             {
                 title: 'Messagerie',
                 value: 'messagerie',
                 icon: 'mdi-message-outline',
-                to: '',
+                to: 'client-chat',
             },
             {
                 title: 'Compte',
                 value: 'compte',
                 icon: 'mdi-account-outline',
-                to: '',
+                to: 'client-profile',
             },
         ]"
     />
