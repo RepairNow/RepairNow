@@ -24,13 +24,19 @@
                 </div>
             </router-link>
         </div>
-        <div class="tw-my-6">
-            <p>Vous avez déjà un compte ? Connectez-vous</p>
+        <div class="tw-my-6 tw-flex tw-gap-2">
+            <p class="">Vous avez déjà un compte ?</p>
+            <login-form>
+                <template #button>
+                    <span class="tw-text-primary hover:tw-text-primary-darken-1 hover:tw-underline">Connectez-vous</span>
+                </template>
+            </login-form>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
 
+import LoginForm from "@/components/modal/form/session/login-form.vue";
 </script>
 
