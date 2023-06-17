@@ -66,7 +66,7 @@
                 <div class="tw-text-sm pt-4">
                     Pas encore membre?
                     <router-link
-                            to="register"
+                            :to="{name: 'register'}"
                             class="tw-text-primary hover:tw-underline hover:tw-text-primary-darken-1"
                             @click="dialog = false"
                     >

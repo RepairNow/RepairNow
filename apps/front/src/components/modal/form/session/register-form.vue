@@ -4,12 +4,19 @@
             transition="dialog-bottom-transition"
     >
         <template v-slot:activator="{ props }">
-            <v-btn
-                    color="primary"
+            <div
                     v-bind="props"
             >
-                Open Dialog
-            </v-btn>
+                <slot name="button">
+                    <v-btn
+                            color="primary"
+                    >
+                        Inscription
+                    </v-btn>
+                </slot>
+            </div>
+
+
         </template>
 
         <v-card class="tw-w-1/3 tw-mx-auto tw-p-4 rounded-lg">
@@ -23,10 +30,25 @@
                 />
             </div>
             <div class="mb-4">
-                <p class="tw-text-3xl tw-font-bold">Content de te revoir!</p>
-                <p>Connectez-vous à votre compte</p>
+                <p class="tw-text-3xl tw-font-bold">Créer un compte</p>
+                <p>Profitez de votre temps libre grâce à nos jobbers</p>
             </div>
             <div class="tw-flex tw-flex-col tw-gap-4">
+                <v-text-field
+                        prepend-inner-icon="mdi-account"
+                        variant="filled"
+                        label="Prénom"
+                        hide-details
+                        class="tw-bg-neutral-200 rounded-lg"
+                />
+                <v-text-field
+                        prepend-inner-icon="mdi-lock-outline"
+                        variant="filled"
+                        label="Nom"
+                        hide-details
+                        class="tw-bg-neutral-200 rounded-lg"
+
+                />
                 <v-text-field
                         prepend-inner-icon="mdi-email-outline"
                         variant="filled"
@@ -43,27 +65,20 @@
 
                 />
             </div>
-            <div class="tw-flex tw-items-center">
+            <div class="tw-flex tw-flex-col">
                 <v-checkbox
                         hide-details
-                        label="Se souvenir de moi"
+                        label="Je souhaite être informé des nouveautés, cadeaux et bons plans"
                 />
-                <router-link
-                        to=""
-                >
-                    <p class="tw-text-primary">Mot de passe oublié ?</p>
-                </router-link>
+                <v-checkbox
+                        hide-details
+                        label="Je souhaite recevoir les bons plans des partenaires"
+                />
             </div>
             <div class="tw-flex tw-flex-col tw-items-center">
                 <v-btn text="Se connecter" block class="tw-normal-case"/>
                 <div class="tw-text-sm pt-4">
-                    Pas encore membre?
-                    <router-link
-                            to=""
-                            class="tw-text-primary"
-                    >
-                        se créer un compte
-                    </router-link>
+                    En vous inscrivant vous acceptez les conditions générales et la politique de confidentialité
                 </div>
             </div>
         </v-card>
