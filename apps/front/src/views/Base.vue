@@ -2,7 +2,7 @@
     <div class="tw-flex tw-h-screen tw-w-screen tw-pt-16">
         <mobile-drawer />
         <header-navigation />
-        <div class="tw-bg-green-100 tw-h-full tw-w-full overflow-auto">
+        <div class="tw-h-full tw-w-full overflow-auto">
             <router-view />
         </div>
     </div>
