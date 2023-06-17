@@ -6,6 +6,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { StatusInterceptor } from './interceptors/status.interceptor';
 import { JwtModule } from '@nestjs/jwt';
+import { JobController } from './job/job.controller';
 
 @Module({
   imports: [
@@ -56,7 +57,7 @@ import { JwtModule } from '@nestjs/jwt';
       inject: [ConfigService],
     }),
   ],
-  controllers: [ApiGatewayController],
+  controllers: [ApiGatewayController, JobController],
   providers: [
     ApiGatewayService,
     // list of global interceptors, not needed if you use the interceptor only in one controller

@@ -16,12 +16,11 @@ export class StatusInterceptor implements NestInterceptor {
         const httpResponse = context.switchToHttp().getResponse();
 
         // verify if "status" property exists in response
-        if (response.error && response.error.hasOwnProperty('statusCode')) {
-          const { statusCode } = response.error;
+        if (response && response.hasOwnProperty('status')) {
+          const { status } = response;
 
           // modify response status of the api-gateway
-          httpResponse.status(statusCode);
-          return response.error;
+          httpResponse.status(status);
         }
 
         return response;

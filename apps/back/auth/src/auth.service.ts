@@ -1,6 +1,6 @@
 import { Injectable, UnauthorizedException, HttpException, HttpStatus, UseGuards } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { SignWithEmailDto } from '@repairnow/dto';
+import { SignWithEmailDto } from './dto/sign-with-email.dto';
 import { PrismaService, User } from '@repairnow/prisma';
 import { AuthGuard } from './auth.guard';
 @Injectable()

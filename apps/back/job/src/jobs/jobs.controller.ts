@@ -1,35 +1,41 @@
-import { Controller } from '@nestjs/common';
+import { Body, Controller, UseFilters, UsePipes, ValidationPipe } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { JobsService } from './jobs.service';
 import { CreateJobDto } from './dto/create-job.dto';
 import { UpdateJobDto } from './dto/update-job.dto';
+import { RpcValidationFilter } from './filters/rpc-validation.filter';
 
 @Controller()
 export class JobsController {
-  constructor(private readonly jobsService: JobsService) {}
+  constructor(private readonly jobsService: JobsService) { }
 
-  @MessagePattern('createJob')
-  create(@Payload() createJobDto: CreateJobDto) {
+  @UseFilters(new RpcValidationFilter())
+  @MessagePattern({ cmd: 'createJob' })
+  @UsePipes(new ValidationPipe())
+  create(@Payload(ValidationPipe) createJobDto: CreateJobDto) {
     return this.jobsService.create(createJobDto);
   }
 
-  @MessagePattern('findAllJobs')
+  @UseFilters(new RpcValidationFilter())
+  @MessagePattern({ cmd: 'findAllJobs' })
   findAll() {
     return this.jobsService.findAll();
   }
 
-  @MessagePattern('findOneJob')
-  findOne(@Payload() id: number) {
+  @UseFilters(new RpcValidationFilter())
+  @MessagePattern({ cmd: 'findOneJob' })
+  findOne(@Payload() id: string) {
     return this.jobsService.findOne(id);
   }
 
-  @MessagePattern('updateJob')
+  @UseFilters(new RpcValidationFilter())
+  @MessagePattern({ cmd: 'updateJob' })
   update(@Payload() updateJobDto: UpdateJobDto) {
-    return this.jobsService.update(updateJobDto.id, updateJobDto);
+    return this.jobsService.update(updateJobDto);
   }
 
-  @MessagePattern('removeJob')
-  remove(@Payload() id: number) {
+  @MessagePattern({ cmd: 'removeJob' })
+  remove(@Payload() id: string) {
     return this.jobsService.remove(id);
   }
 }

@@ -13,7 +13,7 @@ import { AuthService } from './auth.service';
 import { MessagePattern } from '@nestjs/microservices';
 import { RpcValidationFilter } from './filters/rpc-validation.filter';
 // import { Public } from './auth.module';
-import { SignWithEmailDto } from '@repairnow/dto'
+import { SignWithEmailDto } from './dto/sign-with-email.dto'
 import { AuthGuard } from './auth.guard';
 
 
