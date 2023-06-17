@@ -1,11 +1,13 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, UseGuards, Inject } from '@nestjs/common';
 import { ApiGatewayService } from './api-gateway.service';
 import { AuthGuard } from './guards/auth.guard';
-import { ApiBearerAuth, SignWithEmailDto } from '@repairnow/dto';
-
+import { ClientProxy } from '@nestjs/microservices';
+import { Observable } from 'rxjs';
 @Controller('/')
 export class ApiGatewayController {
-  constructor(private readonly apiGatewayService: ApiGatewayService) { }
+  constructor(private readonly apiGatewayService: ApiGatewayService,
+    @Inject('JOB_SERVICE') private jobClient: ClientProxy,
+    @Inject('MISSION_SERVICE') private missionClient: ClientProxy) { }
 
   // Needed for k8s - Don't touch !!!
   @Get()
@@ -14,9 +16,21 @@ export class ApiGatewayController {
   }
 
   @Get('hello')
+  @UseGuards(AuthGuard)
   getHello(): string {
     return this.apiGatewayService.getHello();
   }
+
+  @Get('greeting')
+  getGreeting(): Observable<string> {
+    return this.jobClient.send({ cmd: 'greeting' }, {});
+  }
+
+  @Get('mission')
+  getMissions(): Observable<string> {
+    return this.missionClient.send({ cmd: 'findAllMission' }, {});
+  }
+
 
   @Get('users')
   getHelloTwo(): any {
@@ -28,27 +42,18 @@ export class ApiGatewayController {
     return this.apiGatewayService.callAuth();
   }
 
-  @ApiBearerAuth()
-  @UseGuards(AuthGuard)
-  @Get('me')
-  async getMe(@Req() req) {
-    // UseGuard will add to the request the user object
-    // Use this user object to get the user info
-    const userInfos = req.user;
-    return userInfos;
-
-    // TO PASS JWT TOKEN TO MICROSERVICES:
-    // const jwt_token = req.token:
-    // return this.apiGatewayService.getMe(jwt_token);
+  @Get('profile')
+  getProfile() {
+    return this.apiGatewayService.getProfile();
   }
 
   @Post('signIn')
-  signIn(@Body() signInDto: SignWithEmailDto) {
+  signIn(@Body() signInDto: { email: string; password: string }) {
     return this.apiGatewayService.signIn(signInDto.email, signInDto.password);
   }
 
   @Post('signUp')
-  signUp(@Body() signInDto: SignWithEmailDto) {
+  signUp(@Body() signInDto: { email: string; password: string }) {
     return this.apiGatewayService.signUp(signInDto.email, signInDto.password);
   }
 }

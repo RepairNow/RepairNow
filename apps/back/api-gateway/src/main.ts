@@ -21,10 +21,11 @@ async function bootstrap() {
   // First message when the app is ready
   await app.listen(
     port,
+    '0.0.0.0',
     function () {
       console.log(
-        'Hey hey ! ApiGateway is listening on port ' +
-        port,
+        'Hey ya ya ya ! ApiGateway is listening on port ' +
+        configService.get('API_GATEWAY_PORT'),
       );
     },
   );

@@ -6,21 +6,24 @@ import {
   HttpStatus,
   Request,
   UseFilters,
+  UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { MessagePattern } from '@nestjs/microservices';
 import { RpcValidationFilter } from './filters/rpc-validation.filter';
 // import { Public } from './auth.module';
-import { SignWithEmailDto } from '@repairnow/dto';
+import { SignWithEmailDto } from '@repairnow/dto'
+import { AuthGuard } from './auth.guard';
+
 
 @Controller()
 export class AuthController {
   constructor(private readonly authService: AuthService) { }
 
   @Get()
+  @UseGuards(AuthGuard)
   getHello(): string {
-    console.log('Hello World !');
     return this.authService.getHello();
   }
 
@@ -36,11 +39,12 @@ export class AuthController {
 
   @UseFilters(new RpcValidationFilter())
   @MessagePattern({ cmd: 'sign_in_email' })
+
   signIn(@Body(ValidationPipe) params: SignWithEmailDto) {
     return this.authService.signInEmail(params.email, params.password);
   }
-
   @UseFilters(new RpcValidationFilter())
+
   @MessagePattern({ cmd: 'sign_up_email' })
   async signUp(
     @Body(ValidationPipe)
@@ -51,5 +55,12 @@ export class AuthController {
       return new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     }
     return this.authService.signUpEmail(params.email, params.password);
+  }
+
+  @UseGuards(AuthGuard)
+  @UseFilters(new RpcValidationFilter())
+  @MessagePattern({ cmd: 'get_profile' })
+  getProfile(@Request() req) {
+    return req.user;
   }
 }
