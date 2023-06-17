@@ -9,10 +9,8 @@
 </template>
 
 <script setup>
-import MobileDrawer from "@/components/structure/base/mobile-drawer.vue";
-import MobileNavigation from "@/components/structure/base/mobile-navigation.vue";
-import HeaderNavigation from "@/components/structure/base/header-navigation.vue";
-import SidebarNavigation from "@/components/structure/base/sidebar-navigation.vue";
+import MobileDrawer from "@/components/structure/base/base-mobile-drawer.vue";
+import HeaderNavigation from "@/components/structure/base/base-header-navigation.vue";
 </script>
 
 <style scoped>

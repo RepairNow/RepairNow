@@ -13,10 +13,10 @@
 </template>
 
 <script setup>
-import MobileDrawer from "@/components/structure/client/mobile-drawer.vue";
-import MobileNavigation from "@/components/structure/client/mobile-navigation.vue";
-import HeaderNavigation from "@/components/structure/client/header-navigation.vue";
-import SidebarNavigation from "@/components/structure/client/sidebar-navigation.vue";
+import MobileDrawer from "@/components/structure/client/client-mobile-drawer.vue";
+import MobileNavigation from "@/components/structure/client/client-mobile-navigation.vue";
+import HeaderNavigation from "@/components/structure/client/client-header-navigation.vue";
+import SidebarNavigation from "@/components/structure/client/client-sidebar-navigation.vue";
 </script>
 
 <style scoped>
