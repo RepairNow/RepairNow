@@ -3,6 +3,7 @@ import {
   NestInterceptor,
   ExecutionContext,
   CallHandler,
+  Logger,
 } from '@nestjs/common';
 import { Observable, map } from 'rxjs';
 
@@ -14,7 +15,6 @@ export class StatusInterceptor implements NestInterceptor {
     return next.handle().pipe(
       map((response) => {
         const httpResponse = context.switchToHttp().getResponse();
-
         // verify if "status" property exists in response
         if (response.error && response.error.hasOwnProperty('statusCode')) {
           const { statusCode } = response.error;

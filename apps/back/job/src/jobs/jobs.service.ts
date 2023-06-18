@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { BadRequestException, HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateJobDto } from './dto/create-job.dto';
 import { UpdateJobDto } from './dto/update-job.dto';
 import { PrismaService } from '@repairnow/prisma';
@@ -15,7 +15,7 @@ export class JobsService {
         data: createJobDto
       })
     } catch (error) {
-      return new RpcException({ message: error.message, statusCode: HttpStatus.BAD_REQUEST });
+      return new BadRequestException(error.message);
     }
   }
 
@@ -23,7 +23,7 @@ export class JobsService {
     try {
       return await this.prismaService.job.findMany();
     } catch (error) {
-      return new RpcException({ message: error.message, statusCode: HttpStatus.BAD_REQUEST });
+      return new BadRequestException(error.message);
     }
   }
 
@@ -35,7 +35,7 @@ export class JobsService {
         }
       });
     } catch (error) {
-      return new RpcException({ message: error.message, statusCode: HttpStatus.BAD_REQUEST });
+      return new BadRequestException(error.message);
     }
   }
 
@@ -49,7 +49,7 @@ export class JobsService {
         data: jobData
       });
     } catch (error) {
-      return new RpcException({ message: error.message, statusCode: HttpStatus.BAD_REQUEST });
+      return new BadRequestException(error.message);
     }
   }
 
@@ -61,7 +61,7 @@ export class JobsService {
         }
       });
     } catch (error) {
-      return new RpcException({ message: error.message, statusCode: HttpStatus.BAD_REQUEST });
+      return new BadRequestException(error.message);
     }
   }
 }

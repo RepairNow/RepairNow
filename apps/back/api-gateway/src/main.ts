@@ -2,12 +2,11 @@ import { NestFactory } from '@nestjs/core';
 import { ApiGatewayModule } from './api-gateway.module';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-
+import { StatusInterceptor } from './interceptors/status.interceptor';
 async function bootstrap() {
   const app = await NestFactory.create(ApiGatewayModule);
   const configService = app.get(ConfigService);
   const port = configService.get('API_GATEWAY_PORT');
-
   // swagger part
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Repair Now API Doc')
@@ -29,5 +28,8 @@ async function bootstrap() {
       );
     },
   );
+
+  app.useGlobalInterceptors(new StatusInterceptor());
+
 }
 bootstrap();
