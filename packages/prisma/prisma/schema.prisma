@@ -97,6 +97,8 @@ model Announcement {
   mission     Mission?     @ignore
   geolocation Geolocation? @ignore
   Estimation  Estimation[]
+  currentStatus  String   
+  acceptedAt  DateTime     @default("1970-01-01T00:00:00Z")
 
   @@map(name: "m_announcement")
 }

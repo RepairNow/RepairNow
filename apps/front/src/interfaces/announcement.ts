@@ -4,7 +4,7 @@ import { EstimateI } from "./estimate"
 import { UserI } from "./user"
 
 export interface CreateAnnouncement {
-    announcerId: string
+    userId: string
     title: string
     description: string
     images: File[]
@@ -20,17 +20,22 @@ export interface UpdateAnnouncement extends Partial<AnnouncementI> {
     address?: string
     startTime?: Date
     endTime?: Date
+    acceptedAt?: Date
+    status?: string
 }
 
 export interface AnnouncementI {
     id: string
-    announcerId: UserI
+    userId: string
+    user: UserI
     title: string
     description: string
     images: File[]
     address: string
     startTime: Date
     endTime: Date
+    acceptedAt: Date
+    status: string
     mission: MissionI
     chat: ChatI
     estimate: EstimateI[]
