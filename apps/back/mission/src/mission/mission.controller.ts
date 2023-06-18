@@ -1,15 +1,17 @@
-import { Controller } from '@nestjs/common';
+import { Controller, UseFilters, ValidationPipe } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { MissionService } from './mission.service';
 import { CreateMissionDto } from './dto/create-mission.dto';
 import { UpdateMissionDto } from './dto/update-mission.dto';
+import { RpcValidationFilter } from 'src/filters/rpc-validation.filter';
 
 @Controller()
 export class MissionController {
   constructor(private readonly missionService: MissionService) { }
 
-  @MessagePattern('createMission')
-  create(@Payload() createMissionDto: CreateMissionDto) {
+  @MessagePattern({ cmd: 'createMission' })
+  @UseFilters(RpcValidationFilter)
+  create(@Payload(ValidationPipe) createMissionDto: CreateMissionDto) {
     return this.missionService.create(createMissionDto);
   }
 
@@ -19,7 +21,7 @@ export class MissionController {
   }
 
   @MessagePattern('findOneMission')
-  findOne(@Payload() id: number) {
+  findOne(@Payload() id: string) {
     return this.missionService.findOne(id);
   }
 
@@ -29,7 +31,7 @@ export class MissionController {
   }
 
   @MessagePattern('removeMission')
-  remove(@Payload() id: number) {
+  remove(@Payload() id: string) {
     return this.missionService.remove(id);
   }
 }
