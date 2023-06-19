@@ -2,7 +2,9 @@
     <div class="tw-flex tw-flex-col tw-items-center tw-my-6 tw-mx-4">
         <h1 class="tw-text-2xl tw-font-bold tw-my-12">Bienvenue chez RepairNow</h1>
         <div class="tw-flex lg:tw-flex-row tw-items-center tw-gap-12 tw-flex-col">
-            <register-form>
+            <register-form
+                    dialog-class="tw-w-full"
+            >
                 <template #button>
                     <div class="tw-border tw-w-full tw-rounded hover:tw-shadow-lg tw-p-6 tw-gap-y-2 tw-flex tw-flex-col lg:tw-w-96 tw-cursor-pointer">
                         <v-icon

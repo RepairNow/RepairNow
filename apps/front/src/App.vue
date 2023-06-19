@@ -142,7 +142,19 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import {onMounted, onUnmounted, ref} from "vue";
+import { useScreenSize } from "@/stores/screen-size";
+
+const screenSize = useScreenSize();
+const { onScreenSizeUpdate, removeScreenSizeUpdate } = screenSize;
+
+onMounted(() => {
+    onScreenSizeUpdate()
+})
+
+onUnmounted(() => {
+    removeScreenSizeUpdate()
+})
 
 const drawerMain = ref(false);
 const drawerRight = ref(false);

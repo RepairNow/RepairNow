@@ -56,6 +56,7 @@
                         class="h-screen tw-z-[2000]"
                         :elevation="24"
                         temporary
+                        :rail="false"
                 >
                     <div class="tw-flex">
                         <v-spacer />

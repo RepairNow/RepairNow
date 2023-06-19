@@ -2,10 +2,12 @@
     <v-dialog
             v-model="dialog"
             transition="dialog-bottom-transition"
+            :fullscreen="isSizeLG"
     >
         <template v-slot:activator="{ props }">
             <div
                     v-bind="props"
+                    :class="dialogClass"
             >
                 <slot name="button">
                     <v-btn
@@ -87,6 +89,16 @@
 
 <script setup lang="ts">
 import {ref} from "vue";
+import {useScreenSize} from "@/stores/screen-size";
+import {storeToRefs} from "pinia";
+
+const screenSize = useScreenSize();
+const { isSizeLG } = storeToRefs(screenSize);
+
+const props = defineProps({
+    dialogClass: {type: String}
+})
+
 
 const dialog = ref(false)
 </script>

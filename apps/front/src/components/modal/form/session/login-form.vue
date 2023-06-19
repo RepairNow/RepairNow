@@ -2,6 +2,7 @@
     <v-dialog
             v-model="dialog"
             transition="dialog-bottom-transition"
+            fullscreen
     >
         <template v-slot:activator="{ props }">
             <div
@@ -55,11 +56,11 @@
                     hide-details
                     label="Se souvenir de moi"
                 />
-                <router-link
-                        to=""
-                >
-                    <p class="tw-text-primary hover:tw-underline hover:tw-text-primary-darken-1">Mot de passe oublié ?</p>
-                </router-link>
+                <password-forgot-form>
+                    <template #button>
+                        <p class="tw-text-primary hover:tw-underline hover:tw-text-primary-darken-1">Mot de passe oublié ?</p>
+                    </template>
+                </password-forgot-form>
             </div>
             <div class="tw-flex tw-flex-col tw-items-center">
                 <v-btn text="Se connecter" block class="tw-normal-case"/>
@@ -80,6 +81,7 @@
 
 <script setup lang="ts">
     import {ref} from "vue";
+    import PasswordForgotForm from "@/components/modal/form/session/password-forgot-form.vue";
 
     const dialog = ref(false)
 </script>
