@@ -20,17 +20,18 @@ export class MissionController {
     return this.missionService.findAll();
   }
 
-  @MessagePattern('findOneMission')
+  @MessagePattern({ cmd: 'findOneMission' })
   findOne(@Payload() id: string) {
     return this.missionService.findOne(id);
   }
 
-  @MessagePattern('updateMission')
-  update(@Payload() updateMissionDto: UpdateMissionDto) {
-    return this.missionService.update(updateMissionDto.id, updateMissionDto);
+  @MessagePattern({ cmd: 'updateMission' })
+  @UseFilters(RpcValidationFilter)
+  update(@Payload(ValidationPipe) updateMissionDto: UpdateMissionDto) {
+    return this.missionService.update(updateMissionDto);
   }
 
-  @MessagePattern('removeMission')
+  @MessagePattern({ cmd: 'removeMission' })
   remove(@Payload() id: string) {
     return this.missionService.remove(id);
   }

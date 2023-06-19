@@ -1,13 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateMissionDto } from './dto/create-mission.dto';
 import { UpdateMissionDto } from './dto/update-mission.dto';
 import { PrismaService } from '@repairnow/prisma';
-
-
-enum MissionStatus {
-  IN_PROGRESS = "IN PROGRESS",
-  DONE = "DONE"
-}
+import { MissionStatus } from './enums/mission-status.enum';
 
 @Injectable()
 export class MissionService {
@@ -24,7 +19,7 @@ export class MissionService {
       });
 
       if (!prestataire) {
-        return new BadRequestException("Le Prestataire n'existe pas");
+        return new NotFoundException("Le Prestataire n'existe pas");
       }
 
       const announcement = await this.prismaService.announcement.findUnique({
@@ -34,7 +29,7 @@ export class MissionService {
       });
 
       if (!announcement) {
-        return new BadRequestException("L'annonce n'existe pas");
+        return new NotFoundException("L'annonce n'existe pas");
       }
 
       // check if a mission already exists for this announcement
@@ -61,19 +56,77 @@ export class MissionService {
     }
   }
 
-  findAll() {
-    return `This action returns all mission`;
+  async findAll() {
+    try {
+      return await this.prismaService.mission.findMany();
+    } catch (error) {
+      return new BadRequestException(error.message);
+    }
   }
 
-  findOne(id: string) {
-    return `This action returns a #${id} mission`;
+  async findOne(id: string) {
+
+    try {
+      const mission = await this.prismaService.mission.findUnique({
+        where: {
+          id: id
+        }
+      });
+
+      if (!mission) {
+        return new NotFoundException("La mission n'existe pas");
+      }
+
+      return mission;
+    } catch (error) {
+      return new BadRequestException(error.message);
+    }
   }
 
-  update(id: string, updateMissionDto: UpdateMissionDto) {
-    return `This action updates a #${id} mission`;
+  async update(updateMissionDto: UpdateMissionDto) {
+    try {
+      const { id, ...missionData } = updateMissionDto;
+
+      const mission = await this.prismaService.mission.findUnique({
+        where: {
+          id: id
+        }
+      });
+
+      if (!mission) {
+        return new NotFoundException("La mission n'existe pas");
+      }
+
+      return await this.prismaService.mission.update({
+        where: {
+          id: id
+        },
+        data: missionData
+      });
+    } catch (error) {
+      return new BadRequestException(error.message);
+    }
   }
 
-  remove(id: string) {
-    return `This action removes a #${id} mission`;
+  async remove(id: string) {
+    try {
+      const mission = await this.prismaService.mission.findUnique({
+        where: {
+          id: id
+        }
+      });
+
+      if (!mission) {
+        return new NotFoundException("La mission n'existe pas");
+      }
+
+      return await this.prismaService.mission.delete({
+        where: {
+          id: id
+        }
+      });
+    } catch (error) {
+      return new BadRequestException(error.message);
+    }
   }
 }
