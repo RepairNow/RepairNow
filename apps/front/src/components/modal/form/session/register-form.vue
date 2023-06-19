@@ -78,7 +78,7 @@
                 />
             </div>
             <div class="tw-flex tw-flex-col tw-items-center">
-                <v-btn text="Se connecter" block class="tw-normal-case"/>
+                <v-btn text="S'inscrire" block class="tw-normal-case"/>
                 <div class="tw-text-sm pt-4">
                     En vous inscrivant vous acceptez les conditions générales et la politique de confidentialité
                 </div>

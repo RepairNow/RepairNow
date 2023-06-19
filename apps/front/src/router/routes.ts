@@ -42,11 +42,6 @@ const routes = [
 		component: () => import("@/views/Session/Session.vue"),
 		children: [
 			{
-				name: "reset-password",
-				path: "reset-password",
-				component: () => import("@/views/Session/ResetPassword.vue"),
-			},
-			{
 				name: "register",
 				path: "register",
 				component: () => import("@/views/Session/Register.vue"),

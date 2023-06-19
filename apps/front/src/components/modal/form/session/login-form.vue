@@ -2,7 +2,7 @@
     <v-dialog
             v-model="dialog"
             transition="dialog-bottom-transition"
-            fullscreen
+            :fullscreen="isSizeLG"
     >
         <template v-slot:activator="{ props }">
             <div
@@ -82,6 +82,11 @@
 <script setup lang="ts">
     import {ref} from "vue";
     import PasswordForgotForm from "@/components/modal/form/session/password-forgot-form.vue";
+    import {useScreenSize} from "@/stores/screen-size";
+    import {storeToRefs} from "pinia";
+
+    const screenSize = useScreenSize();
+    const { isSizeLG } = storeToRefs(screenSize);
 
     const dialog = ref(false)
 </script>
