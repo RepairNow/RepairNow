@@ -8,5 +8,5 @@ export class UpdateMissionDto extends PartialType(CreateMissionDto) {
   id: string;
 
   @IsIn([MissionStatus.IN_PROGRESS, MissionStatus.DONE])
-  status: string;
+  currentStatus: string;
 }

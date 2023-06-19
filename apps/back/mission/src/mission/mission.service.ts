@@ -48,7 +48,7 @@ export class MissionService {
         data: {
           prestataireId: createMissionDto.prestataireId,
           announcementId: createMissionDto.announcementId,
-          status: MissionStatus.IN_PROGRESS
+          currentStatus: MissionStatus.IN_PROGRESS
         }
       });
     } catch (error) {

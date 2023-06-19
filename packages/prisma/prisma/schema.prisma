@@ -143,7 +143,7 @@ model Mission {
   prestataireId     String             @db.Uuid
   announcement      Announcement       @relation(fields: [announcementId], references: [id])
   announcementId    String             @unique @db.Uuid
-  status            String
+  currentStatus     String
   walletTransaction WalletTransaction? 
   Review            Review[]
 
