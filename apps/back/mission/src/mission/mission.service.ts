@@ -1,26 +1,132 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateMissionDto } from './dto/create-mission.dto';
 import { UpdateMissionDto } from './dto/update-mission.dto';
+import { PrismaService } from '@repairnow/prisma';
+import { MissionStatus } from './enums/mission-status.enum';
 
 @Injectable()
 export class MissionService {
-  create(createMissionDto: CreateMissionDto) {
-    return 'This action adds a new mission';
+  constructor(private prismaService: PrismaService) { }
+
+  async create(createMissionDto: CreateMissionDto) {
+
+    try {
+
+      const prestataire = await this.prismaService.user.findUnique({
+        where: {
+          id: createMissionDto.prestataireId
+        }
+      });
+
+      if (!prestataire) {
+        return new NotFoundException("Le Prestataire n'existe pas");
+      }
+
+      const announcement = await this.prismaService.announcement.findUnique({
+        where: {
+          id: createMissionDto.announcementId
+        }
+      });
+
+      if (!announcement) {
+        return new NotFoundException("L'annonce n'existe pas");
+      }
+
+      // check if a mission already exists for this announcement
+      const mission = await this.prismaService.mission.findFirst({
+        where: {
+          announcementId: createMissionDto.announcementId
+        }
+      });
+
+      if (mission) {
+        return new BadRequestException("Une mission existe déjà pour cette annonce");
+      }
+
+
+      return this.prismaService.mission.create({
+        data: {
+          prestataireId: createMissionDto.prestataireId,
+          announcementId: createMissionDto.announcementId,
+          currentStatus: MissionStatus.IN_PROGRESS
+        }
+      });
+    } catch (error) {
+      return new BadRequestException(error.message);
+    }
   }
 
-  findAll() {
-    return `This action returns all mission`;
+  async findAll() {
+    try {
+      return await this.prismaService.mission.findMany();
+    } catch (error) {
+      return new BadRequestException(error.message);
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} mission`;
+  async findOne(id: string) {
+
+    try {
+      const mission = await this.prismaService.mission.findUnique({
+        where: {
+          id: id
+        }
+      });
+
+      if (!mission) {
+        return new NotFoundException("La mission n'existe pas");
+      }
+
+      return mission;
+    } catch (error) {
+      return new BadRequestException(error.message);
+    }
   }
 
-  update(id: number, updateMissionDto: UpdateMissionDto) {
-    return `This action updates a #${id} mission`;
+  async update(updateMissionDto: UpdateMissionDto) {
+    try {
+      const { id, ...missionData } = updateMissionDto;
+
+      const mission = await this.prismaService.mission.findUnique({
+        where: {
+          id: id
+        }
+      });
+
+      if (!mission) {
+        return new NotFoundException("La mission n'existe pas");
+      }
+
+      return await this.prismaService.mission.update({
+        where: {
+          id: id
+        },
+        data: missionData
+      });
+    } catch (error) {
+      return new BadRequestException(error.message);
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} mission`;
+  async remove(id: string) {
+    try {
+      const mission = await this.prismaService.mission.findUnique({
+        where: {
+          id: id
+        }
+      });
+
+      if (!mission) {
+        return new NotFoundException("La mission n'existe pas");
+      }
+
+      return await this.prismaService.mission.delete({
+        where: {
+          id: id
+        }
+      });
+    } catch (error) {
+      return new BadRequestException(error.message);
+    }
   }
 }
