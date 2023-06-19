@@ -12,7 +12,7 @@ import { AnnouncementsController } from './announcement-gateway.controller';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      isGlobal: true
+      isGlobal: true,
     }),
     ClientsModule.registerAsync([
       {
@@ -21,7 +21,7 @@ import { AnnouncementsController } from './announcement-gateway.controller';
           transport: Transport.TCP,
           options: {
             host: configService.get('AUTH_HOST'),
-            port: configService.get('AUTH_PORT')
+            port: configService.get('AUTH_PORT'),
           },
         }),
         inject: [ConfigService],
@@ -32,7 +32,7 @@ import { AnnouncementsController } from './announcement-gateway.controller';
           transport: Transport.TCP,
           options: {
             host: configService.get('AUTH_HOST'),
-            port: configService.get('JOB_PORT')
+            port: configService.get('JOB_PORT'),
           },
         }),
         inject: [ConfigService],
@@ -43,17 +43,28 @@ import { AnnouncementsController } from './announcement-gateway.controller';
           transport: Transport.TCP,
           options: {
             host: configService.get('AUTH_HOST'),
-            port: configService.get('MISSION_PORT')
+            port: configService.get('MISSION_PORT'),
           },
         }),
         inject: [ConfigService],
       },
+      //   {
+      //     name: 'CHAT_SERVICE',
+      //     useFactory: (configService: ConfigService) => ({
+      //       transport: Transport.TCP,
+      //       options: {
+      //         host: configService.get('AUTH_HOST'),
+      //         port: configService.get('CHAT_PORT'),
+      //       },
+      //     }),
+      //     inject: [ConfigService],
+      //   },
     ]),
     JwtModule.registerAsync({
       useFactory: (configService: ConfigService) => ({
         global: true,
         secret: configService.get('JWT_SECRET'),
-        signOptions: { expiresIn: '1h' }
+        signOptions: { expiresIn: '1h' },
       }),
       inject: [ConfigService],
     }),
@@ -68,4 +79,4 @@ import { AnnouncementsController } from './announcement-gateway.controller';
     },
   ],
 })
-export class ApiGatewayModule { }
+export class ApiGatewayModule {}
