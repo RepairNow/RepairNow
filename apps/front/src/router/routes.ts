@@ -1,29 +1,269 @@
-import Home from "../pages/index.vue";
-import Account from "../pages/account.vue";
-import Login from "../pages/login.vue";
-import Register from "../pages/register.vue";
-
 const routes = [
 	{
 		name: "home",
 		path: "/",
-		component: Home,
+		component: () => import("@/views/Base.vue"),
+		children: [
+			{
+				name: "home-page",
+				path: "",
+				component: () => import("@/views/Home.vue"),
+			},
+			{
+				name: "about",
+				path: "about",
+				component: () => import("@/views/About.vue"),
+			},
+			{
+				name: "become-contractor",
+				path: "become-contractor",
+				component: () => import("@/views/BecomeContractor.vue"),
+			},
+			{
+				name: "cesu",
+				path: "cesu",
+				component: () => import("@/views/Cesu.vue"),
+			},
+			{
+				path: "/:pathMatch(.*)*",
+				component: () => import("@/views/NotFound.vue"),
+			},
+		],
+		meta: {
+			admin: false,
+			contractor: false,
+			mobile: true,
+			connected: false
+		}
 	},
 	{
-		name: "account",
-		path: "/account",
-		component: Account,
+		name: "session",
+		path: "/session",
+		component: () => import("@/views/Session/Session.vue"),
+		children: [
+			{
+				name: "register",
+				path: "register",
+				component: () => import("@/views/Session/Register.vue"),
+			}
+		],
+		meta: {
+			admin: false,
+			contractor: false,
+			mobile: true,
+			connected: false
+		}
 	},
 	{
-		name: "login",
-		path: "/login",
-		component: Login,
+		name: "client",
+		path: "/client",
+		component: () => import("@/views/Client/Client.vue"),
+		children: [
+			{
+				name: "client-announcement",
+				path: "announcement/{id}",
+				component: () => import("@/views/Client/Announcement/Announcement.vue"),
+			},
+			{
+				name: "client-announcements",
+				path: "announcements",
+				component: () => import("@/views/Client/Announcement/Announcements.vue"),
+			},
+			{
+				name: "client-contractor",
+				path: "contractor/{id}",
+				component: () => import("@/views/Client/Contractor/Contractor.vue"),
+			},
+			{
+				name: "client-contractors",
+				path: "contractors",
+				component: () => import("@/views/Client/Contractor/Contractors.vue"),
+			},
+			{
+				name: "client-chat",
+				path: "chat",
+				component: () => import("@/views/Client/Chat.vue"),
+			},
+			{
+				name: "client-devis",
+				path: "devis",
+				component: () => import("@/views/Client/Devis.vue"),
+			},
+			{
+				name: "client-geo-location",
+				path: "geo-location",
+				component: () => import("@/views/Client/GeoLocation.vue"),
+			},
+			{
+				name: "client-notifications",
+				path: "notifications",
+				component: () => import("@/views/Client/Notifications.vue"),
+			},
+			{
+				name: "client-partnerships",
+				path: "partnerships",
+				component: () => import("@/views/Client/Partnership.vue"),
+			},
+			{
+				name: "client-profile",
+				path: "profile",
+				component: () => import("@/views/Client/Profile.vue"),
+			},
+			{
+				name: "client-reviews",
+				path: "reviews",
+				component: () => import("@/views/Client/Reviews.vue"),
+			},
+			{
+				name: "client-wallet",
+				path: "wallet",
+				component: () => import("@/views/Client/Wallet.vue"),
+			},
+		],
+		meta: {
+			admin: true,
+			contractor: true,
+			mobile: true,
+			connected: true,
+		}
 	},
 	{
-		name: "register",
-		path: "/register",
-		component: Register,
+		name: "contractor",
+		path: "/contractor",
+		component: () => import("@/views/Contractor/Contractor.vue"),
+		children: [
+			{
+				name: "contractor-announcement",
+				path: "announcement/{id}",
+				component: () => import("@/views/Contractor/Announcement/Announcement.vue"),
+			},
+			{
+				name: "contractor-announcements",
+				path: "announcements",
+				component: () => import("@/views/Contractor/Announcement/Announcements.vue"),
+			},
+			{
+				name: "contractor-mission",
+				path: "mission/{id}",
+				component: () => import("@/views/Contractor/Mission/Mission.vue"),
+			},
+			{
+				name: "contractor-missions",
+				path: "missions",
+				component: () => import("@/views/Contractor/Mission/Missions.vue"),
+			},
+			{
+				name: "contractor-chat",
+				path: "chat",
+				component: () => import("@/views/Contractor/Chat.vue"),
+			},
+			{
+				name: "contractor-geo-location",
+				path: "geo-location",
+				component: () => import("@/views/Contractor/GeoLocation.vue"),
+			},
+			{
+				name: "contractor-notifications",
+				path: "notifications",
+				component: () => import("@/views/Contractor/Notifications.vue"),
+			},
+			{
+				name: "contractor-partnership",
+				path: "partnership",
+				component: () => import("@/views/Contractor/Partnership.vue"),
+			},
+			{
+				name: "contractor-profile",
+				path: "profile",
+				component: () => import("@/views/Contractor/Profile.vue"),
+			},
+			{
+				name: "contractor-reviews",
+				path: "reviews",
+				component: () => import("@/views/Contractor/Reviews.vue"),
+			},
+			{
+				name: "contractor-wallet",
+				path: "wallet",
+				component: () => import("@/views/Contractor/Wallet.vue"),
+			},
+		],
+		meta: {
+			admin: true,
+			contractor: true,
+			mobile: true,
+			connected: true
+		}
+
 	},
+	{
+		name: "admin",
+		path: "/admin",
+		component: () => import("@/views/Admin/Admin.vue"),
+		children: [
+			{
+				name: "admin-profile",
+				path: "profile",
+				component: () => import("@/views/Admin/Profile.vue"),
+			},
+			{
+				name: "admin-user",
+				path: "user",
+				component: () => import("@/views/Admin/User/User.vue"),
+			},
+			{
+				name: "admin-users",
+				path: "users",
+				component: () => import("@/views/Admin/User/Users.vue"),
+			},
+			{
+				name: "admin-announcement",
+				path: "announcement",
+				component: () => import("@/views/Admin/Announcement/Announcement.vue"),
+			},
+			{
+				name: "admin-announcements",
+				path: "announcements",
+				component: () => import("@/views/Admin/Announcement/Announcements.vue"),
+			},
+			{
+				name: "admin-chat",
+				path: "chat",
+				component: () => import("@/views/Admin/Chat.vue"),
+			},
+			{
+				name: "admin-geo-locations",
+				path: "geo-locations",
+				component: () => import("@/views/Admin/GeoLocations.vue"),
+			},
+			{
+				name: "admin-notifications",
+				path: "notifications",
+				component: () => import("@/views/Admin/Notifications.vue"),
+			},
+			{
+				name: "admin-partnerships",
+				path: "partnerships",
+				component: () => import("@/views/Admin/Partnerships.vue"),
+			},
+			{
+				name: "admin-profile",
+				path: "profile",
+				component: () => import("@/views/Admin/Profile.vue"),
+			},
+			{
+				name: "admin-reviews",
+				path: "reviews",
+				component: () => import("@/views/Admin/Reviews.vue"),
+			}
+		],
+		meta: {
+			admin: true,
+			contractor: false,
+			mobile: false,
+			connected: true
+		}
+	}
 ];
 
 export default routes;
