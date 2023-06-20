@@ -15,9 +15,12 @@
 <script setup lang="ts">
 import Notification from "@/components/notification/notification.vue";
 import {ref} from "vue";
+import {NotificationI} from "@/interfaces/notification";
 
-const notifications = ref<Notification[]>([
+const notifications = ref<NotificationI[]>([
     {
+        id: '0',
+        userId: '0',
         title: 'notification title',
         content: 'notification content',
         created_at: '12/02/10',
