@@ -41,6 +41,8 @@
                     label="Email"
                     hide-details
                     class="tw-bg-neutral-200 rounded-lg"
+                    type="email"
+                    v-model="email"
                 />
                 <v-text-field
                     prepend-inner-icon="mdi-lock-outline"
@@ -48,8 +50,13 @@
                     label="Mot de passe"
                     hide-details
                     class="tw-bg-neutral-200 rounded-lg"
-
+                    type="password"
+                    v-model="password"
                 />
+                <v-alert
+					v-if="isErrorMessageDisplayed"
+					color="error"
+					>Combinaison impossible</v-alert>
             </div>
             <div class="tw-flex tw-items-center">
                 <v-checkbox
@@ -63,7 +70,7 @@
                 </password-forgot-form>
             </div>
             <div class="tw-flex tw-flex-col tw-items-center">
-                <v-btn text="Se connecter" block class="tw-normal-case"/>
+                <v-btn @click="handleLogin()" text="Se connecter" :disabled="isSent" block class="tw-normal-case"/>
                 <div class="tw-text-sm pt-4">
                     Pas encore membre?
                     <router-link
@@ -85,8 +92,37 @@
     import {useScreenSize} from "@/stores/screen-size";
     import {storeToRefs} from "pinia";
 
+    const email = ref("");
+    const password = ref("");
+    const isSent = ref(false);
+    const isErrorMessageDisplayed = ref(false);
     const screenSize = useScreenSize();
     const { isSizeLG } = storeToRefs(screenSize);
+
+
+    const handleLogin = async () => {
+        isSent.value = true;
+        isErrorMessageDisplayed.value = false;
+        const res = await fetch("http://localhost:3000/signin", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                email: email.value,
+                password: password.value,
+            }),
+        });
+        res.json().then((data) => {
+            isSent.value = false;
+            if (data.access_token) {
+                document.cookie = `access_token=${data.access_token};max-age=3600`;
+                dialog.value = false;
+            } else {
+                isErrorMessageDisplayed.value = true;
+            }
+        });
+    }
 
     const dialog = ref(false)
 </script>
