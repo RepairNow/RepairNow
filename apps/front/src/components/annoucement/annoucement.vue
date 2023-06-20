@@ -19,11 +19,11 @@
             </div>
         </div>
         <div>
-            <router-link :to="{}">
+            <router-link :to="{name: 'client-announcement', params: { id: 1 }}">
                 <v-btn
                     block
                 >
-                    eaze
+                    Gérer ma demande
                 </v-btn>
             </router-link>
         </div>

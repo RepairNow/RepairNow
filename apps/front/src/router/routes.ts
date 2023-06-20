@@ -61,7 +61,7 @@ const routes = [
 		children: [
 			{
 				name: "client-announcement",
-				path: "announcement/{id}",
+				path: "announcement/:id:",
 				component: () => import("@/views/Client/Announcement/Announcement.vue"),
 			},
 			{
@@ -71,7 +71,7 @@ const routes = [
 			},
 			{
 				name: "client-contractor",
-				path: "contractor/{id}",
+				path: "contractor/:id",
 				component: () => import("@/views/Client/Contractor/Contractor.vue"),
 			},
 			{
@@ -134,7 +134,7 @@ const routes = [
 		children: [
 			{
 				name: "contractor-announcement",
-				path: "announcement/{id}",
+				path: "announcement/:id",
 				component: () => import("@/views/Contractor/Announcement/Announcement.vue"),
 			},
 			{
@@ -144,7 +144,7 @@ const routes = [
 			},
 			{
 				name: "contractor-mission",
-				path: "mission/{id}",
+				path: "mission/:id",
 				component: () => import("@/views/Contractor/Mission/Mission.vue"),
 			},
 			{
