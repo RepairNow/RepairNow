@@ -1,7 +1,9 @@
-import { Body, Controller, Delete, Get, Inject, Param, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Inject, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('jobs')
+@UseGuards(AuthGuard)
 export class JobController {
     constructor(@Inject('JOB_SERVICE') private jobClient: ClientProxy) { }
 
