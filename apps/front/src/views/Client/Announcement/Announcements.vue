@@ -1,11 +1,11 @@
 <template>
-    <div class="tw-m-5">
-        <div class="tw-font-bold tw-text-2xl">
+    <div class="tw-m-5 xl:tw-mx-64">
+        <div class="tw-font-bold tw-text-2xl lg:tw-text-4xl">
             Mes demandes
         </div>
-        <div class="tw-flex tw-gap-2">
+        <div class="tw-flex tw-gap-2 tw-my-6">
             <v-btn
-                class="tw-rounded-full tw-bg-red-100"
+                class="tw-rounded-full"
             >
                 En cours
             </v-btn>
@@ -19,23 +19,10 @@
             v-if="services"
             class="tw-flex tw-flex-col tw-gap-4 tw-my-4"
         >
-            <div
+            <announcement
                 v-for="i in 10"
                 class="tw-p-3 border"
-            >
-                <div>
-                    Titre
-                </div>
-                <div>
-                    Détail
-                </div>
-                <div>
-                    Accepter
-                </div>
-                <div>
-                    Refuser
-                </div>
-            </div>
+            />
         </div>
         <div v-else>
             <p>Aucune demande en cours</p>
@@ -54,6 +41,7 @@
 <script setup lang="ts">
 import {ref} from "vue";
 import ServicesModal from "@/components/modal/services/services-modal.vue";
+import Announcement from "@/components/annoucement/annoucement.vue";
 
 const services = ref(true)
 </script>

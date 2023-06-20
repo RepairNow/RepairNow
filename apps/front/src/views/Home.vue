@@ -5,27 +5,30 @@
                 <h1 class="tw-text-3xl lg:tw-text-5xl tw-font-bold">
                     Trouvez le prestataire idéal pour tous les services du quotidien
                 </h1>
-                <v-btn
-                        class="tw-normal-case tw-rounded-full tw-justify-start tw-my-6 tw-border"
-                        color="white"
-                        height="80"
-                >
-                    <template #default>
-                        <div class="tw-w-full tw-pl-4 tw-text-lg">
-                            Rechercher un service...
-                        </div>
+                <services-modal>
+                    <template #button>
+                        <v-btn
+                                class="tw-normal-case tw-rounded-full tw-justify-start tw-my-6 tw-border"
+                                color="white"
+                                height="80"
+                        >
+                            <template #default>
+                                <span class="tw-w-full tw-pl-4 tw-text-lg">Obtenir un réparateur</span>
+                            </template>
+
+                            <template #append>
+                                <div class="tw-bg-primary tw-p-3 tw-rounded-full">
+                                    <v-icon
+                                            size="35"
+                                            class="tw-text-white"
+                                    >
+                                        mdi-magnify
+                                    </v-icon>
+                                </div>
+                            </template>
+                        </v-btn>
                     </template>
-                    <template #append>
-                        <div class="tw-bg-primary tw-p-3 tw-rounded-full">
-                            <v-icon
-                                    size="35"
-                                    class="tw-text-white"
-                            >
-                                mdi-magnify
-                            </v-icon>
-                        </div>
-                    </template>
-                </v-btn>
+                </services-modal>
             </div>
         </div>
         <div class="tw-flex tw-py-10 tw-border-b-2 overflow-auto tw-gap-4">
@@ -99,7 +102,7 @@
                     <div class="tw-flex tw-items-center">
                         <v-icon
                             icon="mdi-briefcase-variant-outline"
-                            class="tw-bg-red-100 tw-p-8 tw-rounded-full tw-text-white tw-bg-primary"
+                            class="tw-p-8 tw-rounded-full tw-text-white tw-bg-primary"
                             size="35"
                         />
                     </div>
@@ -112,7 +115,7 @@
                     <div class="tw-flex tw-items-center">
                         <v-icon
                             icon="mdi-account-outline"
-                            class="tw-bg-red-100 tw-p-8 tw-rounded-full tw-text-white tw-bg-secondary"
+                            class="tw-p-8 tw-rounded-full tw-text-white tw-bg-secondary"
                             size="35"
                         />
                     </div>
@@ -125,7 +128,7 @@
                     <div class="tw-flex tw-items-center">
                         <v-icon
                             icon="mdi-star-outline"
-                            class="tw-bg-red-100 tw-p-8 tw-rounded-full tw-bg-primary-darken-1 tw-text-white"
+                            class="tw-p-8 tw-rounded-full tw-bg-primary-darken-1 tw-text-white"
                             size="35"
                         />
                     </div>
@@ -145,6 +148,7 @@
 
 <script setup lang="ts">
     import {ref} from "vue";
+    import ServicesModal from "@/components/modal/services/services-modal.vue";
 
     const items = ref([
         {

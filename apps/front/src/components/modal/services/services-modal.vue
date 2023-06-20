@@ -73,7 +73,7 @@
                     @click="service = i"
                 >
                     <div
-                        class="tw-h-16 tw-w-16 tw-bg-red-100 rounded-lg tw-mr-4"
+                        class="tw-h-16 tw-w-16 rounded-lg tw-mr-4"
                     >
 
                     </div>
@@ -91,7 +91,7 @@
                     class="border w-94 tw-rounded-lg tw-p-3 tw-flex tw-items-center"
                 >
                     <div
-                        class="tw-h-16 tw-w-16 tw-bg-red-100 rounded-lg tw-mr-4"
+                        class="tw-h-16 tw-w-16 rounded-lg tw-mr-4"
                     >
 
                     </div>
