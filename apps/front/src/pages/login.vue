@@ -36,7 +36,10 @@
 					<router-link to="/register"> S'inscrire </router-link>
 					<v-dialog v-model="isDialogOpened" width="auto">
 						<template v-slot:activator="{ props }">
-							<router-link to="#" v-bind="props">
+							<router-link
+                                :to="{name:'reset-password'}"
+                                v-bind="props"
+                            >
 								Mot de passe oublié
 							</router-link>
 						</template>
@@ -92,7 +95,7 @@
 	</div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import router from "@/router";
 import { ref } from "vue";
 const email = ref("");
