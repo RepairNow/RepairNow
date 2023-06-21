@@ -9,6 +9,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { JobController } from './job/job.controller';
 import { AnnouncementsController } from './announcement-gateway.controller';
 import { MissionController } from './mission/mission.controller';
+import { ReviewController } from './review/review.controller';
 
 @Module({
   imports: [
@@ -59,7 +60,7 @@ import { MissionController } from './mission/mission.controller';
       inject: [ConfigService],
     }),
   ],
-  controllers: [ApiGatewayController, JobController, AnnouncementsController, MissionController],
+  controllers: [ApiGatewayController, JobController, AnnouncementsController, MissionController, ReviewController],
   providers: [
     ApiGatewayService,
     // list of global interceptors, not needed if you use the interceptor only in one controller

@@ -1,35 +1,38 @@
-import { Controller } from '@nestjs/common';
+import { Controller, UseFilters, ValidationPipe } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { ReviewService } from './review.service';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { UpdateReviewDto } from './dto/update-review.dto';
+import { RpcValidationFilter } from 'src/filters/rpc-validation.filter';
 
 @Controller()
 export class ReviewController {
-  constructor(private readonly reviewService: ReviewService) {}
+  constructor(private readonly reviewService: ReviewService) { }
 
-  @MessagePattern('createReview')
-  create(@Payload() createReviewDto: CreateReviewDto) {
+  @MessagePattern({ cmd: 'createReview' })
+  @UseFilters(RpcValidationFilter)
+  create(@Payload(ValidationPipe) createReviewDto: CreateReviewDto) {
     return this.reviewService.create(createReviewDto);
   }
 
-  @MessagePattern('findAllReview')
+  @MessagePattern({ cmd: 'findAllReview' })
   findAll() {
     return this.reviewService.findAll();
   }
 
-  @MessagePattern('findOneReview')
-  findOne(@Payload() id: number) {
+  @MessagePattern({ cmd: 'findOneReview' })
+  findOne(@Payload() id: string) {
     return this.reviewService.findOne(id);
   }
 
-  @MessagePattern('updateReview')
-  update(@Payload() updateReviewDto: UpdateReviewDto) {
-    return this.reviewService.update(updateReviewDto.id, updateReviewDto);
+  @MessagePattern({ cmd: 'updateReview' })
+  @UseFilters(RpcValidationFilter)
+  update(@Payload(ValidationPipe) updateReviewDto: UpdateReviewDto) {
+    return this.reviewService.update(updateReviewDto);
   }
 
-  @MessagePattern('removeReview')
-  remove(@Payload() id: number) {
+  @MessagePattern({ cmd: 'removeReview' })
+  remove(@Payload() id: string) {
     return this.reviewService.remove(id);
   }
 }
