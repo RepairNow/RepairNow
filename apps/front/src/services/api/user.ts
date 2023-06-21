@@ -1,15 +1,13 @@
 import { client, clientWithoutAuth } from "..";
 import { Signin, Signup, TokenI, UserI, UpdateUser } from "@/interfaces/user";
-import { token } from "..";
 
 class User {
 
     async _signin(payload: Signin): Promise<TokenI> {
         try {
 
-            const uri = '/authentication_token'
+            const uri = '/signin'
             const res = await clientWithoutAuth.post(uri, payload);
-            token.value = res.data.token;
             return res.data;
         } catch (error) {
             throw error;

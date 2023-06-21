@@ -1,6 +1,7 @@
 import { Signin, Signup, UserI } from "@/interfaces/user";
 import { defineStore } from "pinia";
 import { Ref, ref } from "vue";
+import { token } from "@/services";
 import userService from "@/services/api/user";
 
 export const useUserStore = defineStore("user", () => {
@@ -9,8 +10,10 @@ export const useUserStore = defineStore("user", () => {
 
     async function signin(payload: Signin) {
         try {
-            await _signin(payload);
-            await getSelf();
+            const res = await _signin(payload);
+            user.value = res.user;
+            token.value = res.access_token;
+            // await getSelf();
         } catch (error) {
             throw error;
         }
