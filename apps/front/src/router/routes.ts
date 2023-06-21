@@ -80,8 +80,13 @@ const routes = [
 				component: () => import("@/views/Client/Contractor/Contractors.vue"),
 			},
 			{
+				name: "client-chats",
+				path: "chats",
+				component: () => import("@/views/Client/Chat.vue"),
+			},
+			{
 				name: "client-chat",
-				path: "chat",
+				path: "chat/:id",
 				component: () => import("@/views/Client/Chat.vue"),
 			},
 			{
