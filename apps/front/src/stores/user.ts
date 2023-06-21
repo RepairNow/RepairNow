@@ -5,8 +5,7 @@ import userService from "@/services/api/user";
 
 export const useUserStore = defineStore("user", () => {
     const { _signin, _signup, _getSelfUser } = userService;
-    // @ts-ignore
-    const user: Ref<UserI> = ref({});
+    const user: Ref<UserI | null> = ref(null);
 
     async function signin(payload: Signin) {
         try {
