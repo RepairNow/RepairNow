@@ -1,7 +1,7 @@
 import { Injectable, ForbiddenException, BadRequestException, NotFoundException } from '@nestjs/common';
 import { CreateAnnouncementDto } from './dto/create-announcement.dto';
 import { UpdateAnnouncementDto } from './dto/update-announcement.dto';
-import { PrismaService } from '@repairnow/prisma';
+import { Prisma, PrismaService } from '@repairnow/prisma';
 import { RpcException } from '@nestjs/microservices';
 
 enum AnnouncementStatus {
@@ -37,7 +37,7 @@ export class AnnouncementsService {
     try {
       const announcement = await this.prismaService.announcement.findMany({
         include: {
-          user: true
+
         }
       })
       return announcement;

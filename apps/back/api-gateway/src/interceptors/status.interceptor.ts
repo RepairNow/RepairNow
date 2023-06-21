@@ -21,7 +21,7 @@ export class StatusInterceptor implements NestInterceptor {
 
           // modify response status of the api-gateway
           httpResponse.status(statusCode);
-          return response.error;
+          return response;
         }
 
         // change status if received a Nest built in exception (BadRequestException, NotFoundException, etc...)

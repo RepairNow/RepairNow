@@ -1,9 +1,8 @@
 import { Controller, UseInterceptors, Inject, Body, UseGuards, Post, Get, Param, Patch, UseFilters, Delete } from "@nestjs/common";
 import { ClientProxy } from "@nestjs/microservices";
-import { AuthGuard } from "./guards/auth.guard";
+import { AuthGuard } from "../guards/auth.guard";
 import { Observable } from "rxjs";
-import { ExceptionFilter } from "./filters/rpc-exception.filter";
-import { StatusInterceptor } from "./interceptors/status.interceptor";
+import { ExceptionFilter } from "../filters/rpc-exception.filter";
 
 @Controller('/announcements')
 @UseGuards(AuthGuard)
@@ -28,11 +27,7 @@ export class AnnouncementsController {
   @Patch('/:id')
   @UseFilters(new ExceptionFilter())
   updateAnnouncement(@Param() param: { id: string }, @Body() payload): Observable<any> {
-    try {
-      return this.missionClient.send({ cmd: "updateAnnouncement" }, { id: param.id, ...payload });
-    } catch (error) {
-      return error.statusCode;
-    }
+    return this.missionClient.send({ cmd: "updateAnnouncement" }, { id: param.id, ...payload });
   }
 
   @Delete('/:id')

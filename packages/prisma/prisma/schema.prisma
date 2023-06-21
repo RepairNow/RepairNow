@@ -22,15 +22,15 @@ model User {
   lastname      String?
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @default(now()) @updatedAt
-  Wallet        Wallet?        
+  wallet        Wallet?       
   jobs          Job[]          
-  notifications Notification[] 
-  estimations   Estimation[]   
-  Partnership   Partnership[]  
-  Announcement  Announcement[] 
-  Message       Message[]      
-  Mission       Mission[]      
-  Geolocation   Geolocation[]  
+  notifications Notification[]
+  estimates     Estimate[]  
+  partnerships  Partnership[]  
+  announcements Announcement[] 
+  messages      Message[]     
+  missions      Mission[]      
+  geolocation   Geolocation[]  
 
   @@map(name: "u_user")
 }
@@ -47,7 +47,7 @@ model Wallet {
 
 model WalletTransaction {
   id             String  @id @default(uuid()) @db.Uuid
-  status         Boolean
+  currentStatus  Boolean
   validationCode Int
   mission        Mission @relation(fields: [missionId], references: [id])
   missionId      String  @unique @db.Uuid
@@ -95,15 +95,15 @@ model Announcement {
   startTime   DateTime     @default(now())
   endTime     DateTime     @default(now())
   mission     Mission?     
-  geolocation Geolocation? 
-  Estimation  Estimation[]
+  geolocation Geolocation?
+  estimates   Estimate[]
   currentStatus  String   
   acceptedAt  DateTime     @default("1970-01-01T00:00:00Z")
 
   @@map(name: "m_announcement")
 }
 
-model Estimation {
+model Estimate {
   id             String       @id @default(uuid()) @db.Uuid
   announcement   Announcement @relation(fields: [announcementId], references: [id])
   announcementId String       @db.Uuid
@@ -112,14 +112,14 @@ model Estimation {
   price          Float
   description    String
   images         String[]
-  status         String
+  currentStatus         String
 
   @@map(name: "m_estimation")
 }
 
 model Chat {
   id      String    @id @default(uuid()) @db.Uuid
-  status  Boolean
+  currentStatus  Boolean
   Message Message[]
 
   @@map(name: "m_chat")
