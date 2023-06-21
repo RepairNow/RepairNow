@@ -30,7 +30,7 @@ export class JobsController {
 
   @UseFilters(new RpcValidationFilter())
   @MessagePattern({ cmd: 'updateJob' })
-  update(@Payload() updateJobDto: UpdateJobDto) {
+  update(@Payload(ValidationPipe) updateJobDto: UpdateJobDto) {
     return this.jobsService.update(updateJobDto);
   }
 

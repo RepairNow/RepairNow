@@ -15,13 +15,19 @@ export class StatusInterceptor implements NestInterceptor {
     return next.handle().pipe(
       map((response) => {
         const httpResponse = context.switchToHttp().getResponse();
-        // verify if "status" property exists in response
+        // change status if received a rpc exception
         if (response.error && response.error.hasOwnProperty('statusCode')) {
           const { statusCode } = response.error;
 
           // modify response status of the api-gateway
           httpResponse.status(statusCode);
           return response.error;
+        }
+
+        // change status if received a Nest built in exception (BadRequestException, NotFoundException, etc...)
+        if (response.status && response.status.toString().match(/^[45]/)) {
+          // modify response status of the api-gateway
+          httpResponse.status(response.status);
         }
 
         return response;
