@@ -1,26 +1,138 @@
-import { Injectable } from '@nestjs/common';
+import { BadGatewayException, BadRequestException, Injectable, NotFoundException, ParseUUIDPipe } from '@nestjs/common';
 import { CreateEstimateDto } from './dto/create-estimate.dto';
 import { UpdateEstimateDto } from './dto/update-estimate.dto';
+import { PrismaService } from '@repairnow/prisma';
 
+enum EstimateStatus {
+  PENDING = "PENDING",
+  ACCEPTED = "ACCEPTED",
+  REFUSED = "REFUSED"
+}
 @Injectable()
 export class EstimatesService {
-  create(createEstimateDto: CreateEstimateDto) {
-    return 'This action adds a new estimate';
+  constructor(private prismaService: PrismaService) { }
+
+  async create(createEstimateDto: CreateEstimateDto) {
+    try {
+      const announcement = await this.prismaService.announcement.findUnique({
+        where: {
+          id: createEstimateDto.announcementId
+        }
+      })
+      if (!announcement) {
+        throw new NotFoundException();
+      }
+      const estimate = await this.prismaService.estimate.create({
+        // @ts-ignore
+        data: {
+          ...createEstimateDto,
+          currentStatus: EstimateStatus.PENDING,
+          announcementId: createEstimateDto.announcementId,
+          prestataireId: createEstimateDto.prestataireId
+        },
+      });
+      return estimate;
+    } catch (error) {
+      return error;
+    }
   }
 
-  findAll() {
-    return `This action returns all estimates`;
+  async findAll(payload: { id: string }) {
+    try {
+      if (Object.keys(payload).length === 0) {
+        throw new BadRequestException();
+      }
+      const announcement = await this.prismaService.announcement.findUnique({
+        where: {
+          id: payload.id
+        },
+        include: {
+          estimates: true
+        }
+      })
+
+      if (!announcement) {
+        throw new NotFoundException();
+      }
+
+      return announcement.estimates;
+    } catch (error) {
+      return error;
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} estimate`;
+  async findOne(payload: { id: string, estimateId: string }) {
+    try {
+      if (Object.keys(payload).length === 0) {
+        throw new BadRequestException();
+      }
+      const announcement = await this.prismaService.announcement.findUnique({
+        where: {
+          id: payload.id
+        },
+        include: {
+          estimates: true
+        }
+      })
+
+      if (!announcement) {
+        throw new NotFoundException();
+      }
+
+      const estimate = announcement.estimates.find(e => e.id === payload.estimateId);
+
+      if (!estimate) {
+        throw new NotFoundException();
+      }
+      return estimate;
+    } catch (error) {
+      return error;
+    }
   }
 
-  update(id: number, updateEstimateDto: UpdateEstimateDto) {
-    return `This action updates a #${id} estimate`;
+  async update(updateEstimateDto: UpdateEstimateDto) {
+    try {
+      if (Object.keys(updateEstimateDto).length === 0) {
+        throw new BadRequestException();
+      }
+
+      const announcement = await this.prismaService.announcement.findUnique({
+        where: {
+          id: updateEstimateDto.announcementId
+        },
+      })
+
+      if (!announcement) {
+        throw new NotFoundException();
+      }
+
+      const estimate = await this.prismaService.estimate.findUnique({
+        where: {
+          id: updateEstimateDto.id
+        }
+      });
+
+      if (!estimate) {
+        throw new NotFoundException();
+      }
+
+      // TODO: If Accepted, map through all estimates and set status refused ?
+      const estimateUpdated = await this.prismaService.estimate.update({
+        where: {
+          id: updateEstimateDto.id
+        },
+        // @ts-ignore
+        data: {
+          ...updateEstimateDto
+        }
+      });
+
+      return estimateUpdated;
+    } catch (error) {
+      return error;
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} estimate`;
+  remove(payload: { id: string, estimateId: string }) {
   }
 }
