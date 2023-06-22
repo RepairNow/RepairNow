@@ -37,7 +37,7 @@ export class AnnouncementsService {
     try {
       const announcement = await this.prismaService.announcement.findMany({
         include: {
-
+          user: true
         }
       })
       return announcement;

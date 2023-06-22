@@ -129,7 +129,7 @@ model Message {
   message  String
   sender   User    @relation(fields: [senderId], references: [id])
   senderId String  @db.Uuid
-  Chat     Chat    @relation(fields: [chatId], references: [id])
+  chat     Chat    @relation(fields: [chatId], references: [id])
   chatId   String  @db.Uuid
   read     Boolean
 
@@ -155,9 +155,9 @@ model Review {
   rating    Int
   comment   String
   mission   Mission @relation(fields: [missionId], references: [id])
-  missionId String  @db.Uuid
+  missionId String  @unique @db.Uuid
 
-  @@map(name: "m_Review")
+  @@map(name: "m_review")
 }
 
 model Geolocation {

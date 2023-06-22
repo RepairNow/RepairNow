@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Inject, Param, Patch, Post, UseGuards } 
 import { ClientProxy } from '@nestjs/microservices';
 import { AuthGuard } from 'src/guards/auth.guard';
 
-@Controller('announcements/:announcementId/missions')
+@Controller('announcements/:announcementId/mission')
 @UseGuards(AuthGuard)
 export class MissionController {
     constructor(@Inject('MISSION_SERVICE') private missionClient: ClientProxy) { }
@@ -12,13 +12,13 @@ export class MissionController {
         return this.missionClient.send({ cmd: 'createMission' }, createMissionDto);
     }
 
-    @Get()
-    findAll() {
-        return this.missionClient.send({ cmd: 'findAllMission' }, '');
-    }
+    // @Get()
+    // findAll() {
+    //     return this.missionClient.send({ cmd: 'findAllMission' }, '');
+    // }
 
-    @Get(':id')
-    findOne(@Param('id') id: string) {
+    @Get()
+    findOne(@Param('announcementId') id: string) {
         return this.missionClient.send({ cmd: 'findOneMission' }, id);
     }
 
@@ -27,8 +27,8 @@ export class MissionController {
         return this.missionClient.send({ cmd: 'updateMission' }, updateMissionDto);
     }
 
-    @Delete(':id')
-    remove(@Param('id') id: string) {
+    @Delete()
+    remove(@Param('announcementId') id: string) {
         return this.missionClient.send({ cmd: 'removeMission' }, id);
     }
 }
