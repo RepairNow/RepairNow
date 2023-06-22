@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Inject, Param, Patch, Post, UseGuards } 
 import { ClientProxy } from '@nestjs/microservices';
 import { AuthGuard } from 'src/guards/auth.guard';
 
-@Controller('reviews')
+@Controller('announcements/:announcementId/reviews')
 @UseGuards(AuthGuard)
 export class ReviewController {
     constructor(@Inject('MISSION_SERVICE') private missionClient: ClientProxy) { }

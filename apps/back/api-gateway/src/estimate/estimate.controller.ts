@@ -4,36 +4,36 @@ import { AuthGuard } from "../guards/auth.guard";
 import { Observable } from "rxjs";
 import { ExceptionFilter } from "../filters/rpc-exception.filter";
 
-@Controller('/announcements')
+@Controller('announcements/:announcementId/estimates')
 export class EstimatesController {
   constructor(@Inject('MISSION_SERVICE') private missionClient: ClientProxy) { }
 
-  @Post('/:id/estimates')
+  @Post()
   @UseGuards(AuthGuard)
   createEstimate(@Body() payload): Observable<any> {
     return this.missionClient.send({ cmd: "createEstimate" }, { ...payload });
   }
 
-  @Get('/:id/estimates')
+  @Get()
   @UseGuards(AuthGuard)
   findAll(@Param() params: { id: string }): Observable<any> {
     return this.missionClient.send({ cmd: "findAllEstimates" }, { ...params });
   }
 
-  @Get('/:id/estimates/:estimateId')
+  @Get('/:estimateId')
   @UseGuards(AuthGuard)
   findOne(@Param() params: { id: string, estimateId: string }): Observable<any> {
     return this.missionClient.send({ cmd: "findOneEstimate" }, { id: params.id, estimateId: params.estimateId });
   }
 
-  @Patch('/:id/estimates/:estimateId')
+  @Patch('/:estimateId')
   @UseFilters(new ExceptionFilter())
   @UseGuards(AuthGuard)
   updateEstimate(@Body() payload): Observable<any> {
     return this.missionClient.send({ cmd: "updateEstimate" }, { ...payload });
   }
 
-  @Delete('/:id/estimates/:estimateId')
+  @Delete('/:estimateId')
   @UseGuards(AuthGuard)
   remove(@Param() param: { id: string }): Observable<any> {
     return this.missionClient.send({ cmd: "removeEstimate" }, { id: param.id });
