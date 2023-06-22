@@ -1,10 +1,10 @@
-import { Signin, Signup, UserI } from "@/interfaces/user";
+import {ResetPassword, Signin, Signup, UserI} from "@/interfaces/user";
 import { defineStore } from "pinia";
 import { Ref, ref } from "vue";
 import userService from "@/services/api/user";
 
 export const useUserStore = defineStore("user", () => {
-    const { _signin, _signup, _getSelfUser } = userService;
+    const { _signin, _signup, _getSelfUser, _resetPassword } = userService;
     // @ts-ignore
     const user: Ref<UserI> = ref({});
 
@@ -25,6 +25,14 @@ export const useUserStore = defineStore("user", () => {
         }
     }
 
+    async function resetPassword(payload: ResetPassword) {
+        try {
+            await _resetPassword(payload);
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async function getSelf() {
         try {
             const res = await _getSelfUser();
@@ -34,5 +42,5 @@ export const useUserStore = defineStore("user", () => {
         }
     }
 
-    return { user, signin, getSelf, signup };
+    return { user, signin, getSelf, signup, resetPassword };
 });

@@ -34,21 +34,23 @@
                 <p class="tw-text-3xl tw-font-bold">Content de te revoir!</p>
                 <p>Connectez-vous à votre compte</p>
             </div>
-            <div class="tw-flex tw-flex-col tw-gap-4">
+            <div class="tw-flex tw-flex-col">
+                <p class="tw-text-center tw-text-red-500 tw-pb-2">{{formError}}</p>
                 <v-text-field
+                    v-model="loginForm.email"
                     prepend-inner-icon="mdi-email-outline"
                     variant="filled"
                     label="Email"
-                    hide-details
-                    class="tw-bg-neutral-200 rounded-lg"
+                    :rules="[rules.required, rules.email]"
+                    class="rounded-lg"
                 />
                 <v-text-field
+                    v-model="loginForm.password"
                     prepend-inner-icon="mdi-lock-outline"
                     variant="filled"
                     label="Mot de passe"
-                    hide-details
-                    class="tw-bg-neutral-200 rounded-lg"
-
+                    :rules="[rules.required]"
+                    class="rounded-lg"
                 />
             </div>
             <div class="tw-flex tw-items-center">
@@ -63,7 +65,7 @@
                 </password-forgot-form>
             </div>
             <div class="tw-flex tw-flex-col tw-items-center">
-                <v-btn text="Se connecter" block class="tw-normal-case"/>
+                <v-btn text="Se connecter" block class="tw-normal-case" @click="submit()"/>
                 <div class="tw-text-sm pt-4">
                     Pas encore membre?
                     <router-link
@@ -84,13 +86,47 @@
     import PasswordForgotForm from "@/components/modal/form/session/password-forgot-form.vue";
     import {useScreenSize} from "@/stores/screen-size";
     import {storeToRefs} from "pinia";
+    import {useUserStore} from "@/stores/user";
+    import {Signin} from "@/interfaces/user";
 
     const screenSize = useScreenSize();
     const { isSizeLG } = storeToRefs(screenSize);
+    const { signin } = useUserStore();
+
+    const loginForm = ref<Signin>({
+        email: "",
+        password: "",
+    })
+
+    const formError = ref<string>('')
+
+    const submit = async () => {
+        if (checkForm() && checkIsEmail()) {
+            formError.value = ''
+
+            await signin(loginForm)
+            router.push({name: 'client-announcements'})
+        } else {
+            formError.value = 'Tous les champs doivent être complété'
+        }
+    }
+
+    const checkForm = () => {
+        return Object.values(loginForm.value).every(value => !!value);
+    }
+
+    const checkIsEmail = () => {
+        const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        return pattern.test(loginForm.value.email);
+    }
+
+    const rules = ref({
+        required: value => !!value || 'Ce champs est requis.',
+        email: value => {
+            const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            return pattern.test(value) || 'Email invalide.'
+        },
+    })
 
     const dialog = ref(false)
 </script>
-
-<style scoped>
-
-</style>
