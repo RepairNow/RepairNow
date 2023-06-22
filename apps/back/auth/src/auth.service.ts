@@ -1,14 +1,14 @@
-import { Injectable, UnauthorizedException, HttpException, HttpStatus, UseGuards } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { SignWithEmailDto } from './dto/sign-with-email.dto';
 import { PrismaService, User } from '@repairnow/prisma';
-import { AuthGuard } from './auth.guard';
+
 @Injectable()
 export class AuthService {
   constructor(
     private prismaService: PrismaService,
     private jwtService: JwtService,
-  ) { }
+  ) {}
 
   async isUserExist(email: SignWithEmailDto['email']): Promise<boolean> {
     const user = await this.prismaService.user.findUnique({
@@ -22,7 +22,17 @@ export class AuthService {
   async signInEmail(
     email: string,
     password: string,
-  ): Promise<{ access_token: string } | null> {
+  ): Promise<{
+    access_token: string;
+    user: {
+      id: string;
+      email: string;
+      firstname: string | null;
+      lastname: string | null;
+      phoneNumber: string | null;
+      role: string;
+    };
+  } | null> {
     const user = await this.prismaService.user.findUnique({
       where: {
         email,
@@ -42,6 +52,14 @@ export class AuthService {
       };
       return {
         access_token: this.jwtService.sign(payload),
+        user: {
+          id: user.id,
+          email: user.email,
+          firstname: user.firstname,
+          lastname: user.lastname,
+          phoneNumber: user.phoneNumber,
+          role: user.role,
+        },
       };
     }
     return null;

@@ -1,35 +1,38 @@
-import { Controller } from '@nestjs/common';
+import { Controller, UsePipes, ValidationPipe, UseFilters } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { EstimatesService } from './estimates.service';
 import { CreateEstimateDto } from './dto/create-estimate.dto';
 import { UpdateEstimateDto } from './dto/update-estimate.dto';
-
+import { RpcValidationFilter } from 'src/filters/rpc-validation.filter';
 @Controller()
 export class EstimatesController {
-  constructor(private readonly estimatesService: EstimatesService) {}
+  constructor(private readonly estimatesService: EstimatesService) { }
 
-  @MessagePattern('createEstimate')
-  create(@Payload() createEstimateDto: CreateEstimateDto) {
+  @MessagePattern({ cmd: 'createEstimate' })
+  @UsePipes(new ValidationPipe())
+  @UseFilters(new RpcValidationFilter())
+  create(@Payload(ValidationPipe) createEstimateDto: CreateEstimateDto) {
     return this.estimatesService.create(createEstimateDto);
   }
 
-  @MessagePattern('findAllEstimates')
-  findAll() {
-    return this.estimatesService.findAll();
+  @MessagePattern({ cmd: 'findAllEstimates' })
+  findAll(@Payload() payload: { id: string }) {
+    return this.estimatesService.findAll(payload);
   }
 
-  @MessagePattern('findOneEstimate')
-  findOne(@Payload() id: number) {
-    return this.estimatesService.findOne(id);
+  @MessagePattern({ cmd: 'findOneEstimate' })
+  findOne(@Payload() payload: { id: string, estimateId: string }) {
+    return this.estimatesService.findOne(payload);
   }
 
-  @MessagePattern('updateEstimate')
-  update(@Payload() updateEstimateDto: UpdateEstimateDto) {
-    return this.estimatesService.update(updateEstimateDto.id, updateEstimateDto);
+  @MessagePattern({ cmd: 'updateEstimate' })
+  @UsePipes(new ValidationPipe())
+  update(@Payload(ValidationPipe) updateEstimateDto: UpdateEstimateDto) {
+    return this.estimatesService.update(updateEstimateDto);
   }
 
-  @MessagePattern('removeEstimate')
-  remove(@Payload() id: number) {
-    return this.estimatesService.remove(id);
+  @MessagePattern({ cmd: 'removeEstimate' })
+  remove(@Payload() payload: { id: string, estimateId: string }) {
+    return this.estimatesService.remove(payload);
   }
 }

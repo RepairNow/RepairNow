@@ -51,5 +51,6 @@ export interface ResetPassword {
 }
 
 export interface TokenI {
-    token: string
+    access_token: string
+    user: UserI
 }

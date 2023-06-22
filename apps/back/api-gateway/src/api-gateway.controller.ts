@@ -1,24 +1,28 @@
-import { Body, Controller, Get, Post, Req, UseGuards, Inject } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Request,
+  UseGuards,
+  Inject,
+} from '@nestjs/common';
 import { ApiGatewayService } from './api-gateway.service';
 import { AuthGuard } from './guards/auth.guard';
 import { ClientProxy } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
 @Controller('/')
 export class ApiGatewayController {
-  constructor(private readonly apiGatewayService: ApiGatewayService,
+  constructor(
+    private readonly apiGatewayService: ApiGatewayService,
     @Inject('JOB_SERVICE') private jobClient: ClientProxy,
-    @Inject('MISSION_SERVICE') private missionClient: ClientProxy) { }
+    @Inject('MISSION_SERVICE') private missionClient: ClientProxy,
+  ) {}
 
   // Needed for k8s - Don't touch !!!
   @Get()
   health() {
     return true;
-  }
-
-  @Get('hello')
-  @UseGuards(AuthGuard)
-  getHello(): string {
-    return this.apiGatewayService.getHello();
   }
 
   @Get('greeting')
@@ -31,20 +35,15 @@ export class ApiGatewayController {
     return this.missionClient.send({ cmd: 'findAllMission' }, {});
   }
 
-
   @Get('users')
   getHelloTwo(): any {
     return this.apiGatewayService.getUsers();
   }
 
-  @Get('auth')
-  callAuth() {
-    return this.apiGatewayService.callAuth();
-  }
-
-  @Get('profile')
-  getProfile() {
-    return this.apiGatewayService.getProfile();
+  @UseGuards(AuthGuard)
+  @Get('me')
+  getMe(@Request() req) {
+    return req.user;
   }
 
   @Post('signIn')

@@ -4,7 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { StatusInterceptor } from './interceptors/status.interceptor';
 async function bootstrap() {
-  const app = await NestFactory.create(ApiGatewayModule);
+  const app: any = await NestFactory.create(ApiGatewayModule);
   const configService = app.get(ConfigService);
   const port = configService.get('API_GATEWAY_PORT');
   // swagger part
@@ -17,19 +17,16 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('api', app, document);
 
+  app.enableCors();
+
   // First message when the app is ready
-  await app.listen(
-    port,
-    '0.0.0.0',
-    function () {
-      console.log(
-        'Hey ya ya ya ! ApiGateway is listening on port ' +
+  await app.listen(port, '0.0.0.0', function () {
+    console.log(
+      'Hey ya ya ya ! ApiGateway is listening on port ' +
         configService.get('API_GATEWAY_PORT'),
-      );
-    },
-  );
+    );
+  });
 
   app.useGlobalInterceptors(new StatusInterceptor());
-
 }
 bootstrap();

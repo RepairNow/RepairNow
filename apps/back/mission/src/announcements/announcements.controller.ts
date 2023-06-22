@@ -3,7 +3,6 @@ import { MessagePattern, Payload } from '@nestjs/microservices';
 import { AnnouncementsService } from './announcements.service';
 import { CreateAnnouncementDto } from './dto/create-announcement.dto';
 import { UpdateAnnouncementDto } from './dto/update-announcement.dto';
-import { Logger } from '@nestjs/common/services';
 @Controller()
 export class AnnouncementsController {
   constructor(private readonly announcementsService: AnnouncementsService) { }
@@ -25,12 +24,7 @@ export class AnnouncementsController {
 
   @MessagePattern({ cmd: 'updateAnnouncement' })
   update(@Payload() updateAnnouncementDto: UpdateAnnouncementDto) {
-    try {
-      return this.announcementsService.update(updateAnnouncementDto);
-    } catch (error) {
-      Logger.error(error);
-      throw error;
-    }
+    return this.announcementsService.update(updateAnnouncementDto);
   }
 
   @MessagePattern({ cmd: 'removeAnnouncement' })
