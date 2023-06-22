@@ -56,8 +56,9 @@
                         prepend-inner-icon="mdi-phone-outline"
                         variant="filled"
                         label="Numéro de téléphone*"
-                        :rules="[rules.required]"
+                        :rules="[rules.required, rules.phoneNumber]"
                         class="rounded-lg"
+                        type="phone"
                 />
                 <v-text-field
                         v-model="registerForm.email"
@@ -74,6 +75,7 @@
                         label="Mot de passe*"
                         :rules="[rules.required]"
                         class="rounded-lg"
+                        type="password"
                 />
             </div>
             <div class="tw-flex tw-flex-col tw-hidden">
@@ -107,10 +109,12 @@ import {useScreenSize} from "@/stores/screen-size";
 import {storeToRefs} from "pinia";
 import {Signup} from "@/interfaces/user";
 import {useUserStore} from "@/stores/user";
+import {useRouter} from "vue-router";
 
 const screenSize = useScreenSize();
 const { isSizeLG } = storeToRefs(screenSize);
 const { signup } = useUserStore();
+const router = useRouter();
 
 const props = defineProps({
     dialogClass: {type: String}
@@ -130,8 +134,8 @@ const submit = async () => {
     if (checkForm() && checkIsEmail()) {
         formError.value = ''
 
-        await signup(registerForm)
-        router.push({name: 'client-announcements'})
+        await signup(registerForm.value)
+        await router.push({name: 'client-announcements'})
     } else {
         formError.value = 'Tous les champs doivent être complété'
     }
@@ -147,11 +151,15 @@ const checkIsEmail = () => {
 }
 
 const rules = ref({
-    required: value => !!value || 'Ce champs est requis.',
-    email: value => {
+    required: (value: string) => !!value || 'Ce champs est requis.',
+    email: (value: string) => {
         const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         return pattern.test(value) || 'Email invalide.'
     },
+    phoneNumber: (value: string) => {
+        const pattern = /^\+?[0-9\s-()]{10,20}$/
+        return pattern.test(value) || 'Numéro de téléphone invalide'
+    }
 })
 
 const dialog = ref(false)

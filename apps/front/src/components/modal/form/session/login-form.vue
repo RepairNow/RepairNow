@@ -77,15 +77,18 @@ import { useScreenSize } from "@/stores/screen-size";
 import { storeToRefs } from "pinia";
 import { useUserStore } from "@/stores/user";
 import { Signin } from "@/interfaces/user";
+import {useRouter} from "vue-router";
 
 const screenSize = useScreenSize();
 const { isSizeLG } = storeToRefs(screenSize);
 const { signin } = useUserStore();
+const router = useRouter()
 
 const loginForm = ref<Signin>({
     email: "",
     password: "",
 })
+
 const isSent = ref<boolean>(false);
 const formError = ref<string>('')
 const isErrorMessageDisplayed = ref<boolean>(false);
@@ -95,10 +98,10 @@ const handleLogin = async () => {
         isSent.value = true;
         isErrorMessageDisplayed.value = false;
         try {
-            await signin(loginForm)
+            await signin(loginForm.value)
             formError.value = ''
 
-            router.push({name: 'client-announcements'})
+            await router.push({name: 'client-announcements'})
         } catch (error) {
             isErrorMessageDisplayed.value = true;
             throw error;
@@ -137,8 +140,8 @@ const checkIsEmail = () => {
 }
 
 const rules = ref({
-    required: value => !!value || 'Ce champs est requis.',
-    email: value => {
+    required: (value: string) => !!value || 'Ce champs est requis.',
+    email: (value: string) => {
         const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         return pattern.test(value) || 'Email invalide.'
     },
