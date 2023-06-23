@@ -1,10 +1,10 @@
 import { defineStore } from "pinia";
 import { Ref, ref } from "vue";
 import notificationService from "@/services/api/notification";
-import { NotificationI } from "@/interfaces/notification";
+import {NotificationI, SendNotification} from "@/interfaces/notification";
 
 export const useNotificationStore = defineStore("notification", () => {
-    const { _getNotifications } = notificationService;
+    const { _getNotifications, _sendNotification } = notificationService;
 
     const notifications: Ref<NotificationI[]> = ref([]);
 
@@ -17,5 +17,13 @@ export const useNotificationStore = defineStore("notification", () => {
         }
     }
 
-    return { notifications, getNotifications };
+    async function sendNotification(payload: SendNotification) {
+        try {
+            const res = await _sendNotification(payload);
+        } catch (error) {
+            throw error
+        }
+    }
+
+    return { notifications, getNotifications, sendNotification };
 });

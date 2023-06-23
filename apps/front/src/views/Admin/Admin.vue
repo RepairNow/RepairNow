@@ -5,7 +5,6 @@
             <sidebar-navigation/>
         </div>
         <div class="tw-bg-green-100 tw-h-full tw-w-full">
-            {{isSizeSM}}
             <router-view />
         </div>
     </div>
