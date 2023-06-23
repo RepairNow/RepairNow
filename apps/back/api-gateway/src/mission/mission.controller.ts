@@ -23,12 +23,12 @@ export class MissionController {
     }
 
     @Patch()
-    update(@Body() updateMissionDto: any) {
+    update(@Param('announcementId') id: string, @Body() updateMissionDto: any) {
         return this.missionClient.send({ cmd: 'updateMission' }, updateMissionDto);
     }
 
-    @Delete()
-    remove(@Param('announcementId') id: string) {
+    @Delete('/:id')
+    remove(@Param('id') id: string) {
         return this.missionClient.send({ cmd: 'removeMission' }, id);
     }
 }

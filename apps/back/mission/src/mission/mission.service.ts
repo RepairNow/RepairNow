@@ -79,6 +79,10 @@ export class MissionService {
         return new NotFoundException("L'annonce n'existe pas");
       }
 
+      if (!announcement.mission) {
+        return new NotFoundException("Aucune mission trouvée pour cette annonce");
+      }
+
       return announcement.mission;
     } catch (error) {
       return new BadRequestException(error.message);
@@ -87,11 +91,9 @@ export class MissionService {
 
   async update(updateMissionDto: UpdateMissionDto) {
     try {
-      const { id, ...missionData } = updateMissionDto;
-
       const mission = await this.prismaService.mission.findUnique({
         where: {
-          id: id
+          id: updateMissionDto.id
         }
       });
 
@@ -101,10 +103,13 @@ export class MissionService {
 
       return await this.prismaService.mission.update({
         where: {
-          id: id
+          id: mission.id
         },
-        data: missionData
+        data: {
+          currentStatus: updateMissionDto.currentStatus
+        }
       });
+
     } catch (error) {
       return new BadRequestException(error.message);
     }
