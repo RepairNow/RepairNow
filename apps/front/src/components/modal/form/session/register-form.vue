@@ -135,7 +135,7 @@ const submit = async () => {
         formError.value = ''
 
         await signup(registerForm.value)
-        await router.push({name: 'client-announcements'})
+        await router.push({name: 'home-page'})
     } else {
         formError.value = 'Tous les champs doivent être complété'
     }

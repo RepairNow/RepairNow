@@ -62,7 +62,7 @@ class User {
 
     async _signup(payload: Signup): Promise<void> {
         try {
-            const uri = '/users'
+            const uri = '/signup'
             const res = await clientWithoutAuth.post(uri, payload);
             return res.data;
         } catch (error) {

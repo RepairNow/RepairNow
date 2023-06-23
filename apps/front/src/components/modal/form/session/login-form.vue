@@ -44,6 +44,7 @@
                     label="Mot de passe"
                     :rules="[rules.required]"
                     class="rounded-lg"
+                    type="password"
                 />
                 <v-alert v-if="isErrorMessageDisplayed" color="error">Combinaison impossible</v-alert>
             </div>
@@ -101,8 +102,9 @@ const handleLogin = async () => {
             await signin(loginForm.value)
             formError.value = ''
 
-            await router.push({name: 'client-announcements'})
+            await router.push({name: 'home-page'})
         } catch (error) {
+            isSent.value = false;
             isErrorMessageDisplayed.value = true;
             throw error;
         }

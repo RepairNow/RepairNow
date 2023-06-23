@@ -4,12 +4,23 @@
             Les utilisateurs
         </div>
         <div>
-
+            {{ users }}
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
+import {useUserStore} from "@/stores/user";
+import {onMounted} from "vue";
+import {storeToRefs} from "pinia";
+
+const userStore = useUserStore()
+const { getUsers } = userStore
+const { users } = storeToRefs(userStore)
+
+onMounted(async () => {
+    await getUsers()
+})
 </script>
 
 <style scoped>

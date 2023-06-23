@@ -5,9 +5,10 @@ import { token } from "@/services";
 import userService from "@/services/api/user";
 
 export const useUserStore = defineStore("user", () => {
-    const { _signin, _signup, _getSelfUser, _resetPassword } = userService;
+    const { _signin, _signup, _getSelfUser, _resetPassword, _getUsers } = userService;
     // @ts-ignore
     const user: Ref<UserI | null> = ref(null);
+    const users: Ref<UserI[]> = ref([]);
 
     async function signin(payload: Signin) {
         try {
@@ -45,5 +46,14 @@ export const useUserStore = defineStore("user", () => {
         }
     }
 
-    return { user, signin, getSelf, signup, resetPassword };
+    async function getUsers() {
+        try {
+            const res = await _getUsers();
+            users.value = res;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    return { user, users, signin, getSelf, signup, resetPassword, getUsers };
 });
