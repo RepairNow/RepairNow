@@ -37,14 +37,11 @@ export class EstimatesService {
     }
   }
 
-  async findAll(payload: { id: string }) {
+  async findAll(id: string) {
     try {
-      if (Object.keys(payload).length === 0) {
-        throw new BadRequestException();
-      }
       const announcement = await this.prismaService.announcement.findUnique({
         where: {
-          id: payload.id
+          id: id
         },
         include: {
           estimates: true
@@ -61,14 +58,14 @@ export class EstimatesService {
     }
   }
 
-  async findOne(payload: { id: string, estimateId: string }) {
+  async findOne(payload: { announcementId: string, estimateId: string }) {
     try {
       if (Object.keys(payload).length === 0) {
         throw new BadRequestException();
       }
       const announcement = await this.prismaService.announcement.findUnique({
         where: {
-          id: payload.id
+          id: payload.announcementId
         },
         include: {
           estimates: true

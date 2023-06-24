@@ -2,23 +2,23 @@ import { Body, Controller, Delete, Get, Inject, Param, Patch, Post, UseGuards } 
 import { ClientProxy } from '@nestjs/microservices';
 import { AuthGuard } from 'src/guards/auth.guard';
 
-@Controller('reviews')
+@Controller('announcements/:announcementId/mission/review')
 @UseGuards(AuthGuard)
 export class ReviewController {
     constructor(@Inject('MISSION_SERVICE') private missionClient: ClientProxy) { }
 
     @Post()
-    create(@Body() createReviewDto: any) {
-        return this.missionClient.send({ cmd: 'createReview' }, createReviewDto);
+    create(@Param('announcementId') id: string, @Body() createReviewDto: any) {
+        return this.missionClient.send({ cmd: 'createReview' }, { id, ...createReviewDto });
     }
+
+    // @Get()
+    // findAll() {
+    //     return this.missionClient.send({ cmd: 'findAllReview' }, '');
+    // }
 
     @Get()
-    findAll() {
-        return this.missionClient.send({ cmd: 'findAllReview' }, '');
-    }
-
-    @Get(':id')
-    findOne(@Param('id') id: string) {
+    findOne(@Param('announcementId') id: string) {
         return this.missionClient.send({ cmd: 'findOneReview' }, id);
     }
 

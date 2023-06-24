@@ -9,12 +9,12 @@ import { ExceptionFilter } from "../filters/rpc-exception.filter";
 export class AnnouncementsController {
   constructor(@Inject('MISSION_SERVICE') private missionClient: ClientProxy) { }
 
-  @Post('')
-  createAnnouncement(@Body() payload): Observable<any> {
-    return this.missionClient.send({ cmd: "createAnnouncement" }, { ...payload });
+  @Post()
+  createAnnouncement(@Body() createAnnouncementDto): Observable<any> {
+    return this.missionClient.send({ cmd: "createAnnouncement" }, createAnnouncementDto);
   }
 
-  @Get('')
+  @Get()
   findAll(): Observable<any> {
     return this.missionClient.send({ cmd: "findAllAnnouncements" }, {});
   }
