@@ -1,4 +1,4 @@
-import { Controller, Inject, Post, UseGuards, Param } from '@nestjs/common';
+import { Controller, Inject, Post, UseGuards, Param, Body } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { AuthGuard } from 'src/guards/auth.guard';
 
@@ -8,7 +8,7 @@ export class ValicationCodeController {
   constructor(@Inject('MISSION_SERVICE') private missionClient: ClientProxy) { }
 
   @Post(':missionId')
-  validateMission(@Param('missionId') params) {
-    return this.missionClient.send({ cmd: 'validateCode' }, params.id)
+  validateMission(@Param('missionId') missionId, @Body() validationCodeDto) {
+    return this.missionClient.send({ cmd: 'validateCode' }, { missionId, validationCodeDto })
   }
 }

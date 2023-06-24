@@ -146,6 +146,7 @@ model Mission {
   walletTransaction WalletTransaction? 
   review            Review[]
   geolocation       Geolocation?
+  validationCode    ValidationCode?
 
   @@map(name: "m_mission")
 }
@@ -171,4 +172,11 @@ model Geolocation {
   userId         String       @db.Uuid
 
   @@map(name: "m_geolocation")
+}
+
+model ValidationCode {
+  id              String    @id @default(uuid()) @db.Uuid
+  mission         Mission   @relation(fields: [missionId], references: [id])
+  missionId       String    @unique @db.Uuid
+  code            Float
 }
