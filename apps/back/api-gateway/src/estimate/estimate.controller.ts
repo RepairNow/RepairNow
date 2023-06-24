@@ -10,8 +10,8 @@ export class EstimatesController {
 
   @Post()
   @UseGuards(AuthGuard)
-  createEstimate(@Body() createEstimate: any): Observable<any> {
-    return this.missionClient.send({ cmd: "createEstimate" }, createEstimate);
+  createEstimate(@Body() createEstimateDto: any): Observable<any> {
+    return this.missionClient.send({ cmd: "createEstimate" }, createEstimateDto);
   }
 
   @Get()
@@ -29,8 +29,8 @@ export class EstimatesController {
   @Patch('/:estimateId')
   @UseFilters(new ExceptionFilter())
   @UseGuards(AuthGuard)
-  updateEstimate(@Body() payload): Observable<any> {
-    return this.missionClient.send({ cmd: "updateEstimate" }, { ...payload });
+  updateEstimate(@Body() updateEstimateDto: any): Observable<any> {
+    return this.missionClient.send({ cmd: "updateEstimate" }, updateEstimateDto);
   }
 
   @Delete('/:estimateId')

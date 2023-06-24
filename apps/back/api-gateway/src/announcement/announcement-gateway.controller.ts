@@ -10,8 +10,8 @@ export class AnnouncementsController {
   constructor(@Inject('MISSION_SERVICE') private missionClient: ClientProxy) { }
 
   @Post()
-  createAnnouncement(@Body() createAnnouncement): Observable<any> {
-    return this.missionClient.send({ cmd: "createAnnouncement" }, createAnnouncement);
+  createAnnouncement(@Body() createAnnouncementDto): Observable<any> {
+    return this.missionClient.send({ cmd: "createAnnouncement" }, createAnnouncementDto);
   }
 
   @Get()
