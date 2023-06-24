@@ -16,12 +16,12 @@ export class EstimatesController {
   }
 
   @MessagePattern({ cmd: 'findAllEstimates' })
-  findAll(@Payload() payload: { id: string }) {
-    return this.estimatesService.findAll(payload);
+  findAll(@Payload() id: string) {
+    return this.estimatesService.findAll(id);
   }
 
   @MessagePattern({ cmd: 'findOneEstimate' })
-  findOne(@Payload() payload: { id: string, estimateId: string }) {
+  findOne(@Payload() payload: { announcementId: string, estimateId: string }) {
     return this.estimatesService.findOne(payload);
   }
 

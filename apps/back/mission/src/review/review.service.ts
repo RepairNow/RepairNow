@@ -14,6 +14,9 @@ export class ReviewService {
       const mission = await this.prismaService.mission.findUnique({
         where: {
           id: createReviewDto.missionId
+        },
+        include: {
+          review: true
         }
       });
 
@@ -61,17 +64,37 @@ export class ReviewService {
 
   async findOne(id: string) {
     try {
-      const review = await this.prismaService.review.findUnique({
+      const announcement = await this.prismaService.announcement.findUnique({
         where: {
           id: id
+        },
+        include: {
+          mission: true
         }
       });
 
-      if (!review) {
+      if (!announcement) {
+        return new BadRequestException("L'annonce n'existe pas");
+      }
+
+      if (!announcement.mission) {
+        return new BadRequestException("Aucune mission pour cette annonce");
+      }
+
+      const mission = await this.prismaService.mission.findUnique({
+        where: {
+          id: announcement.mission.id
+        },
+        include: {
+          review: true
+        }
+      });
+
+      if (!mission.review) {
         return new BadRequestException("La review n'existe pas");
       }
 
-      return review;
+      return mission.review;
     } catch (error) {
       return new BadRequestException(error.message);
     }

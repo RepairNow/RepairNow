@@ -19,30 +19,31 @@ export class AnnouncementsService {
   async create(createAnnouncementDto: CreateAnnouncementDto): Promise<any> {
     try {
       const announcement = await this.prismaService.announcement.create({
-
         // @ts-ignore
         data: {
           ...createAnnouncementDto,
-          currentStatus: AnnouncementStatus.PUBLISHED.toString(),
-          userId: createAnnouncementDto.userId
+          currentStatus: AnnouncementStatus.PUBLISHED.toString()
         }
       });
       return announcement;
     } catch (error) {
-      return new BadRequestException();
+      return new BadRequestException(error.message);
     }
   }
 
   async findAll() {
     try {
       const announcement = await this.prismaService.announcement.findMany({
+        where: {
+          currentStatus: AnnouncementStatus.PUBLISHED
+        },
         include: {
-
+          user: true
         }
       })
       return announcement;
     } catch (error) {
-      return new BadRequestException();
+      return new BadRequestException(error.message);
     }
   }
 
@@ -61,7 +62,7 @@ export class AnnouncementsService {
       }
       return announcement;
     } catch (error) {
-      return error;
+      return new BadRequestException(error.message);
     }
   }
 
@@ -94,8 +95,8 @@ export class AnnouncementsService {
       } else {
         throw new ForbiddenException('Vous ne pouvez pas mettre à jour une annonce qui a été acceptée, annulée ou terminée')
       }
-    } catch (err) {
-      return err;
+    } catch (error) {
+      return new BadRequestException(error.message);
     }
   }
 
@@ -127,7 +128,7 @@ export class AnnouncementsService {
       }
       throw new ForbiddenException('Vous ne pouvez pas mettre à jour une annonce qui a été acceptée, annulée ou terminée')
     } catch (error) {
-      return error;
+      return new BadRequestException(error.message);
     }
   }
 }

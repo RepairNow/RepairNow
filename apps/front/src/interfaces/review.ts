@@ -12,6 +12,7 @@ export interface ReviewI {
 
 export interface UpdateReview extends Partial<ReviewI> {
     announcementId: string
+    id: string
     rating?: number
     comment?: string
 }
