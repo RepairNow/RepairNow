@@ -4,7 +4,6 @@ import { EstimateI } from "./estimate"
 import { UserI } from "./user"
 
 export interface CreateAnnouncement {
-    userId: string
     title: string
     description: string
     images: File[]

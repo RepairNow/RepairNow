@@ -1,8 +1,10 @@
 import { PartialType } from '@nestjs/mapped-types';
 import { CreateAnnouncementDto } from './create-announcement.dto';
-import { IsOptional, IsUUID, IsString, IsDate } from "class-validator"
+import { IsOptional, IsNotEmpty, IsString, IsDate } from "class-validator"
 
 export class UpdateAnnouncementDto extends PartialType(CreateAnnouncementDto) {
+  @IsString()
+  @IsNotEmpty()
   id: string;
   @IsString()
   title: string

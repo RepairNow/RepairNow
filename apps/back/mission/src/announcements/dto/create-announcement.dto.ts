@@ -1,10 +1,6 @@
 import { IsNotEmpty, IsUUID, IsString, IsDate } from "class-validator"
 
 export class CreateAnnouncementDto {
-  @IsUUID()
-  @IsNotEmpty()
-  userId: string
-
   @IsNotEmpty()
   @IsString()
   title: string

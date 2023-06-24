@@ -1,8 +1,9 @@
-import { Injectable, ForbiddenException, BadRequestException, NotFoundException } from '@nestjs/common';
+import { Injectable, Inject, ForbiddenException, BadRequestException, NotFoundException } from '@nestjs/common';
 import { CreateAnnouncementDto } from './dto/create-announcement.dto';
 import { UpdateAnnouncementDto } from './dto/update-announcement.dto';
 import { Prisma, PrismaService } from '@repairnow/prisma';
 import { RpcException } from '@nestjs/microservices';
+import { CurrentUserDto } from "@repairnow/dto";
 
 enum AnnouncementStatus {
   PUBLISHED = "PUBLISHED",
@@ -16,12 +17,14 @@ enum AnnouncementStatus {
 export class AnnouncementsService {
   constructor(private prismaService: PrismaService) { }
 
-  async create(createAnnouncementDto: CreateAnnouncementDto): Promise<any> {
+  async create(payload: { createAnnouncementDto: CreateAnnouncementDto, user: CurrentUserDto }): Promise<any> {
+
     try {
       const announcement = await this.prismaService.announcement.create({
         // @ts-ignore
         data: {
-          ...createAnnouncementDto,
+          ...payload.createAnnouncementDto,
+          userId: payload.user.sub,
           currentStatus: AnnouncementStatus.PUBLISHED.toString()
         }
       });
@@ -31,7 +34,9 @@ export class AnnouncementsService {
     }
   }
 
-  async findAll() {
+
+  async findAll(user: any) {
+    console.log(user)
     try {
       const announcement = await this.prismaService.announcement.findMany({
         where: {
@@ -66,13 +71,13 @@ export class AnnouncementsService {
     }
   }
 
-  async update(updateAnnouncementDto: UpdateAnnouncementDto): Promise<any> {
+  async update(payload: { updateAnnouncementDto: UpdateAnnouncementDto, user: CurrentUserDto, id: string }): Promise<any> {
     try {
       let updatableAnnouncementStatus = [AnnouncementStatus.DRAFT.toString(), AnnouncementStatus.PUBLISHED.toString()];
 
       let announcement = await this.prismaService.announcement.findUnique({
         where: {
-          id: updateAnnouncementDto.id
+          id: payload.id
         },
         include: {
           user: true
@@ -82,16 +87,16 @@ export class AnnouncementsService {
         throw new RpcException(new NotFoundException());
       }
       if (updatableAnnouncementStatus.includes(announcement.currentStatus)) {
-        return this.prismaService.announcement.update({
+        const updatedAnnouncement = await this.prismaService.announcement.update({
           where: {
-            id: updateAnnouncementDto.id
+            id: payload.id
           },
           // @ts-ignore
           data: {
-            ...updateAnnouncementDto,
-            userId: updateAnnouncementDto.userId
+            ...payload.updateAnnouncementDto
           }
         });
+        return updatedAnnouncement;
       } else {
         throw new ForbiddenException('Vous ne pouvez pas mettre à jour une annonce qui a été acceptée, annulée ou terminée')
       }
