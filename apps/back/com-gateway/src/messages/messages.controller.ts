@@ -21,11 +21,10 @@ export class MessagesController {
     @Request() req,
     @Body() createMessageDto: CreateMessageDtoBody,
   ) {
-    // return await this.messagesService.createMessage({
-    //   ...createMessageDto,
-    //   sender_id: req.user.sub,
-    // });
-    return req.user;
+    return await this.messagesService.createMessage({
+      ...createMessageDto,
+      sender_id: req.user.sub,
+    });
   }
 
   @Get(':id')

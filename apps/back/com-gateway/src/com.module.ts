@@ -1,16 +1,16 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { AppGateway } from './app.gateway';
+import { ComController } from './com.controller';
+import { ComService } from './com.service';
+import { ComGateway } from './com.gateway';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConversationsModule } from './conversations/conversations.module';
 import { MessagesModule } from './messages/messages.module';
 import { JwtModule } from '@nestjs/jwt';
 
 @Module({
-  controllers: [AppController],
-  providers: [AppService, AppGateway],
+  controllers: [ComController],
+  providers: [ComService, ComGateway],
   imports: [
     ConfigModule.forRoot(),
     MongooseModule.forRoot(process.env.COM_DB),
@@ -26,4 +26,4 @@ import { JwtModule } from '@nestjs/jwt';
     }),
   ],
 })
-export class AppModule {}
+export class ComModule {}
