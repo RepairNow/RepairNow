@@ -2,6 +2,7 @@ import { BadGatewayException, BadRequestException, Injectable, NotFoundException
 import { CreateEstimateDto } from './dto/create-estimate.dto';
 import { UpdateEstimateDto } from './dto/update-estimate.dto';
 import { PrismaService } from '@repairnow/prisma';
+import { StripeService } from 'src/stripe/stripe.service';
 
 enum EstimateStatus {
   PENDING = "PENDING",
@@ -10,7 +11,7 @@ enum EstimateStatus {
 }
 @Injectable()
 export class EstimatesService {
-  constructor(private prismaService: PrismaService) { }
+  constructor(private prismaService: PrismaService, private stripeService: StripeService) { }
 
   async create(createEstimateDto: CreateEstimateDto) {
     try {
@@ -123,6 +124,13 @@ export class EstimatesService {
           ...updateEstimateDto
         }
       });
+
+      // Send stripe checkout page url to the client if estimate is accepted
+      if (estimateUpdated.currentStatus === EstimateStatus.ACCEPTED) {
+        const checkoutPageUrl = await this.stripeService.createCheckoutSession(estimateUpdated.price);
+
+        return { ...estimateUpdated, checkoutPageUrl: checkoutPageUrl };
+      }
 
       return estimateUpdated;
     } catch (error) {
