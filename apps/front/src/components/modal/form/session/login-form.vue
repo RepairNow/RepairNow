@@ -74,8 +74,13 @@ const handleLogin = async () => {
         await signin({
             email: email.value,
             password: password.value,
-        })
+        }).then(() => {
+            isSent.value = false;
+            dialog.value = false;
+        });
     } catch (error) {
+        isErrorMessageDisplayed.value = true;
+        isSent.value = false;
         throw error;
     }
     // const res = await fetch("http://localhost:3000/signin", {

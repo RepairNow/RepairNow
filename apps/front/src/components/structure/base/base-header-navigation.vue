@@ -35,7 +35,7 @@
 				</template>
 				<v-list>
 					<v-list-item @click="handleDisconnect()">
-						<v-list-item-title>se déconecenter</v-list-item-title>
+						<v-list-item-title>se déconnecter</v-list-item-title>
 					</v-list-item>
 				</v-list>
 			</v-menu>
@@ -52,6 +52,10 @@ import { getCookieFromDocument } from "@/cookiesUtils";
 
 // TODO: Use User from store (set the store value when sign in)
 const currentUser = ref<{ email: string; firstname?: string } | null>(null);
+
+// On est censé stocker le user dans le store au moment du sign in mais j'arrive pas à la récupérer
+// const userStore = useUserStore();
+// const { user } = storeToRefs(userStore);
 
 const handleDisconnect = () => {
 	currentUser.value = null;
