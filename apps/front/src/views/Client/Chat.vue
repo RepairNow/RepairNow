@@ -4,7 +4,9 @@
             :class="isSizeSM && route.params.id ? 'tw-hidden' : ''"
             class="tw-w-full tw-border-r tw-h-full sm:tw-w-96 tw-overflow-auto"
         >
-            <chat-list/>
+            <chat-list
+
+            />
         </div>
         <div
             :class="isSizeSM && !route.params.id ? 'tw-hidden' : ''"

@@ -27,20 +27,20 @@
         <div v-else>
             <p>Aucune demande en cours</p>
             <p>Faites une demande de service et trouvez un prestataire en quelques minutes</p>
-            <services-modal>
+            <announcements-modal>
                 <template #button>
                     <v-btn>
                         Demander un service
                     </v-btn>
                 </template>
-            </services-modal>
+            </announcements-modal>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
 import {ref} from "vue";
-import ServicesModal from "@/components/modal/services/services-modal.vue";
+import AnnouncementsModal from "@/components/modal/form/announcements/announcements-modal.vue";
 import Announcement from "@/components/annoucement/annoucement.vue";
 
 const services = ref(true)

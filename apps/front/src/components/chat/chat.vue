@@ -25,7 +25,7 @@
         </div>
         <div class="tw-absolute tw-bottom-3 tw-w-full tw-px-4 tw-flex tw-gap-4 tw-items-center">
             <v-text-field class="tw-bg-neutral-100" variant="filled" hide-details/>
-            <v-btn class="tw-h-full tw-h-10 tw-rounded" icon="mdi-send"></v-btn>
+            <v-btn class="tw-h-full tw-rounded" icon="mdi-send"></v-btn>
         </div>
     </div>
     <div v-else class="tw-w-full tw-h-full tw-flex tw-flex-col tw-items-center tw-justify-center">

@@ -32,7 +32,6 @@
 </template>
 
 <script setup lang="ts">
-import ServicesModal from "@/components/modal/services/services-modal.vue";
 </script>
 
 <style scoped>

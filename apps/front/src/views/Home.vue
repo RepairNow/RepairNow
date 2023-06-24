@@ -5,7 +5,7 @@
                 <h1 class="tw-text-3xl lg:tw-text-5xl tw-font-bold">
                     Trouvez le prestataire idéal pour tous les services du quotidien
                 </h1>
-                <services-modal>
+                <announcements-modal>
                     <template #button>
                         <v-btn
                                 class="tw-normal-case tw-rounded-full tw-justify-start tw-my-6 tw-border"
@@ -28,7 +28,7 @@
                             </template>
                         </v-btn>
                     </template>
-                </services-modal>
+                </announcements-modal>
             </div>
         </div>
         <div class="tw-flex tw-py-10 tw-border-b-2 overflow-auto tw-gap-4">
@@ -148,7 +148,7 @@
 
 <script setup lang="ts">
     import {ref} from "vue";
-    import ServicesModal from "@/components/modal/services/services-modal.vue";
+    import AnnouncementsModal from "@/components/modal/form/announcements/announcements-modal.vue";
 
     const items = ref([
         {
