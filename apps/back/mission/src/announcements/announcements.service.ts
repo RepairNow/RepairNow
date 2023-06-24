@@ -34,6 +34,9 @@ export class AnnouncementsService {
   async findAll() {
     try {
       const announcement = await this.prismaService.announcement.findMany({
+        where: {
+          currentStatus: AnnouncementStatus.PUBLISHED
+        },
         include: {
           user: true
         }
