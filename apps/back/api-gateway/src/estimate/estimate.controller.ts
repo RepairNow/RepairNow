@@ -10,27 +10,27 @@ export class EstimatesController {
 
   @Post()
   @UseGuards(AuthGuard)
-  createEstimate(@Body() payload): Observable<any> {
-    return this.missionClient.send({ cmd: "createEstimate" }, { ...payload });
+  createEstimate(@Body() createEstimateDto: any): Observable<any> {
+    return this.missionClient.send({ cmd: "createEstimate" }, createEstimateDto);
   }
 
   @Get()
   @UseGuards(AuthGuard)
-  findAll(@Param() params: { id: string }): Observable<any> {
-    return this.missionClient.send({ cmd: "findAllEstimates" }, { ...params });
+  findAll(@Param('announcementId') id: string): Observable<any> {
+    return this.missionClient.send({ cmd: "findAllEstimates" }, id);
   }
 
   @Get('/:estimateId')
   @UseGuards(AuthGuard)
-  findOne(@Param() params: { id: string, estimateId: string }): Observable<any> {
-    return this.missionClient.send({ cmd: "findOneEstimate" }, { id: params.id, estimateId: params.estimateId });
+  findOne(@Param() params: { announcementId: string, estimateId: string }): Observable<any> {
+    return this.missionClient.send({ cmd: "findOneEstimate" }, { announcementId: params.announcementId, estimateId: params.estimateId });
   }
 
   @Patch('/:estimateId')
   @UseFilters(new ExceptionFilter())
   @UseGuards(AuthGuard)
-  updateEstimate(@Body() payload): Observable<any> {
-    return this.missionClient.send({ cmd: "updateEstimate" }, { ...payload });
+  updateEstimate(@Body() updateEstimateDto: any): Observable<any> {
+    return this.missionClient.send({ cmd: "updateEstimate" }, updateEstimateDto);
   }
 
   @Delete('/:estimateId')

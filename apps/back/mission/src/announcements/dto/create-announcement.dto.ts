@@ -18,8 +18,6 @@ export class CreateAnnouncementDto {
   @IsString()
   address: string
 
-  @IsString()
-  currentStatus: string
   // @IsDate()
   startTime: Date
 
