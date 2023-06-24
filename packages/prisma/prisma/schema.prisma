@@ -144,7 +144,7 @@ model Mission {
   announcementId    String             @unique @db.Uuid
   currentStatus     String
   walletTransaction WalletTransaction? 
-  Review            Review[]
+  review            Review[]
   geolocation       Geolocation?
 
   @@map(name: "m_mission")
