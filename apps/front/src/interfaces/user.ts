@@ -43,6 +43,11 @@ export interface Signup {
     lastname: string
     email: string
     password: string
+    phoneNumber: string
+}
+
+export interface ResetPassword {
+    email: string
 }
 
 export interface TokenI {

@@ -9,4 +9,8 @@ const router = createRouter({
 
 // registerRouteGuard(router)
 
+router.beforeEach((to, from, next) => {
+  next()
+})
+
 export default router

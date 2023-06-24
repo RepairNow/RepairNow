@@ -1,5 +1,5 @@
 import { client, clientWithoutAuth } from "..";
-import { Signin, Signup, TokenI, UserI, UpdateUser } from "@/interfaces/user";
+import { Signin, Signup, TokenI, UserI, UpdateUser, ResetPassword } from "@/interfaces/user";
 
 class User {
 
@@ -34,7 +34,7 @@ class User {
         }
     }
 
-    async _resetPassword(payload: { email: string }): Promise<void> {
+    async _resetPassword(payload: ResetPassword): Promise<void> {
         try {
             const uri = '/reset_password';
             await clientWithoutAuth.post(uri, payload);
@@ -63,7 +63,7 @@ class User {
 
     async _signup(payload: Signup): Promise<void> {
         try {
-            const uri = '/users'
+            const uri = '/signup'
             const res = await clientWithoutAuth.post(uri, payload);
             return res.data;
         } catch (error) {

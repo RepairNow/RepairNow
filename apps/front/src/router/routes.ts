@@ -25,6 +25,11 @@ const routes = [
 				component: () => import("@/views/Cesu.vue"),
 			},
 			{
+				name: "announcement",
+				path: "announcement/:id",
+				component: () => import("@/views/Announcement.vue"),
+			},
+			{
 				path: "/:pathMatch(.*)*",
 				component: () => import("@/views/NotFound.vue"),
 			},
@@ -61,7 +66,7 @@ const routes = [
 		children: [
 			{
 				name: "client-announcement",
-				path: "announcement/{id}",
+				path: "announcement/:id:",
 				component: () => import("@/views/Client/Announcement/Announcement.vue"),
 			},
 			{
@@ -71,7 +76,7 @@ const routes = [
 			},
 			{
 				name: "client-contractor",
-				path: "contractor/{id}",
+				path: "contractor/:id",
 				component: () => import("@/views/Client/Contractor/Contractor.vue"),
 			},
 			{
@@ -80,8 +85,13 @@ const routes = [
 				component: () => import("@/views/Client/Contractor/Contractors.vue"),
 			},
 			{
+				name: "client-chats",
+				path: "chats",
+				component: () => import("@/views/Client/Chat.vue"),
+			},
+			{
 				name: "client-chat",
-				path: "chat",
+				path: "chat/:id",
 				component: () => import("@/views/Client/Chat.vue"),
 			},
 			{
@@ -134,7 +144,7 @@ const routes = [
 		children: [
 			{
 				name: "contractor-announcement",
-				path: "announcement/{id}",
+				path: "announcement/:id",
 				component: () => import("@/views/Contractor/Announcement/Announcement.vue"),
 			},
 			{
@@ -144,7 +154,7 @@ const routes = [
 			},
 			{
 				name: "contractor-mission",
-				path: "mission/{id}",
+				path: "mission/:id",
 				component: () => import("@/views/Contractor/Mission/Mission.vue"),
 			},
 			{
@@ -215,6 +225,11 @@ const routes = [
 				name: "admin-users",
 				path: "users",
 				component: () => import("@/views/Admin/User/Users.vue"),
+			},
+			{
+				name: "admin-jobs",
+				path: "jobs",
+				component: () => import("@/views/Admin/Jobs.vue"),
 			},
 			{
 				name: "admin-announcement",

@@ -17,7 +17,7 @@
                 title: 'Messagerie',
                 value: 'messagerie',
                 icon: 'mdi-message-outline',
-                to: 'client-chat',
+                to: 'client-chats',
             },
             {
                 title: 'Compte',

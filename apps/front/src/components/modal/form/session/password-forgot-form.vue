@@ -42,12 +42,14 @@
             <form
                     @submit.prevent="handleForgotPassword"
                     class="tw-mt-5">
+                <p class="tw-text-center tw-text-red-500 tw-pb-2">{{formError}}</p>
                 <v-text-field
                         label="Adresse email"
                         class="tw-secondary-darken-1"
-                        v-model="emailForgotPassword"
+                        v-model="resetPasswordForm.email"
                         type="email"
                         required
+                        :rules="[rules.required, rules.email]"
                         variant="filled"
                 />
                 <v-btn
@@ -55,7 +57,7 @@
                         color="primary"
                         class="tw-w-full"
                         :disabled="isForgotPasswordSent"
-                        @click="handleClickForgotPassword">
+                        @click="handleForgotPassword">
                     <template v-if="isForgotPasswordSent">
                         <v-progress-circular
                                 indeterminate
@@ -73,28 +75,51 @@
     import {ref} from "vue";
     import {useScreenSize} from "@/stores/screen-size";
     import {storeToRefs} from "pinia";
+    import {useUserStore} from "@/stores/user";
+    import {ResetPassword} from "@/interfaces/user";
 
     const screenSize = useScreenSize();
     const { isSizeLG } = storeToRefs(screenSize);
+    const { resetPassword } = useUserStore();
 
-    const dialog = ref(false)
-    const email = ref("");
-    const password = ref("");
-    const errorMessage = ref("");
-    const isSent = ref(false);
+    const dialog = ref(false);
+    const resetPasswordForm = ref<ResetPassword>({
+        email: ""
+    });
+    const formError = ref("");
     const isDialogOpened = ref(false);
-    const emailForgotPassword = ref("");
     const isForgotPasswordSent = ref(false);
 
-    const handleForgotPassword = () => {
-        console.log("send email to reset password", emailForgotPassword.value);
-        isForgotPasswordSent.value = true;
+    const handleForgotPassword = async () => {
+        if (checkForm() && checkIsEmail()) {
+            formError.value = ''
 
-        setTimeout(() => {
+            isForgotPasswordSent.value = true;
+            await resetPassword(resetPasswordForm)
             isForgotPasswordSent.value = false;
             isDialogOpened.value = false;
-        }, 1000);
-    };
+
+        } else {
+            formError.value = 'Tous les champs doivent être complété'
+        }
+    }
+
+    const checkForm = () => {
+        return Object.values(resetPasswordForm.value).every(value => !!value);
+    }
+
+    const checkIsEmail = () => {
+        const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        return pattern.test(resetPasswordForm.value.email);
+    }
+
+    const rules = ref({
+        required: value => !!value || 'Ce champs est requis.',
+        email: value => {
+            const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            return pattern.test(value) || 'Email invalide.'
+        },
+    })
 </script>
 
 <style scoped>

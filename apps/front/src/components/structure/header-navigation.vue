@@ -19,7 +19,7 @@
                 <v-spacer></v-spacer>
 
                 <slot name="center">
-                    <services-modal>
+                    <announcements-modal>
                         <template #button>
                             <v-btn
                                     rounded
@@ -38,7 +38,7 @@
                             </v-btn>
 
                         </template>
-                    </services-modal>
+                    </announcements-modal>
                 </slot>
 
                 <v-spacer></v-spacer>
@@ -97,7 +97,7 @@
 
 <script setup lang="ts">
 import {ref} from "vue";
-import ServicesModal from "@/components/modal/services/services-modal.vue";
+import AnnouncementsModal from "@/components/modal/form/announcements/announcements-modal.vue";
 
 const props = defineProps({
     items: { type: Array }
