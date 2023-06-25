@@ -100,23 +100,22 @@ import {onMounted, ref} from "vue";
 import AnnouncementsModal from "@/components/modal/form/announcements/announcements-modal.vue";
 import {useUserStore} from "@/stores/user";
 import {storeToRefs} from "pinia";
-
+import {token} from "@/services"
 const props = defineProps({
     items: { type: Array }
 })
 
 const drawer = ref<boolean>(false);
 const userStore = useUserStore()
-const {getSelf} = userStore
+const {getSelf, signout} = userStore
 const {currentUser} = storeToRefs(userStore)
 
 const handleDisconnect = () => {
-    currentUser.value = null;
-    localStorage.removeItem('access_token')
+    signout()
 };
 
 onMounted(async () => {
-    if (localStorage.getItem('access_token')) {
+    if (token) {
         await getSelf()
     }
 });

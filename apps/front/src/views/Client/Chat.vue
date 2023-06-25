@@ -28,17 +28,18 @@ const route = useRoute()
 const {isSizeSM} = storeToRefs(useScreenSize())
 import { io } from "socket.io-client";
 import { onMounted } from "vue";
+import {token} from "@/services";
 
 const socket = io("http://localhost:3005", {
 	auth: {
-		token: localStorage.getItem('access_token')
+		token: token
 	},
 });
 
 console.log(
-	'%cChat.vue line:14 localStorage.getItem(\'access_token\')',
+	'%cChat.vue line:14 token',
 	"color: #007acc;",
-    localStorage.getItem('access_token')
+    token
 );
 
 onMounted(() => {

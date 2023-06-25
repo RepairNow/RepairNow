@@ -30,6 +30,15 @@ export const useUserStore = defineStore("user", () => {
         }
     }
 
+    function signout() {
+        try {
+            currentUser.value = null;
+            token.value = ''
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async function resetPassword(payload: ResetPassword) {
         try {
             await _resetPassword(payload);
@@ -68,5 +77,5 @@ export const useUserStore = defineStore("user", () => {
         return currentUser.value?.role === "CLIENT" || currentUser.value?.role === "CONTRACTOR" || currentUser.value?.role === "ADMIN"
     }
 
-    return { currentUser, user, users, signin, getSelf, signup, resetPassword, getUsers };
+    return { signout, currentUser, user, users, signin, getSelf, signup, resetPassword, getUsers };
 });

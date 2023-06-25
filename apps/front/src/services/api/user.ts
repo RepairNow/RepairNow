@@ -8,7 +8,6 @@ class User {
             const uri = '/signin'
             const res = await clientWithoutAuth.post(uri, payload);
 
-            localStorage.setItem('access_token', res.data.access_token);
             return res.data;
         } catch (error) {
             throw error;
