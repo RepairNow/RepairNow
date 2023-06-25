@@ -1,0 +1,5 @@
+export enum ValidationStatus {
+  PENDING = "PENIDNG",
+  WAITING_FOR_APPROVAL = "WAITING FOR APPROVAL",
+  VALIDATED = "VALIDATED"
+}

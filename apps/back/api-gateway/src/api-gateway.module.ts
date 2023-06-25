@@ -12,6 +12,7 @@ import { EstimatesController } from './estimate/estimate.controller';
 import { MissionController } from './mission/mission.controller';
 import { ReviewController } from './review/review.controller';
 import { GeolocationController } from './geolocation/geolocation.controller';
+import { ValicationCodeController } from './valication.code/valication.code.controller';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -61,7 +62,7 @@ import { GeolocationController } from './geolocation/geolocation.controller';
       inject: [ConfigService],
     }),
   ],
-  controllers: [ApiGatewayController, JobController, EstimatesController, AnnouncementsController, MissionController, ReviewController, GeolocationController],
+  controllers: [ApiGatewayController, JobController, EstimatesController, AnnouncementsController, MissionController, ReviewController, GeolocationController, ValicationCodeController],
   providers: [
     ApiGatewayService,
     // list of global interceptors, not needed if you use the interceptor only in one controller

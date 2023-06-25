@@ -4,6 +4,9 @@ import { UpdateMissionDto } from './dto/update-mission.dto';
 import { PrismaService } from '@repairnow/prisma';
 import { MissionStatus } from './enums/mission-status.enum';
 
+function generateRandomNumber() {
+  return Math.floor(Math.random() * 9000) + 1000;
+}
 @Injectable()
 export class MissionService {
   constructor(private prismaService: PrismaService) { }
@@ -43,14 +46,23 @@ export class MissionService {
         return new BadRequestException("Une mission existe déjà pour cette annonce");
       }
 
-
-      return this.prismaService.mission.create({
+      const createdMission = await this.prismaService.mission.create({
         data: {
           prestataireId: createMissionDto.prestataireId,
           announcementId: createMissionDto.announcementId,
           currentStatus: MissionStatus.IN_PROGRESS
         }
       });
+
+      await this.prismaService.validationCode.create({
+        // @ts-ignore
+        data: {
+          missionId: createdMission.id,
+          code: generateRandomNumber()
+        }
+      });
+
+      return createdMission;
     } catch (error) {
       return new BadRequestException(error.message);
     }
@@ -99,6 +111,10 @@ export class MissionService {
 
       if (!mission) {
         return new NotFoundException("La mission n'existe pas");
+      }
+
+      if (mission.currentStatus === MissionStatus.DONE) {
+        return new BadRequestException("La mission est déjà terminée");
       }
 
       return await this.prismaService.mission.update({
