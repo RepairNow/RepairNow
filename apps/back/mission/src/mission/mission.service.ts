@@ -101,6 +101,10 @@ export class MissionService {
         return new NotFoundException("La mission n'existe pas");
       }
 
+      if (mission.currentStatus === MissionStatus.DONE) {
+        return new BadRequestException("La mission est déjà terminée");
+      }
+
       return await this.prismaService.mission.update({
         where: {
           id: mission.id
