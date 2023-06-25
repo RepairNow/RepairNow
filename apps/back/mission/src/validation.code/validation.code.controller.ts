@@ -10,4 +10,14 @@ export class ValidationCodeController {
   validateCode(@Payload() payload: { missionId: string, validationCodeDto: ValicationCodeDto }) {
     return this.validationCodeService.create(payload);
   }
+
+  @MessagePattern({ cmd: 'validateMissionAsContractor' })
+  validateMissionAsContractor(@Payload() missionId: string) {
+    return this.validationCodeService.validateMissionAsContractor(missionId);
+  }
+
+  @MessagePattern({ cmd: 'missionCode' })
+  missionCode(@Payload() missionId: string) {
+    return this.validationCodeService.missionCode(missionId);
+  }
 }

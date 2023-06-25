@@ -30,7 +30,7 @@ model User {
   announcements Announcement[] 
   messages      Message[]     
   missions      Mission[]      
-  geolocation   Geolocation[]  
+  geolocation   Geolocation[]
 
   @@map(name: "u_user")
 }
@@ -179,4 +179,7 @@ model ValidationCode {
   mission         Mission   @relation(fields: [missionId], references: [id])
   missionId       String    @unique @db.Uuid
   code            Float
+  currentStatus   String    @default("PENDING")
+
+  @@map(name: "m_validation_code")
 }
