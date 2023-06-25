@@ -26,20 +26,19 @@ import {storeToRefs} from "pinia";
 
 const route = useRoute()
 const {isSizeSM} = storeToRefs(useScreenSize())
-import { getCookieFromDocument } from "@/cookiesUtils";
 import { io } from "socket.io-client";
 import { onMounted } from "vue";
 
 const socket = io("http://localhost:3005", {
 	auth: {
-		token: getCookieFromDocument("access_token"),
+		token: localStorage.getItem('access_token')
 	},
 });
 
 console.log(
-	'%cChat.vue line:14 getCookieFromDocument("access_token")',
+	'%cChat.vue line:14 localStorage.getItem(\'access_token\')',
 	"color: #007acc;",
-	getCookieFromDocument("access_token")
+    localStorage.getItem('access_token')
 );
 
 onMounted(() => {
