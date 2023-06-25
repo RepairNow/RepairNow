@@ -1,22 +1,24 @@
-import { Controller, UseInterceptors, Inject, Body, UseGuards, Post, Get, Param, Patch, UseFilters, Delete } from "@nestjs/common";
+import { Controller, Request, Inject, Body, UseGuards, Post, Get, Param, Patch, UseFilters, Delete } from "@nestjs/common";
 import { ClientProxy } from "@nestjs/microservices";
 import { AuthGuard } from "../guards/auth.guard";
 import { Observable } from "rxjs";
 import { ExceptionFilter } from "../filters/rpc-exception.filter";
-
+import { CurrentUserDto } from "@repairnow/dto"
 @Controller('/announcements')
 @UseGuards(AuthGuard)
 export class AnnouncementsController {
   constructor(@Inject('MISSION_SERVICE') private missionClient: ClientProxy) { }
 
   @Post()
-  createAnnouncement(@Body() createAnnouncementDto): Observable<any> {
-    return this.missionClient.send({ cmd: "createAnnouncement" }, createAnnouncementDto);
+  createAnnouncement(@Body() createAnnouncementDto, @Request() request): Observable<any> {
+    const { user } = request;
+    return this.missionClient.send({ cmd: "createAnnouncement" }, { createAnnouncementDto, user });
   }
 
   @Get()
-  findAll(): Observable<any> {
-    return this.missionClient.send({ cmd: "findAllAnnouncements" }, {});
+  findAll(@Request() request): Observable<any> {
+    const { user }: { user: CurrentUserDto } = request;
+    return this.missionClient.send({ cmd: "findAllAnnouncements" }, user);
   }
 
   @Get('/:id')
@@ -26,8 +28,9 @@ export class AnnouncementsController {
 
   @Patch('/:id')
   @UseFilters(new ExceptionFilter())
-  updateAnnouncement(@Param() param: { id: string }, @Body() payload): Observable<any> {
-    return this.missionClient.send({ cmd: "updateAnnouncement" }, { id: param.id, ...payload });
+  updateAnnouncement(@Param() params, @Body() updateAnnouncementDto, @Request() request): Observable<any> {
+    const { user } = request;
+    return this.missionClient.send({ cmd: "updateAnnouncement" }, { id: params.id, updateAnnouncementDto, user });
   }
 
   @Delete('/:id')

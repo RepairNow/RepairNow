@@ -9605,6 +9605,14 @@ strip-literal@^1.0.1:
   dependencies:
     acorn "^8.8.2"
 
+stripe@^12.10.0:
+  version "12.10.0"
+  resolved "https://registry.yarnpkg.com/stripe/-/stripe-12.10.0.tgz#e8ab454bc3c9808b1e6796f117e6a2d344170224"
+  integrity sha512-JJS4Bzx4LAzS8cTy26wqCdRQmhUtyV2XjFXfFTXa+W+Won2PXEWu85RpROi1ZN6pNFcWH7xrhXVW0OfCxUmwwA==
+  dependencies:
+    "@types/node" ">=8.1.0"
+    qs "^6.11.0"
+
 strnum@^1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/strnum/-/strnum-1.0.5.tgz#5c4e829fe15ad4ff0d20c3db5ac97b73c9b072db"

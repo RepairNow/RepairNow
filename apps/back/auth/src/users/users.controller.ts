@@ -33,4 +33,10 @@ export class UsersController {
     const users = await this.userService.getUsers();
     return users;
   }
+
+  @Get('/me/announcements')
+  async getUserAnnouncements() {
+    const users = await this.userService.getUsers();
+    return users;
+  }
 }

@@ -1,24 +1,39 @@
-import { Controller, Get, Post, Body, Param, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  UseGuards,
+  Req,
+} from '@nestjs/common';
 import { ConversationsService } from './conversations.service';
 import { CreateConversationtDto } from './dto/create-conversation.dto';
-// import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { AuthGuard } from 'src/guards/auth.guard';
 @Controller('conversations')
 export class ConversationsController {
   constructor(private readonly conversationsService: ConversationsService) {}
 
-  // TODO: add JWT guard
+  @UseGuards(AuthGuard)
   @Post('create-conv')
-  async createConversation(
+  async createConversationWithMeInside(
+    @Req() req,
     @Body() createConversationDto: CreateConversationtDto,
   ) {
-    return await this.conversationsService.createConversation(
-      createConversationDto,
-    );
+    const membersWithMe = {
+      members: [...createConversationDto.members, req.user.sub],
+    };
+    return await this.conversationsService.createConversation(membersWithMe);
   }
 
-  // TODO: add JWT guard
   @Get(':id')
   async getAllConversationsByUserId(@Param('id') id: string) {
     return await this.conversationsService.findAllConversations(id);
+  }
+
+  @UseGuards(AuthGuard)
+  @Get()
+  async getAllMyConversations(@Req() req) {
+    return await this.conversationsService.findAllConversations(req.user.sub);
   }
 }

@@ -20,7 +20,7 @@ import { ConfigService } from '@nestjs/config';
     origin: '*',
   },
 })
-export class AppGateway
+export class ComGateway
   implements OnGatewayConnection, OnGatewayInit, OnGatewayDisconnect
 {
   constructor(
@@ -32,7 +32,7 @@ export class AppGateway
   @WebSocketServer()
   server: Server;
 
-  private logger: Logger = new Logger('AppGateway');
+  private logger: Logger = new Logger('ComGateway');
 
   @SubscribeMessage('create_message')
   async handleSendMessage(
@@ -69,7 +69,7 @@ export class AppGateway
         secret: this.configService.get('JWT_SECRET'),
       });
       console.log(
-        '%capp.gateway.ts line:72 payload',
+        '%ccom.gateway.ts line:72 payload',
         'color: #007acc;',
         payload,
       );
