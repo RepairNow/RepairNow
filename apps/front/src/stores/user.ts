@@ -7,13 +7,14 @@ import userService from "@/services/api/user";
 export const useUserStore = defineStore("user", () => {
     const { _signin, _signup, _getSelfUser, _resetPassword, _getUsers } = userService;
     // @ts-ignore
+    const currentUser: Ref<UserI | null> = ref(null);
     const user: Ref<UserI | null> = ref(null);
     const users: Ref<UserI[]> = ref([]);
 
     async function signin(payload: Signin) {
         try {
             const res = await _signin(payload);
-            user.value = res.user;
+            currentUser.value = res.user;
             token.value = res.access_token;
             // await getSelf();
         } catch (error) {
@@ -24,6 +25,15 @@ export const useUserStore = defineStore("user", () => {
     async function signup(payload: Signup) {
         try {
             await _signup(payload);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    function signout() {
+        try {
+            currentUser.value = null;
+            token.value = ''
         } catch (error) {
             throw error;
         }
@@ -40,7 +50,7 @@ export const useUserStore = defineStore("user", () => {
     async function getSelf() {
         try {
             const res = await _getSelfUser();
-            user.value = res;
+            currentUser.value = res;
         } catch (error) {
             throw error;
         }
@@ -55,5 +65,17 @@ export const useUserStore = defineStore("user", () => {
         }
     }
 
-    return { user, users, signin, getSelf, signup, resetPassword, getUsers };
+    function isAdmin() {
+        return currentUser.value?.role === "ADMIN"
+    }
+
+    function isContractor() {
+        return currentUser.value?.role === "CONTRACTOR" || currentUser.value?.role === "ADMIN"
+    }
+
+    function isClient() {
+        return currentUser.value?.role === "CLIENT" || currentUser.value?.role === "CONTRACTOR" || currentUser.value?.role === "ADMIN"
+    }
+
+    return { signout, currentUser, user, users, signin, getSelf, signup, resetPassword, getUsers };
 });

@@ -20,6 +20,15 @@ export interface UpdateUser extends Partial<UserI> {
     password?: string
 }
 
+export interface CurrentUserI {
+    email: string,
+    firstname: string,
+    id: string,
+    lastname: string,
+    phoneNumber: string,
+    role: string
+}
+
 export interface UserI {
     id: string
     role: string
