@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from "axios";
 import { useStorage } from "@vueuse/core";
 import { computed } from "vue";
-export const token = useStorage('token', '');
+export const token = useStorage('access_token', '');
 export const refreshToken = useStorage('refreshToken', '');
 
 const config = computed(() => {

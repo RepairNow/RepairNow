@@ -5,10 +5,10 @@ class User {
 
     async _signin(payload: Signin): Promise<TokenI> {
         try {
-
             const uri = '/signin'
             const res = await clientWithoutAuth.post(uri, payload);
-            document.cookie = `access_token=${res.data.access_token};max-age=3600`;
+
+            localStorage.setItem('access_token', res.data.access_token);
             return res.data;
         } catch (error) {
             throw error;
