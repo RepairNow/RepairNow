@@ -30,7 +30,7 @@ export interface CurrentUserI {
 }
 
 export interface UserI {
-    id: string
+    sub: string
     role: string
     phone: string | number
     email: string
@@ -61,5 +61,6 @@ export interface ResetPassword {
 
 export interface TokenI {
     access_token: string
+    refresh_token: string
     user: UserI
 }

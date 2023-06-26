@@ -108,25 +108,6 @@ const handleLogin = async () => {
             isErrorMessageDisplayed.value = true;
             throw error;
         }
-        // const res = await fetch("http://localhost:3000/signin", {
-        //     method: "POST",
-        //     headers: {
-        //         "Content-Type": "application/json",
-        //     },
-        //     body: JSON.stringify({
-        //         email: email.value,
-        //         password: password.value,
-        //     }),
-        // });
-        // res.json().then((data) => {
-        //     isSent.value = false;
-        //     if (data.access_token) {
-        //         document.cookie = `access_token=${data.access_token};max-age=3600`;
-        //         dialog.value = false;
-        //     } else {
-        //         isErrorMessageDisplayed.value = true;
-        //     }
-        // });
     } else {
         formError.value = 'Tous les champs doivent être complété'
     }

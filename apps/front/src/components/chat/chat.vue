@@ -5,7 +5,7 @@
                 <v-icon icon="mdi-chevron-left" />
             </router-link>
             <v-avatar color="surface-variant" size="45" class="tw-ml-3"/>
-            <p v-for="member in currentChat.members" class="tw-px-4 tw-text-xl tw-font-bold">
+            <p v-for="member in currentChatMembersWithoutMe" class="tw-px-4 tw-text-xl tw-font-bold">
                 <span>
                     {{ member }}
                 </span>
@@ -22,7 +22,7 @@
                     :class="chat.fromSelf ? 'tw-justify-end tw-rounded-l-lg' : 'tw-justify-end tw-rounded-r-lg' "
                 >
                     {{ chat.message }}
-                    <small class="tw-absolute tw-top-12 tw-right-0">
+                    <small :class="chat.fromSelf ? 'tw-absolute tw-top-12 tw-right-0' : 'tw-absolute tw-top-12 tw-left-0' ">
                         {{ chat.createdAt }}
                     </small>
                 </span>
@@ -45,8 +45,7 @@
 
 <script setup lang="ts">
 import {useRoute} from "vue-router";
-import { ref } from "vue";
-import { defineProps } from "vue";
+import { ref, watch } from "vue";
 const props = defineProps({
     handleSendMessage: {
         type: Function,
@@ -59,12 +58,24 @@ const props = defineProps({
     chats: {
         type: Array,
         required: true,
-    }
+    },
+    currentUser: {
+        type: Object,
+        required: true,
+    },
 });
 
 const route = useRoute();
 
-const currentChat = props.chats.find((chat) => chat._id === route.params.id);
+const currentChatMembersWithoutMe = ref(props.chats.find((chat) => chat._id === route.params.id)?.members?.filter((member) => member !== props.currentUser.sub));
+
+// each time we open/switch to a conversation, we need to update the currentChatMembersWithoutMe
+watch(
+	() => route.params.id,
+	(newId) => {
+        currentChatMembersWithoutMe.value = props.chats.find((chat) => chat._id === newId)?.members?.filter((member) => member !== props.currentUser.sub);
+	}
+);
 
 const messageToSend = ref('')
 

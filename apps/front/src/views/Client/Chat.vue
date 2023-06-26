@@ -11,7 +11,8 @@
 			<chat
 				:handleSendMessage="sendMessageViaSocket"
 				:chat="messagesRef"
-				:chats="conversationsRef" />
+				:chats="conversationsRef"
+				:currentUser="currentUser" />
 		</div>
 	</div>
 </template>
@@ -29,16 +30,19 @@ import { io } from "socket.io-client";
 import { onMounted } from "vue";
 import { ref, watch } from "vue";
 import { token } from "@/services";
+import { useUserStore } from "@/stores/user";
 
 const socket = io("http://localhost:3005", {
 	auth: {
-		token: token,
+		token: token.value,
 	},
 });
 
 const conversationsRef = ref([]);
 const messagesRef = ref();
-const currentMembersRef = ref([]);
+
+// get my current user_id just to display names
+const { currentUser } = storeToRefs(useUserStore());
 
 // each time we open/switch to a conversation, we ask messages from the server
 watch(
@@ -63,9 +67,7 @@ onMounted(() => {
 				// Remove the current user from the list of members
 				// Just to display names of other members in the chat list
 				conversation.members = conversation.members.filter(
-					(member: string) =>
-						// TODO: replace with the current user id from user store
-						member !== "b77e4f2a-d0a4-4654-a646-6dfa98b1d8a0"
+					(member: string) => member !== currentUser?.value?.sub
 				);
 				return conversation;
 			}
@@ -84,6 +86,8 @@ onMounted(() => {
 });
 
 const parseMessages = (messages: any) => {
+	const userStore = useUserStore();
+	const { currentUser } = storeToRefs(userStore);
 	if (Array.isArray(messages)) {
 		if (messages.length === 0) {
 			return [];
@@ -97,9 +101,7 @@ const parseMessages = (messages: any) => {
 				...(date && {
 					createdAt: `${date.getHours()}:${date.getMinutes()}`,
 				}),
-				fromSelf:
-					message.sender_id ===
-					"b77e4f2a-d0a4-4654-a646-6dfa98b1d8a0",
+				fromSelf: message.sender_id === currentUser?.value?.sub,
 			};
 		});
 	} else {
@@ -110,8 +112,7 @@ const parseMessages = (messages: any) => {
 			...(date && {
 				createdAt: `${date.getHours()}:${date.getMinutes()}`,
 			}),
-			fromSelf:
-				messages.sender_id === "b77e4f2a-d0a4-4654-a646-6dfa98b1d8a0",
+			fromSelf: messages.sender_id === currentUser?.value?.sub,
 		};
 	}
 };

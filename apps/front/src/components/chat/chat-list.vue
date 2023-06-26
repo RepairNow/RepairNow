@@ -21,20 +21,19 @@
                         </span>
                     </p>
                     <v-spacer />
-                    <div class="tw-text-sm tw-self-end tw-text-neutral-500">
+                    <!-- <div class="tw-text-sm tw-self-end tw-text-neutral-500">
                         10:10
-                    </div>
+                    </div> -->
                 </div>
-                <div class="tw-text-sm tw-text-neutral-600 tw-truncate">
+                <!-- <div class="tw-text-sm tw-text-neutral-600 tw-truncate">
                     ezaeazezaeazezaeazezaeazezaeazezaeazezaeazezaeazezaeazezaeazezaeaz
-                </div>
+                </div> -->
             </div>
         </router-link>
     </div>
 </template>
 
 <script setup lang="ts">
-import { defineProps } from "vue";
 const props = defineProps({
     chats: {
         type: Array,
