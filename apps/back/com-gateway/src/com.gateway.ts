@@ -14,6 +14,7 @@ import { Logger } from '@nestjs/common';
 import { MessagesService } from './messages/messages.service';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { ConversationsService } from './conversations/conversations.service';
 
 @WebSocketGateway({
   cors: {
@@ -25,6 +26,7 @@ export class ComGateway
 {
   constructor(
     private readonly messagesService: MessagesService,
+    private readonly conversationsService: ConversationsService,
     private jwtService: JwtService,
     private configService: ConfigService,
   ) {}
@@ -39,8 +41,28 @@ export class ComGateway
     @ConnectedSocket() client: Socket,
     @MessageBody() payload: CreateMessageDto,
   ): Promise<void> {
-    // await this.messagesService.createMessage(payload);
-    await this.server.emit('response_message', payload);
+    const createMessageInfos = {
+      ...payload,
+      sender_id: client['user'].sub,
+      createdAt: new Date(),
+    };
+    this.server
+      .to(payload.conversation_id)
+      .emit('response_message', createMessageInfos);
+    await this.messagesService.createMessage(createMessageInfos);
+  }
+
+  @SubscribeMessage('get_messages_from_conversation')
+  async handleGetMessages(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() payload: { conversation_id: string },
+  ): Promise<void> {
+    const messages = await this.messagesService.findAllMessages(
+      payload.conversation_id,
+    );
+    this.server
+      .to(payload.conversation_id)
+      .emit('response_get_messages', messages);
   }
 
   afterInit(server: Server) {
@@ -68,16 +90,19 @@ export class ComGateway
       const payload = await this.jwtService.verifyAsync(token, {
         secret: this.configService.get('JWT_SECRET'),
       });
-      console.log(
-        '%ccom.gateway.ts line:72 payload',
-        'color: #007acc;',
-        payload,
-      );
       // 💡 We're assigning the payload to the request object here
       // so that we can access it in our route handlers
       client['user'] = payload;
       client['token'] = token;
-    } catch {
+      const conversations =
+        await this.conversationsService.findAllConversations(payload.sub);
+      client.emit('conversations', conversations);
+      const conversationsIds = conversations.map((conversation) =>
+        conversation._id.toString(),
+      );
+      client.join(conversationsIds);
+    } catch (e) {
+      console.log('dans le catch du handleConnection', e);
       return client.disconnect(true);
     }
   }

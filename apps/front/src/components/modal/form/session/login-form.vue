@@ -101,7 +101,7 @@ const handleLogin = async () => {
         try {
             await signin(loginForm.value)
             formError.value = ''
-
+            dialog.value = false;
             await router.push({name: 'home-page'})
         } catch (error) {
             isSent.value = false;
