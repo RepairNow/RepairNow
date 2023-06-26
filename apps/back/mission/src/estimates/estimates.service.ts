@@ -105,6 +105,17 @@ export class EstimatesService {
         throw new NotFoundException();
       }
 
+      const estimateAccepted = await this.prismaService.estimate.findFirst({
+        where: {
+          announcementId: updateEstimateDto.announcementId,
+          currentStatus: EstimateStatus.ACCEPTED
+        },
+      });
+
+      if (estimateAccepted) {
+        throw new BadRequestException("Un devis est déjà accepté pour cette mission");
+      }
+
       const estimate = await this.prismaService.estimate.findUnique({
         where: {
           id: updateEstimateDto.id
@@ -157,6 +168,17 @@ export class EstimatesService {
 
       if (announcement.currentStatus === AnnouncementStatus.DONE) {
         throw new BadRequestException("L'annonce est n'est plus valable");
+      }
+
+      const estimateAccepted = await this.prismaService.estimate.findFirst({
+        where: {
+          announcementId: payload.announcementId,
+          currentStatus: EstimateStatus.ACCEPTED
+        },
+      });
+
+      if (estimateAccepted) {
+        throw new BadRequestException("Un devis est déjà accepté pour cette mission");
       }
 
       const estimate = await this.prismaService.estimate.findUnique({
