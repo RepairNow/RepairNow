@@ -117,7 +117,7 @@ class Announcement {
         }
     }
 
-    async _createMision(payload: CreateMission): Promise<MissionI> {
+    async _createMission(payload: CreateMission): Promise<MissionI> {
         try {
             const uri = `${namespace}/${payload.announcementId}/mission`;
             const res = await client.post(uri, payload);

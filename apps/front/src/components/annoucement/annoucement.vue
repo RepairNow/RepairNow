@@ -6,8 +6,8 @@
                     image
                 </div>
                 <div class="tw-my-4">
-                    Montage de meubles IKEA
-                    Dimanche 26 mai 2024 à 21:00 (4h)
+                    <p>{{announcement.title}}</p>
+                    <p>{{announcement.startTime}}</p>
                 </div>
             </div>
             <div class="tw-w-full">
@@ -21,7 +21,7 @@
             </div>
         </div>
         <div>
-            <router-link :to="{name: 'client-announcement', params: { id: 1 }}">
+            <router-link :to="{name: 'client-announcement', params: { id: announcement.id }}">
                 <v-btn
                     block
                 >
@@ -32,7 +32,16 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import {PropType} from "vue";
+import {AnnouncementI} from "@/interfaces/announcement";
+
+const props = defineProps({
+    announcement: {
+        type: Object as PropType<AnnouncementI>,
+        required: true
+    }
+})
 /**
  * Prestarire reservé
  * Offre prestataire
