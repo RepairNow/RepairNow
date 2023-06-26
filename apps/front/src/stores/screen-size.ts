@@ -20,7 +20,6 @@ export const useScreenSize = defineStore("screen-size", () => {
     }
 
     function updateScreenSize() {
-        console.log('ok');
         windowWidth.value = window.innerWidth
         windowHeight.value = window.innerHeight
         isSizeSM.value = windowWidth.value < 640
@@ -28,8 +27,6 @@ export const useScreenSize = defineStore("screen-size", () => {
         isSizeLG.value = windowWidth.value < 1024
         isSizeXL.value = windowWidth.value < 1280
         isSize2XL.value = windowWidth.value < 1536
-
-        console.log(isSizeSM.value);
     }
 
     return {

@@ -25,14 +25,14 @@ import { storeToRefs } from "pinia";
 
 const route = useRoute();
 const { isSizeSM } = storeToRefs(useScreenSize());
-import { getCookieFromDocument } from "@/cookiesUtils";
 import { io } from "socket.io-client";
 import { onMounted } from "vue";
 import { ref, watch } from "vue";
+import { token } from "@/services";
 
 const socket = io("http://localhost:3005", {
 	auth: {
-		token: getCookieFromDocument("access_token"),
+		token: token,
 	},
 });
 

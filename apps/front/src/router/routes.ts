@@ -66,7 +66,7 @@ const routes = [
 		children: [
 			{
 				name: "client-announcement",
-				path: "announcement/:id:",
+				path: "announcement/:id",
 				component: () => import("@/views/Client/Announcement/Announcement.vue"),
 			},
 			{

@@ -17,7 +17,6 @@
                 </slot>
 
                 <v-spacer></v-spacer>
-
                 <slot name="center">
                     <announcements-modal>
                         <template #button>
@@ -53,7 +52,7 @@
                                     height="50"
                             >
                                 <v-avatar color="surface-variant" size="35"></v-avatar>
-                                <span class="tw-mx-2">Antoine</span>
+                                <span class="tw-mx-2">{{ currentUser?.email }}</span>
                                 <v-icon>mdi-menu</v-icon>
                             </v-btn>
                         </template>
@@ -84,6 +83,7 @@
                                     height="60"
                                     size="large"
                                     color="unset"
+                                    @click="handleDisconnect()"
                             >
                                 Se déconnecter
                             </v-btn>
@@ -96,15 +96,29 @@
 </template>
 
 <script setup lang="ts">
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import AnnouncementsModal from "@/components/modal/form/announcements/announcements-modal.vue";
-
+import {useUserStore} from "@/stores/user";
+import {storeToRefs} from "pinia";
+import {token} from "@/services"
 const props = defineProps({
     items: { type: Array }
 })
 
-const drawer = ref(false);
+const drawer = ref<boolean>(false);
+const userStore = useUserStore()
+const {getSelf, signout} = userStore
+const {currentUser} = storeToRefs(userStore)
 
+const handleDisconnect = () => {
+    signout()
+};
+
+onMounted(async () => {
+    if (token) {
+        await getSelf()
+    }
+});
 </script>
 
 <style scoped>
