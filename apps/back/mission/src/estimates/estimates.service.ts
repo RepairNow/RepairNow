@@ -3,6 +3,7 @@ import { CreateEstimateDto } from './dto/create-estimate.dto';
 import { UpdateEstimateDto } from './dto/update-estimate.dto';
 import { PrismaService } from '@repairnow/prisma';
 import { StripeService } from 'src/stripe/stripe.service';
+import { AnnouncementStatus } from 'src/announcements/announcements.service';
 
 enum EstimateStatus {
   PENDING = "PENDING",
@@ -114,6 +115,10 @@ export class EstimatesService {
         throw new NotFoundException();
       }
 
+      if (estimate.currentStatus === EstimateStatus.ACCEPTED) {
+        throw new BadRequestException("Le devis a déjà été validé");
+      }
+
       // TODO: If Accepted, map through all estimates and set status refused ?
       const estimateUpdated = await this.prismaService.estimate.update({
         where: {
@@ -122,6 +127,59 @@ export class EstimatesService {
         // @ts-ignore
         data: {
           ...updateEstimateDto
+        }
+      });
+
+      // Send stripe checkout page url to the client if estimate is accepted
+      if (estimateUpdated.currentStatus === EstimateStatus.ACCEPTED) {
+        const checkoutPageUrl = await this.stripeService.createCheckoutSession(estimateUpdated.price);
+
+        return { ...estimateUpdated, checkoutPageUrl: checkoutPageUrl };
+      }
+
+      return estimateUpdated;
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async acceptEstimate(payload: { announcementId: string, estimateId: string }) {
+    try {
+      const announcement = await this.prismaService.announcement.findUnique({
+        where: {
+          id: payload.announcementId
+        }
+      })
+
+      if (!announcement) {
+        throw new NotFoundException();
+      }
+
+      if (announcement.currentStatus === AnnouncementStatus.DONE) {
+        throw new BadRequestException("L'annonce est n'est plus valable");
+      }
+
+      const estimate = await this.prismaService.estimate.findUnique({
+        where: {
+          id: payload.estimateId
+        }
+      });
+
+      if (!estimate) {
+        throw new NotFoundException();
+      }
+
+      if (estimate.currentStatus === EstimateStatus.ACCEPTED) {
+        throw new BadRequestException("Le devis a déjà été validé");
+      }
+
+      // TODO: If Accepted, map through all estimates and set status refused ?
+      const estimateUpdated = await this.prismaService.estimate.update({
+        where: {
+          id: payload.estimateId
+        },
+        data: {
+          currentStatus: EstimateStatus.ACCEPTED
         }
       });
 
