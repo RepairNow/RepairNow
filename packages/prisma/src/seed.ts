@@ -7,6 +7,9 @@ async function main() {
     create: {
       email: 'alice@prisma.io',
       password: 'password',
+      firstname: 'Alice',
+      lastname: 'Dupont',
+      phoneNumber: '0606060606',
       jobs: {
         create: {
           title: 'Check out Prisma with Next.js',
@@ -20,6 +23,9 @@ async function main() {
     create: {
       email: 'bob@prisma.io',
       password: 'password',
+      firstname: 'Bob',
+      lastname: 'Le bricoleur',
+      phoneNumber: '0707070707',
       jobs: {
         create: [
           {

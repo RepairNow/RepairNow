@@ -31,7 +31,7 @@
             </div>
             <div class="mb-4">
                 <p class="tw-text-3xl tw-font-bold">Créer un compte</p>
-                <p>Profitez de votre temps libre grâce à nos jobbers</p>
+                <p>Profitez de votre temps libre grâce à nos repairmans</p>
             </div>
             <div class="tw-flex tw-flex-col">
                 <p class="tw-text-center tw-text-red-500 tw-pb-2">{{formError}}</p>
@@ -133,11 +133,13 @@ const formError = ref<string>('')
 const submit = async () => {
     if (checkForm() && checkIsEmail()) {
         formError.value = ''
-
-        await signup(registerForm.value)
-        await router.push({name: 'home-page'})
+        try {
+			await signup(registerForm.value);
+		} catch {
+			formError.value = "Une erreur est survenue";
+		}
     } else {
-        formError.value = 'Tous les champs doivent être complété'
+        formError.value = 'Certains champs sont manquants ou invalides.'
     }
 }
 

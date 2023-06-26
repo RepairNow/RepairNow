@@ -23,12 +23,22 @@ export class CreateUserDto {
   @IsString()
   password: string;
 
-  avatar: string;
+  @IsNotEmpty()
+  @IsString()
   phoneNumber: string;
+
+  @IsNotEmpty()
+  @IsString()
   firstname: string;
+
+  @IsNotEmpty()
+  @IsString()
   lastname: string;
-  birthdate: Date;
+
+  avatar?: string;
+  birthdate?: Date;
 }
+
 export class UpdateUserDto {
   avatar: string;
   phoneNumber: string;

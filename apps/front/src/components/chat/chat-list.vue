@@ -8,30 +8,38 @@
     </div>
     <div v-else>
         <router-link
-            v-for="i in 10"
+            v-for="chat in chats"
             class="tw-border-b tw-h-24 tw-flex tw-items-center tw-p-5"
-            :to="{name: 'client-chat', params: {id: i}}"
+            :to="{name: 'client-chat', params: {id: chat._id}}"
         >
             <v-avatar color="surface-variant" size="60"/>
             <div class="tw-px-4 tw-h-full tw-w-5/6">
                 <div class="tw-flex">
                     <p>
-                        user {{ i }}
+                        <span v-for="member in chat.members">
+                            {{ member }}
+                        </span>
                     </p>
                     <v-spacer />
-                    <div class="tw-text-sm tw-self-end tw-text-neutral-500">
+                    <!-- <div class="tw-text-sm tw-self-end tw-text-neutral-500">
                         10:10
-                    </div>
+                    </div> -->
                 </div>
-                <div class="tw-text-sm tw-text-neutral-600 tw-truncate">
+                <!-- <div class="tw-text-sm tw-text-neutral-600 tw-truncate">
                     ezaeazezaeazezaeazezaeazezaeazezaeazezaeazezaeazezaeazezaeazezaeaz
-                </div>
+                </div> -->
             </div>
         </router-link>
     </div>
 </template>
 
 <script setup lang="ts">
+const props = defineProps({
+    chats: {
+        type: Array,
+        required: true,
+    },
+});
 </script>
 
 <style scoped>

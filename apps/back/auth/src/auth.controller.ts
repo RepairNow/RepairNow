@@ -11,7 +11,7 @@ import {
 import { AuthService } from './auth.service';
 import { MessagePattern } from '@nestjs/microservices';
 import { RpcValidationFilter } from './filters/rpc-validation.filter';
-import { SignWithEmailDto } from './dto/sign-with-email.dto';
+import { SignInDto, SignUpDto } from './dto/sign-with-email.dto';
 
 @Controller()
 export class AuthController {
@@ -29,20 +29,21 @@ export class AuthController {
 
   @UseFilters(new RpcValidationFilter())
   @MessagePattern({ cmd: 'sign_in_email' })
-  signIn(@Body(ValidationPipe) params: SignWithEmailDto) {
+  signIn(@Body(ValidationPipe) params: SignInDto) {
     return this.authService.signInEmail(params.email, params.password);
   }
+
   @UseFilters(new RpcValidationFilter())
   @MessagePattern({ cmd: 'sign_up_email' })
   async signUp(
     @Body(ValidationPipe)
-    params: SignWithEmailDto,
+    params: SignUpDto,
   ) {
     const isUserExist = await this.authService.isUserExist(params.email);
     if (isUserExist) {
       return new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     }
-    return this.authService.signUpEmail(params.email, params.password);
+    return this.authService.signUpEmail(params);
   }
 
   @UseFilters(new RpcValidationFilter())

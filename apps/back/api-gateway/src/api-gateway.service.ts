@@ -16,12 +16,21 @@ export class ApiGatewayService {
     );
   }
 
-  signUp(email: string, password: string): Observable<string> {
+  signUp(signUpDto: {
+    email: string;
+    password: string;
+    firstname: string;
+    lastname: string;
+    phoneNumber: string;
+  }): Observable<string> {
     return this.authClient.send(
       { cmd: 'sign_up_email' },
       {
-        email,
-        password,
+        email: signUpDto.email,
+        password: signUpDto.password,
+        firstname: signUpDto.firstname,
+        lastname: signUpDto.lastname,
+        phoneNumber: signUpDto.phoneNumber,
       },
     );
   }

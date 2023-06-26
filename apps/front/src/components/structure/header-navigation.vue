@@ -101,6 +101,7 @@ import AnnouncementsModal from "@/components/modal/form/announcements/announceme
 import {useUserStore} from "@/stores/user";
 import {storeToRefs} from "pinia";
 import {token} from "@/services"
+import { useRouter } from "vue-router";
 const props = defineProps({
     items: { type: Array }
 })
@@ -110,8 +111,11 @@ const userStore = useUserStore()
 const {getSelf, signout} = userStore
 const {currentUser} = storeToRefs(userStore)
 
+const router = useRouter()
+
 const handleDisconnect = () => {
     signout()
+    router.push({ name: "home-page" });
 };
 
 onMounted(async () => {
