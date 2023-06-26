@@ -52,7 +52,16 @@ export class ApiGatewayController {
   }
 
   @Post('signUp')
-  signUp(@Body() signInDto: { email: string; password: string }) {
-    return this.apiGatewayService.signUp(signInDto.email, signInDto.password);
+  signUp(
+    @Body()
+    signUpDto: {
+      email: string;
+      password: string;
+      firstname: string;
+      lastname: string;
+      phoneNumber: string;
+    },
+  ) {
+    return this.apiGatewayService.signUp(signUpDto);
   }
 }

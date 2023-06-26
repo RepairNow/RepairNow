@@ -1,16 +1,18 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { SignWithEmailDto } from './dto/sign-with-email.dto';
+import { SignInDto } from './dto/sign-with-email.dto';
 import { PrismaService, User } from '@repairnow/prisma';
+import { UsersService } from './users/users.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private prismaService: PrismaService,
+    private usersService: UsersService,
     private jwtService: JwtService,
   ) {}
 
-  async isUserExist(email: SignWithEmailDto['email']): Promise<boolean> {
+  async isUserExist(email: SignInDto['email']): Promise<boolean> {
     const user = await this.prismaService.user.findUnique({
       where: {
         email,
@@ -65,13 +67,34 @@ export class AuthService {
     return null;
   }
 
-  async signUpEmail(email: string, password: string): Promise<User> {
-    return await this.prismaService.user.create({
-      data: {
-        email,
-        password,
-      },
+  async signUpEmail({
+    email,
+    password,
+    firstname,
+    lastname,
+    phoneNumber,
+  }): Promise<{
+    access_token: string;
+    user: User;
+  }> {
+    const userCreated = await this.usersService.createUser({
+      email,
+      password,
+      phoneNumber,
+      firstname,
+      lastname,
     });
+    return {
+      user: userCreated,
+      access_token: this.jwtService.sign({
+        email: userCreated.email,
+        firstname: userCreated.firstname,
+        lastname: userCreated.lastname,
+        phoneNumber: userCreated.phoneNumber,
+        role: userCreated.role,
+        sub: userCreated.id,
+      }),
+    };
   }
 
   getHello(): string {

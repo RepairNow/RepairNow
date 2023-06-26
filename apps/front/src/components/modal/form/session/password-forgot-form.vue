@@ -100,7 +100,7 @@
             isDialogOpened.value = false;
 
         } else {
-            formError.value = 'Tous les champs doivent être complété'
+            formError.value = 'Certains champs sont manquants ou invalides.'
         }
     }
 

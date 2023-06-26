@@ -41,8 +41,8 @@ export default createVuetify({
 		},
 		VTextField: {
 			density: "compact",
-			color: "secondary-darken-1",
-			baseColor: "secondary-darken-1",
+			// color: "secondary-darken-1",
+			// baseColor: "secondary-darken-1",
 			variant: "solo-filled",
 			singleLine: true,
 		},

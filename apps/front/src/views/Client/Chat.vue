@@ -1,5 +1,14 @@
 <template>
-	<div class="tw-h-full tw-flex">
+	<div class="tw-h-full tw-flex" v-if="conversationsRef.length === 0">
+		<h1 class="tw-text-xl tw-self-center tw-text-center tw-w-full">
+			Aucune conversation,
+			<span @click="$emit('someEvent')" class="tw-font-bold"
+				>demandez un service</span
+			>
+			et attendez d'avoir une proposition de devis
+		</h1>
+	</div>
+	<div v-else class="tw-h-full tw-flex">
 		<div
 			:class="isSizeSM && route.params.id ? 'tw-hidden' : ''"
 			class="tw-w-full tw-border-r tw-h-full sm:tw-w-96 tw-overflow-auto">

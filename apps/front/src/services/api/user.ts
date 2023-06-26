@@ -60,7 +60,7 @@ class User {
         }
     }
 
-    async _signup(payload: Signup): Promise<void> {
+    async _signup(payload: Signup): Promise<TokenI> {
         try {
             const uri = '/signup'
             const res = await clientWithoutAuth.post(uri, payload);
