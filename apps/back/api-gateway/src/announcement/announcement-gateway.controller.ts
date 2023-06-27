@@ -10,6 +10,7 @@ export class AnnouncementsController {
   constructor(@Inject('MISSION_SERVICE') private missionClient: ClientProxy) { }
 
   @Post()
+  @UseGuards(AuthGuard)
   createAnnouncement(@Body() createAnnouncementDto, @Request() request): Observable<any> {
     const { user } = request;
     return this.missionClient.send({ cmd: "createAnnouncement" }, { createAnnouncementDto, user });
@@ -34,12 +35,14 @@ export class AnnouncementsController {
 
   @Patch('/:id')
   @UseFilters(new ExceptionFilter())
+  @UseGuards(AuthGuard)
   updateAnnouncement(@Param() params, @Body() updateAnnouncementDto, @Request() request): Observable<any> {
     const { user } = request;
     return this.missionClient.send({ cmd: "updateAnnouncement" }, { id: params.id, updateAnnouncementDto, user });
   }
 
   @Delete('/:id')
+  @UseGuards(AuthGuard)
   remove(@Param() param: { id: string }): Observable<any> {
     return this.missionClient.send({ cmd: "removeAnnouncement" }, { id: param.id });
   }
