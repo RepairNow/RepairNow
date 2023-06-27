@@ -2,11 +2,23 @@
     <sidebar-navigation
         :items="[
             {
-                title: 'Mes demandes',
-                value: 'mes-demandes',
+                title: 'Les demandes',
+                value: 'les-demandes',
                 icon: 'mdi-bookmark-outline',
                 to: 'contractor-announcements',
             },
+            /*{
+                title: 'Mes devis',
+                value: 'mes-devis',
+                icon: 'mdi-bookmark-outline',
+                to: 'contractor-estimates',
+            },
+            {
+                title: 'Mes missions',
+                value: 'mes-missions',
+                icon: 'mdi-bookmark-outline',
+                to: 'contractor-missions',
+            },*/
             {
                 title: 'Notifications',
                 value: 'notifications',

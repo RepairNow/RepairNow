@@ -5,7 +5,7 @@ import { Observable } from "rxjs";
 import { ExceptionFilter } from "../filters/rpc-exception.filter";
 import { CurrentUserDto } from "@repairnow/dto"
 @Controller('/announcements')
-@UseGuards(AuthGuard)
+//@UseGuards(AuthGuard)
 export class AnnouncementsController {
   constructor(@Inject('MISSION_SERVICE') private missionClient: ClientProxy) { }
 
@@ -16,7 +16,12 @@ export class AnnouncementsController {
   }
 
   @Get()
-  findAll(@Request() request): Observable<any> {
+  findAll(): Observable<any> {
+    return this.missionClient.send({ cmd: "findUserAnnouncements" }, '');
+  }
+
+  @Get('/my-announcements')
+  findUserAnnouncements(@Request() request): Observable<any> {
     const { user }: { user: CurrentUserDto } = request;
     return this.missionClient.send({ cmd: "findAllAnnouncements" }, user);
   }

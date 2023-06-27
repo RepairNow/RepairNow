@@ -13,8 +13,8 @@ export class AnnouncementsController {
     return this.announcementsService.create(payload);
   }
 
-  @MessagePattern({ cmd: 'findAllAnnouncements' })
-  findAll(@Payload() user) {
+  @MessagePattern({ cmd: 'findUserAnnouncements' })
+  findUserAnnouncements(@Payload() user) {
     return this.announcementsService.findAll(user);
   }
 
