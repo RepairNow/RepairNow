@@ -17,13 +17,14 @@ export class AnnouncementsController {
 
   @Get()
   findAll(): Observable<any> {
-    return this.missionClient.send({ cmd: "findUserAnnouncements" }, '');
+    return this.missionClient.send({ cmd: "findAllAnnouncements" }, '');
   }
 
   @Get('/my-announcements')
+  @UseGuards(AuthGuard)
   findUserAnnouncements(@Request() request): Observable<any> {
     const { user }: { user: CurrentUserDto } = request;
-    return this.missionClient.send({ cmd: "findAllAnnouncements" }, user);
+    return this.missionClient.send({ cmd: "findUserAnnouncements" }, user);
   }
 
   @Get('/:id')

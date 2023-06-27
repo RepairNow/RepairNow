@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, Inject, Param, Patch, Post, UseGuards } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { AuthGuard } from 'src/guards/auth.guard';
+import {Observable} from "rxjs";
 
 @Controller('announcements/:announcementId/mission')
 @UseGuards(AuthGuard)
@@ -18,8 +19,13 @@ export class MissionController {
     // }
 
     @Get()
-    findOne(@Param('announcementId') id: string) {
+    findUserMissions(@Param('announcementId') id: string) {
         return this.missionClient.send({ cmd: 'findOneMission' }, id);
+    }
+
+    @Get('/:id')
+    findOne(@Param() param: { id: string }): Observable<any> {
+        return this.missionClient.send({ cmd: "findOneMission" }, { id: param.id });
     }
 
     @Patch()

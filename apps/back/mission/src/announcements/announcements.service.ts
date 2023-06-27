@@ -36,8 +36,20 @@ export class AnnouncementsService {
   }
 
 
-  async findAll(user: any) {
-    console.log(user)
+  async findAll() {
+    try {
+      const announcement = await this.prismaService.announcement.findMany({
+        where: {
+          currentStatus: AnnouncementStatus.PUBLISHED
+        }
+      })
+      return announcement;
+    } catch (error) {
+      return new BadRequestException(error.message);
+    }
+  }
+
+  async findUserAll(user: any) {
     try {
       const announcement = await this.prismaService.announcement.findMany({
         where: {
