@@ -31,6 +31,19 @@ export class UsersService {
     return user;
   }
 
+  async getUserByEmailAndCheckPassword(email: string, password: string) {
+    const user = await this.getUserByEmail(email);
+    if (!user) {
+      throw new HttpException('invalid_credentials', HttpStatus.UNAUTHORIZED);
+    }
+    // compare passwords
+    const areEqual = await compare(password, user.password);
+    if (!areEqual) {
+      throw new HttpException('invalid_credentials', HttpStatus.UNAUTHORIZED);
+    }
+    return user;
+  }
+
   async getUsers(): Promise<any> {
     return this.prismaService.user.findMany();
   }
@@ -39,6 +52,14 @@ export class UsersService {
     return this.prismaService.user.findUnique({
       where: {
         id,
+      },
+    });
+  }
+
+  async getUserByEmail(email: string): Promise<any> {
+    return this.prismaService.user.findUnique({
+      where: {
+        email,
       },
     });
   }

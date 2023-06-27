@@ -35,36 +35,32 @@ export class AuthService {
       role: string;
     };
   } | null> {
-    const user = await this.prismaService.user.findUnique({
-      where: {
-        email,
-      },
-    });
-    if (user?.password !== password) {
+    const user = await this.usersService.getUserByEmailAndCheckPassword(
+      email,
+      password,
+    );
+    if (!user) {
       throw new UnauthorizedException();
     }
-    if (user?.password === password) {
-      const payload = {
+    const payload = {
+      email: user.email,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      phoneNumber: user.phoneNumber,
+      role: user.role,
+      sub: user.id,
+    };
+    return {
+      access_token: this.jwtService.sign(payload),
+      user: {
+        id: user.id,
         email: user.email,
         firstname: user.firstname,
         lastname: user.lastname,
         phoneNumber: user.phoneNumber,
         role: user.role,
-        sub: user.id,
-      };
-      return {
-        access_token: this.jwtService.sign(payload),
-        user: {
-          id: user.id,
-          email: user.email,
-          firstname: user.firstname,
-          lastname: user.lastname,
-          phoneNumber: user.phoneNumber,
-          role: user.role,
-        },
-      };
-    }
-    return null;
+      },
+    };
   }
 
   async signUpEmail({
