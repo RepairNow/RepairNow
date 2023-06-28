@@ -29,6 +29,17 @@ const routes = [
 				path: "announcement/:id",
 				component: () => import("@/views/Announcement.vue"),
 			},
+            {
+                name: "post-announcement",
+                path: "/poster-une-annonce",
+                component: () => import("@/views/PostAnnouncement.vue"),
+                meta: {
+                    admin: false,
+                    contractor: false,
+                    mobile: true,
+                    connected: false
+                }
+            },
 			{
 				path: "/:pathMatch(.*)*",
 				component: () => import("@/views/NotFound.vue"),
@@ -52,17 +63,6 @@ const routes = [
 				component: () => import("@/views/Session/Register.vue"),
 			}
 		],
-		meta: {
-			admin: false,
-			contractor: false,
-			mobile: true,
-			connected: false
-		}
-	},
-	{
-		name: "post-announcement",
-		path: "/poster-une-annonce",
-		component: () => import("@/views/PostAnnouncement.vue"),
 		meta: {
 			admin: false,
 			contractor: false,

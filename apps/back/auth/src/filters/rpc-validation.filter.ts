@@ -5,6 +5,8 @@ import { RpcException } from '@nestjs/microservices';
 @Catch(HttpException)
 export class RpcValidationFilter implements ExceptionFilter {
   catch(exception: HttpException) {
-    return new RpcException(exception.getResponse());
+    return new RpcException(
+      new HttpException(exception.getResponse(), exception.getStatus()),
+    );
   }
 }
