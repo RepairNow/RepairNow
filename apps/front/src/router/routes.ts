@@ -60,6 +60,17 @@ const routes = [
 		}
 	},
 	{
+		name: "post-announcement",
+		path: "/poster-une-annonce",
+		component: () => import("@/views/PostAnnouncement.vue"),
+		meta: {
+			admin: false,
+			contractor: false,
+			mobile: true,
+			connected: false
+		}
+	},
+	{
 		name: "client",
 		path: "/client",
 		component: () => import("@/views/Client/Client.vue"),

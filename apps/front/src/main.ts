@@ -8,6 +8,9 @@ import i18n from "./plugins/i18n";
 import "@/main.css";
 import App from "./App.vue";
 
+/* import mosha-vue-testify to have styles */
+import 'mosha-vue-toastify/dist/style.css';
+
 /* import the fontawesome core */
 import { library } from '@fortawesome/fontawesome-svg-core'
 

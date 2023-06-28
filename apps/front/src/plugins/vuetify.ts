@@ -2,6 +2,7 @@ import "@mdi/font/css/materialdesignicons.css";
 import { createVuetify, ThemeDefinition } from "vuetify";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
+import { VDatePicker } from "vuetify/labs/VDatePicker";
 import "vuetify/styles";
 
 const defaultLightTheme: ThemeDefinition = {
@@ -21,7 +22,10 @@ const defaultLightTheme: ThemeDefinition = {
 };
 
 export default createVuetify({
-	components,
+	components: {
+		...components,
+		VDatePicker,
+	},
 	directives,
 	theme: {
 		defaultTheme: "defaultLightTheme",
