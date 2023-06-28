@@ -120,7 +120,7 @@ export class MissionService {
       });
 
       if (!mission) {
-        return new NotFoundException("La n'existe pas pour cette annonce");
+        return new NotFoundException("La mission n'existe pas pour cette annonce");
       }
 
       /*if (!announcement.mission) {
@@ -225,8 +225,6 @@ export class MissionService {
         }
       });
 
-      console.log(mission)
-      console.log(payload)
       if (!mission) {
         return new NotFoundException("La mission n'existe pas");
       }
