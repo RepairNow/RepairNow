@@ -5,7 +5,7 @@ import { token, refreshToken } from "@/services";
 import userService from "@/services/api/user";
 
 export const useUserStore = defineStore("user", () => {
-    const { _signin, _signup, _getSelfUser, _resetPassword, _getUsers } = userService;
+    const { _signin, _signup, _getSelfUser, _resetPassword, _getUsers, _signinWithToken } = userService;
     // @ts-ignore
     const currentUser: Ref<UserI | null> = ref(null);
     const user: Ref<UserI | null> = ref(null);
@@ -55,6 +55,7 @@ export const useUserStore = defineStore("user", () => {
             const res = await _getSelfUser();
             currentUser.value = res;
         } catch (error) {
+            //await _signinWithToken()
             throw error;
         }
     }

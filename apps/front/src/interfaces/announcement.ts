@@ -38,4 +38,5 @@ export interface AnnouncementI {
     mission: MissionI
     chat: ChatI
     estimate: EstimateI[]
+    currentStatus: string
 }

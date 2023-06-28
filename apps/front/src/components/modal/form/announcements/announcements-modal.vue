@@ -2,6 +2,7 @@
     <v-dialog
             v-model="dialog"
             transition="dialog-bottom-transition"
+            :fullscreen="isSizeMD"
     >
         <template v-slot:activator="{ props }">
             <div
@@ -30,7 +31,6 @@
             </div>
             <div class="mb-4">
                 <p
-                    v-if="!service"
                     class="tw-text-3xl tw-font-bold tw-flex tw-items-center tw-h-16"
                 >
                     Demander un service
@@ -39,10 +39,10 @@
             <div>
                 <v-text-field variant="filled" label="Titre" v-model="announcementForm.title"/>
                 <v-text-field variant="filled" label="Description" v-model="announcementForm.description"/>
-                <v-text-field variant="filled" label="Images" v-model="announcementForm.images"/>
+                <!--<v-file-input variant="filled" label="Images" v-model="announcementForm.images"/>-->
                 <v-text-field variant="filled" label="Adresse" v-model="announcementForm.address"/>
-                <v-text-field type="datetime" variant="filled" label="Date de début" v-model="announcementForm.startTime"/>
-                <v-text-field type="datetime" variant="filled" label="Date de fin" v-model="announcementForm.endTime"/>
+                <v-text-field type="date" variant="filled" label="Date de début" v-model="announcementForm.startTime"/>
+                <v-text-field type="date" variant="filled" label="Date de fin" v-model="announcementForm.endTime"/>
                 <v-btn
                         text="S'inscrire"
                         block
@@ -57,11 +57,18 @@
 <script setup lang="ts">
 import {ref} from "vue";
 import {CreateAnnouncement} from "@/interfaces/announcement";
+import {useScreenSize} from "@/stores/screen-size";
+import {storeToRefs} from "pinia";
+import {useAnnouncementStore} from "@/stores/announcement"
 
-const dialog = ref(false)
+const dialog = ref(false);
+const screenSizeStore = useScreenSize()
+const { isSizeMD } = storeToRefs(screenSizeStore)
+
+const announcementStore = useAnnouncementStore()
+const { createAnnouncement } = announcementStore
 
 const announcementForm = ref<CreateAnnouncement>({
-    userId: '',
     title: '',
     description: '',
     images: [],
@@ -70,14 +77,13 @@ const announcementForm = ref<CreateAnnouncement>({
     endTime: new Date(),
 })
 
-const handleAnnouncement = () => {
+const handleAnnouncement = async () => {
     try {
-
+        await createAnnouncement(announcementForm.value)
     } catch (e) {
 
     } finally {
         announcementForm.value = {
-            userId: '',
             title: '',
             description: '',
             images: [],

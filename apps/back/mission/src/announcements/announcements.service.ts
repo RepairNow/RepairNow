@@ -20,6 +20,7 @@ export class AnnouncementsService {
   async create(payload: { createAnnouncementDto: CreateAnnouncementDto, user: CurrentUserDto }): Promise<any> {
 
     try {
+      console.log(payload.createAnnouncementDto)
       const announcement = await this.prismaService.announcement.create({
         // @ts-ignore
         data: {
@@ -35,8 +36,20 @@ export class AnnouncementsService {
   }
 
 
-  async findAll(user: any) {
-    console.log(user)
+  async findAll() {
+    try {
+      const announcement = await this.prismaService.announcement.findMany({
+        where: {
+          currentStatus: AnnouncementStatus.PUBLISHED
+        }
+      })
+      return announcement;
+    } catch (error) {
+      return new BadRequestException(error.message);
+    }
+  }
+
+  async findUserAll(user: any) {
     try {
       const announcement = await this.prismaService.announcement.findMany({
         where: {
@@ -73,6 +86,7 @@ export class AnnouncementsService {
 
   async update(payload: { updateAnnouncementDto: UpdateAnnouncementDto, user: CurrentUserDto, id: string }): Promise<any> {
     try {
+      console.log(payload)
       let updatableAnnouncementStatus = [AnnouncementStatus.DRAFT.toString(), AnnouncementStatus.PUBLISHED.toString()];
 
       let announcement = await this.prismaService.announcement.findUnique({

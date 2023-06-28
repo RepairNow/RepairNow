@@ -57,5 +57,5 @@ export const useAnnouncementStore = defineStore("announcement", () => {
         }
     }
 
-    return { announcements, getAnnouncements, getAnnouncement, createAnnouncement, updateAnnouncement, deleteAnnouncement };
+    return { announcement, announcements, getAnnouncements, getAnnouncement, createAnnouncement, updateAnnouncement, deleteAnnouncement };
 });

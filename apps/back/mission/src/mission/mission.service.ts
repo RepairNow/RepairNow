@@ -3,6 +3,7 @@ import { CreateMissionDto } from './dto/create-mission.dto';
 import { UpdateMissionDto } from './dto/update-mission.dto';
 import { PrismaService } from '@repairnow/prisma';
 import { MissionStatus } from './enums/mission-status.enum';
+import {CurrentUserI} from "front/src/interfaces/user";
 
 function generateRandomNumber() {
   return Math.floor(Math.random() * 9000) + 1000;
@@ -11,9 +12,10 @@ function generateRandomNumber() {
 export class MissionService {
   constructor(private prismaService: PrismaService) { }
 
-  async create(createMissionDto: CreateMissionDto) {
+  async create(payload: {createMissionDto: CreateMissionDto, announcementId: string}) {
 
     try {
+      const {createMissionDto, announcementId} = payload
 
       const prestataire = await this.prismaService.user.findUnique({
         where: {
@@ -27,7 +29,7 @@ export class MissionService {
 
       const announcement = await this.prismaService.announcement.findUnique({
         where: {
-          id: createMissionDto.announcementId
+          id: announcementId
         }
       });
 
@@ -38,7 +40,7 @@ export class MissionService {
       // check if a mission already exists for this announcement
       const mission = await this.prismaService.mission.findFirst({
         where: {
-          announcementId: createMissionDto.announcementId
+          announcementId: announcementId
         }
       });
 
@@ -49,7 +51,7 @@ export class MissionService {
       const createdMission = await this.prismaService.mission.create({
         data: {
           prestataireId: createMissionDto.prestataireId,
-          announcementId: createMissionDto.announcementId,
+          announcementId: announcementId,
           currentStatus: MissionStatus.IN_PROGRESS
         }
       });
@@ -76,36 +78,67 @@ export class MissionService {
     }
   }
 
-  async findOne(announcementId: string) {
+  async findUserAll(payload: { user: CurrentUserI }) {
     try {
-      const announcement = await this.prismaService.announcement.findUnique({
+      console.log(payload)
+      return await this.prismaService.mission.findMany({
         where: {
-          id: announcementId
-        },
-        include: {
-          mission: true
+          prestataireId: payload.user.id
+        }
+      })
+    }  catch (error) {
+      return new BadRequestException(error.message);
+    }
+  }
+
+  async findOne(payload: { id: string }) {
+    try {
+      const mission = await this.prismaService.mission.findUnique({
+        where: {
+          id: payload.id
         }
       });
-
-      if (!announcement) {
-        return new NotFoundException("L'annonce n'existe pas");
+      if (!mission) {
+        throw new NotFoundException();
       }
-
-      if (!announcement.mission) {
-        return new NotFoundException("Aucune mission trouvée pour cette annonce");
-      }
-
-      return announcement.mission;
+      return mission;
     } catch (error) {
       return new BadRequestException(error.message);
     }
   }
 
-  async update(updateMissionDto: UpdateMissionDto) {
+  async findOneByAnnouncement(payload: { announcementId: string }) {
     try {
       const mission = await this.prismaService.mission.findUnique({
         where: {
-          id: updateMissionDto.id
+          announcementId: payload.announcementId
+        },
+        include: {
+          announcement: true,
+          prestataire: true
+        }
+      });
+
+      if (!mission) {
+        return new NotFoundException("La mission n'existe pas pour cette annonce");
+      }
+
+      /*if (!announcement.mission) {
+        return new NotFoundException("Aucune mission trouvée pour cette annonce");
+      }*/
+
+      return mission;
+    } catch (error) {
+      return new BadRequestException(error.message);
+    }
+  }
+
+  async update(payload: {updateMissionDto: UpdateMissionDto, id: string}) {
+    try {
+      const {updateMissionDto, id} = payload
+      const mission = await this.prismaService.mission.findUnique({
+        where: {
+          id: id
         }
       });
 
@@ -119,7 +152,39 @@ export class MissionService {
 
       return await this.prismaService.mission.update({
         where: {
-          id: mission.id
+          id: id
+        },
+        data: {
+          currentStatus: updateMissionDto.currentStatus
+        }
+      });
+
+    } catch (error) {
+      return new BadRequestException(error.message);
+    }
+  }
+
+
+  async updateByAnnouncement(payload: {updateMissionDto: UpdateMissionDto, announcementId: string}) {
+    try {
+      const {updateMissionDto, announcementId} = payload
+      const mission = await this.prismaService.mission.findUnique({
+        where: {
+          announcementId: announcementId
+        }
+      });
+
+      if (!mission) {
+        return new NotFoundException("La mission n'existe pas");
+      }
+
+      if (mission.currentStatus === MissionStatus.DONE) {
+        return new BadRequestException("La mission est déjà terminée");
+      }
+
+      return await this.prismaService.mission.update({
+        where: {
+          announcementId: announcementId
         },
         data: {
           currentStatus: updateMissionDto.currentStatus
@@ -146,6 +211,33 @@ export class MissionService {
       return await this.prismaService.mission.delete({
         where: {
           id: id
+        }
+      });
+    } catch (error) {
+      return new BadRequestException(error.message);
+    }
+  }
+  async removeByAnnouncement(payload: { announcementId: string }) {
+    try {
+      const mission = await this.prismaService.mission.findUnique({
+        where: {
+          announcementId: payload.announcementId
+        }
+      });
+
+      if (!mission) {
+        return new NotFoundException("La mission n'existe pas");
+      }
+
+      await this.prismaService.validationCode.delete({
+        where: {
+          missionId: mission.id
+        }
+      })
+
+      return await this.prismaService.mission.delete({
+        where: {
+          id: mission.id
         }
       });
     } catch (error) {

@@ -4,7 +4,7 @@ import announcementService from "@/services/api/announcement";
 import { CreateMission, DeleteMission, MissionI, UpdateMission } from "@/interfaces/mission";
 
 export const useMissionStore = defineStore("mission", () => {
-    const { _getMission, _createMision, _updateMission, _deleteMission } = announcementService;
+    const { _getMission, _createMission, _updateMission, _deleteMission } = announcementService;
 
     // @ts-ignore
     const mission: Ref<MissionI> = ref({});
@@ -20,7 +20,7 @@ export const useMissionStore = defineStore("mission", () => {
 
     async function createMission(payload: CreateMission) {
         try {
-            const res = await _createMision(payload);
+            const res = await _createMission(payload);
             mission.value = res;
         } catch (error) {
             throw error;

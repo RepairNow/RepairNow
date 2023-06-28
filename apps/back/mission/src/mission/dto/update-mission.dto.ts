@@ -5,8 +5,6 @@ import { MissionStatus } from '../enums/mission-status.enum';
 
 export class UpdateMissionDto extends PartialType(CreateMissionDto) {
 
-  id: string;
-
   @IsIn([MissionStatus.IN_PROGRESS, MissionStatus.DONE])
   currentStatus: string;
 }
