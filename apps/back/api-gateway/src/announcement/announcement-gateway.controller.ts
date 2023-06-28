@@ -46,4 +46,32 @@ export class AnnouncementsController {
   remove(@Param() param: { id: string }): Observable<any> {
     return this.missionClient.send({ cmd: "removeAnnouncement" }, { id: param.id });
   }
+
+  /**
+   * Announcement mission
+   */
+
+  @Post('/:id/mission')
+  @UseGuards(AuthGuard)
+  createMissionOfAnnouncement(@Param('id') id: string, @Body() createMissionDto: any) {
+    return this.missionClient.send({ cmd: 'createMissionOfAnnouncement' },{createMissionDto: createMissionDto, announcementId: id});
+  }
+
+  @Get('/:id/mission')
+  @UseGuards(AuthGuard)
+  findMissionOfAnnouncement(@Param('id') id: string): Observable<any> {
+    return this.missionClient.send({ cmd: 'findMissionOfAnnouncement' }, { announcementId: id });
+  }
+
+  @Patch('/:id/mission')
+  @UseGuards(AuthGuard)
+  updateMissionOfAnnouncement(@Param('id') id: string, @Body() updateMissionDto: any) {
+    return this.missionClient.send({ cmd: 'updateMissionOfAnnouncement' }, {updateMissionDto: updateMissionDto, announcementId: id});
+  }
+
+  @Delete('/:id/mission')
+  @UseGuards(AuthGuard)
+  removeMissionOfAnnouncement(@Param('id') id: string) {
+    return this.missionClient.send({ cmd: 'removeMissionOfAnnouncement' }, id);
+  }
 }

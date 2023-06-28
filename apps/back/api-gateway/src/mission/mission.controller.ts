@@ -1,9 +1,9 @@
-import { Body, Controller, Delete, Get, Inject, Param, Patch, Post, UseGuards } from '@nestjs/common';
+import {Body, Controller, Delete, Get, Inject, Param, Patch, Post, Request, UseGuards} from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { AuthGuard } from 'src/guards/auth.guard';
 import {Observable} from "rxjs";
 
-@Controller('announcements/:announcementId/mission')
+@Controller('missions')
 @UseGuards(AuthGuard)
 export class MissionController {
     constructor(@Inject('MISSION_SERVICE') private missionClient: ClientProxy) { }

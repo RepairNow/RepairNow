@@ -6,7 +6,4 @@ export class CreateMissionDto {
     @IsUUID()
     prestataireId: string;
 
-    @IsNotEmpty()
-    @IsUUID()
-    announcementId: string;
 }
