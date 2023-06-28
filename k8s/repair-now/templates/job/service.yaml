@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: job
+  name: job-svc
+spec:
+  ports:
+    - name: "tcp"
+      port: 3002
+      protocol: TCP
+      targetPort: 3002
+  selector:
+    app: job
+  type: ClusterIP

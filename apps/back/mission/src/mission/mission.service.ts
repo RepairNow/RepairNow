@@ -3,7 +3,7 @@ import { CreateMissionDto } from './dto/create-mission.dto';
 import { UpdateMissionDto } from './dto/update-mission.dto';
 import { PrismaService } from '@repairnow/prisma';
 import { MissionStatus } from './enums/mission-status.enum';
-import {CurrentUserI} from "front/src/interfaces/user";
+import { CurrentUserI } from "./dto/current-user.dto";
 
 function generateRandomNumber() {
   return Math.floor(Math.random() * 9000) + 1000;
@@ -12,10 +12,10 @@ function generateRandomNumber() {
 export class MissionService {
   constructor(private prismaService: PrismaService) { }
 
-  async create(payload: {createMissionDto: CreateMissionDto, announcementId: string}) {
+  async create(payload: { createMissionDto: CreateMissionDto, announcementId: string }) {
 
     try {
-      const {createMissionDto, announcementId} = payload
+      const { createMissionDto, announcementId } = payload
 
       const prestataire = await this.prismaService.user.findUnique({
         where: {
@@ -86,7 +86,7 @@ export class MissionService {
           prestataireId: payload.user.id
         }
       })
-    }  catch (error) {
+    } catch (error) {
       return new BadRequestException(error.message);
     }
   }
@@ -133,9 +133,9 @@ export class MissionService {
     }
   }
 
-  async update(payload: {updateMissionDto: UpdateMissionDto, id: string}) {
+  async update(payload: { updateMissionDto: UpdateMissionDto, id: string }) {
     try {
-      const {updateMissionDto, id} = payload
+      const { updateMissionDto, id } = payload
       const mission = await this.prismaService.mission.findUnique({
         where: {
           id: id
@@ -165,9 +165,9 @@ export class MissionService {
   }
 
 
-  async updateByAnnouncement(payload: {updateMissionDto: UpdateMissionDto, announcementId: string}) {
+  async updateByAnnouncement(payload: { updateMissionDto: UpdateMissionDto, announcementId: string }) {
     try {
-      const {updateMissionDto, announcementId} = payload
+      const { updateMissionDto, announcementId } = payload
       const mission = await this.prismaService.mission.findUnique({
         where: {
           announcementId: announcementId

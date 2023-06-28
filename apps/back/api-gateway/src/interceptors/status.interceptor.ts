@@ -3,7 +3,6 @@ import {
   NestInterceptor,
   ExecutionContext,
   CallHandler,
-  Logger,
 } from '@nestjs/common';
 import { Observable, map } from 'rxjs';
 
@@ -16,11 +15,11 @@ export class StatusInterceptor implements NestInterceptor {
       map((response) => {
         const httpResponse = context.switchToHttp().getResponse();
         // change status if received a rpc exception
-        if (response.error && response.error.hasOwnProperty('statusCode')) {
-          const { statusCode } = response.error;
-
+        if (response.error) {
           // modify response status of the api-gateway
-          httpResponse.status(statusCode);
+          httpResponse.status(
+            response.error.status || response.error.statusCode || 500,
+          );
           return response;
         }
 

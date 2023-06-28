@@ -22,16 +22,18 @@
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
+    "@nestjs/config": "^2.3.1",
     "@nestjs/microservices": "^9.4.0",
     "@nestjs/mapped-types": "*",
     "@nestjs/core": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
-    "stripe": "^12.10.0"
+    "stripe": "^12.10.0",
+    "@repairnow/dto": "*",
+    "@repairnow/prisma": "*"
   },
   "devDependencies": {
-    "@repairnow/prisma": "*",
     "@nestjs/cli": "^9.0.0",
     "@nestjs/schematics": "^9.0.0",
     "@nestjs/testing": "^9.0.0",

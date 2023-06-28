@@ -29,7 +29,7 @@ export class StripeService {
                 },
             ],
             mode: 'payment',
-            success_url: this.configService.get('STRIPE_CHECKOUT_SUCESS_URL'),
+            success_url: this.configService.get('STRIPE_CHECKOUT_SUCCESS_URL'),
             cancel_url: this.configService.get('STRIPE_CHECKOUT_CANCEL_URL')
         });
 

@@ -43,7 +43,9 @@ docker compose -f docker-compose-bdd.yml up -d
 3 - Update BDD (init Tables)
 
 ```
-yarn workspace @repairnow/prisma db:push
+yarn workspace @repairnow/prisma db:migrate:dev
+
+(à éviter) => yarn workspace @repairnow/prisma db:push
 ```
 
 4 - Launch all projects
@@ -56,6 +58,12 @@ yarn run dev
 
 ```
 yarn workspace @repairnow/prisma studio
+```
+
+6 - (Optionnal) Run DB seeds
+
+```
+yarn workspace @repairnow/prisma db:seed
 ```
 
 ### Google Kubernetes Engine (GKE) - PROD

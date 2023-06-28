@@ -35,7 +35,7 @@ import { ValicationCodeController } from './valication.code/valication.code.cont
         useFactory: (configService: ConfigService) => ({
           transport: Transport.TCP,
           options: {
-            host: configService.get('AUTH_HOST'),
+            host: configService.get('JOB_HOST'),
             port: configService.get('JOB_PORT')
           },
         }),
@@ -46,7 +46,7 @@ import { ValicationCodeController } from './valication.code/valication.code.cont
         useFactory: (configService: ConfigService) => ({
           transport: Transport.TCP,
           options: {
-            host: configService.get('AUTH_HOST'),
+            host: configService.get('MISSION_HOST'),
             port: configService.get('MISSION_PORT')
           },
         }),

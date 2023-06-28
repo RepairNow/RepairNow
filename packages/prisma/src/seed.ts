@@ -1,4 +1,6 @@
 import { PrismaClient } from '@prisma/client';
+import { hash } from 'bcrypt';
+
 const prisma = new PrismaClient();
 async function main() {
   const alice = await prisma.user.upsert({
@@ -6,13 +8,13 @@ async function main() {
     update: {},
     create: {
       email: 'alice@prisma.io',
-      password: 'password',
+      password: await hash('password', 10),
       firstname: 'Alice',
       lastname: 'Dupont',
       phoneNumber: '0606060606',
       jobs: {
         create: {
-          title: 'Check out Prisma with Next.js',
+          title: 'Check out Prisma with Next 13',
         },
       },
     },
@@ -22,17 +24,17 @@ async function main() {
     update: {},
     create: {
       email: 'bob@prisma.io',
-      password: 'password',
+      password: await hash('password', 10),
       firstname: 'Bob',
       lastname: 'Le bricoleur',
       phoneNumber: '0707070707',
       jobs: {
         create: [
           {
-            title: 'Follow Prisma on Twitter',
+            title: 'Follow Prisma on FB',
           },
           {
-            title: 'Follow Nexus on Twitter',
+            title: 'Follow Nexus on FB',
           },
         ],
       },
