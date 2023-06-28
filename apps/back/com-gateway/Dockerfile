@@ -9,7 +9,7 @@ RUN apk update
 WORKDIR /app
 RUN yarn global add turbo
 COPY . .
-RUN turbo prune --scope=auth --docker
+RUN turbo prune --scope=com-gateway --docker
 
 # Add lockfile and package.json's of isolated subworkspace
 FROM node:alpine AS installer
@@ -34,7 +34,7 @@ COPY turbo.json turbo.json
 # ARG TURBO_TOKEN
 # ENV TURBO_TOKEN=$TURBO_TOKEN
 
-RUN yarn turbo run build --filter=auth...
+RUN yarn turbo run build --filter=com-gateway...
 
 FROM node:alpine AS runner
 WORKDIR /app
@@ -44,6 +44,4 @@ RUN addgroup --system --gid 1001 nestjs
 RUN adduser --system --uid 1001 nestjs
 USER nestjs
 COPY --from=installer /app .
-RUN yarn workspace @repairnow/prisma db:migrate:deploy
-
-CMD ["yarn", "workspace", "auth", "start:prod"]
+CMD ["yarn", "workspace", "com-gateway", "start:prod"]

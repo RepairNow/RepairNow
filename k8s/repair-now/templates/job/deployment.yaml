@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: job
+  name: job
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: job
+  template:
+    metadata:
+      labels:
+        app: job
+    spec:
+      containers:
+      - image: {{ .Values.DOCKER_HUB_USERNAME }}/repair-now-job:{{ .Values.GITHUB_SHA }}
+        name: job
+        ports:
+        - containerPort: 3002

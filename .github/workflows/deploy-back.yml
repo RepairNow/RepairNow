@@ -3,9 +3,10 @@ name: Deploy Back
 on:
   push:
     branches:
-      - main
-    paths:
-      - 'apps/back/**'
+      - feature/back-cicd
+    # paths:
+    #   - 'apps/back/**'
+    #   - .github/workflows/deploy-back.yml
 
 env:
   GCLOUD_PROJECT_ID: ${{ secrets.GCLOUD_PROJECT_ID }}
@@ -21,34 +22,44 @@ jobs:
     name: Detect changes
     runs-on: ubuntu-latest
     outputs:
-      gateway: ${{ steps.filter.outputs.gateway }}
+      api-gateway: ${{ steps.filter.outputs.api-gateway }}
       auth: ${{ steps.filter.outputs.auth }}
+      job: ${{ steps.filter.outputs.job }}
+      mission: ${{ steps.filter.outputs.mission }}
+      com-gateway: ${{ steps.filter.outputs.com-gateway }}
 
     steps:
     - uses: actions/checkout@v3
     - uses: dorny/paths-filter@v2
       id: filter
       with:
-        base: main
+        base: feature/back-cicd
         filters: |
-          gateway:
+          api-gateway:
             - './apps/back/api-gateway/**'
           auth:
             - './apps/back/auth/**'
+          job:
+            - './apps/back/job/**'
+          mission:
+            - './apps/back/mission/**'
+          com-gateway:
+            - './apps/back/com-gateway/**'
+          
 
-  deploy-api-gateway:
-    name: Deploy Api Gateway
+  push-api-gateway-image:
+    name: Push Api Gateway Image to Docker Hub
     runs-on: ubuntu-latest
     environment: production
     needs: detect-changes
-    if: ${{ needs.detect-changes.outputs.gateway == 'true' }}
+    # if: ${{ needs.detect-changes.outputs.api-gateway == 'true' }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Deploy Api Gateway
-        uses: ./.github/actions/deploy-microservice
+      - name: Push Api Gateway Image to Docker Hub
+        uses: ./.github/actions/push-img-to-dockerhub
         with:
           microservice: api-gateway
           config: |
@@ -56,23 +67,121 @@ jobs:
             JWT_SECRET=${{ secrets.JWT_SECRET }}
             AUTH_HOST=auth-svc
             AUTH_PORT=3001
+            JOB_HOST=job-svc
+            JOB_PORT=3002
+            MISSION_HOST=mission-svc
+            MISSION_PORT=3003
 
-  deploy-auth:
-    name: Deploy Auth
+  push-auth-image:
+    name: Push Auth Image to Docker Hub
     runs-on: ubuntu-latest
     environment: production
     needs: detect-changes
-    if: ${{ needs.detect-changes.outputs.auth == 'true' }}
+    # if: ${{ needs.detect-changes.outputs.auth == 'true' }}
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Deploy Auth
-        uses: ./.github/actions/deploy-microservice
+      - name: Push Auth Image to Docker Hub
+        uses: ./.github/actions/push-img-to-dockerhub
         with:
           microservice: auth
           config: |
             DATABASE_URL=${{ secrets.DATABASE_URL }}
             JWT_SECRET=${{ secrets.JWT_SECRET }}
             AUTH_PORT=3001
+
+  push-job-image:
+    name: Push Job Image to Docker Hub
+    runs-on: ubuntu-latest
+    environment: production
+    needs: detect-changes
+    # if: ${{ needs.detect-changes.outputs.job == 'true' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Push Job Image to Docker Hub
+        uses: ./.github/actions/push-img-to-dockerhub
+        with:
+          microservice: job
+          config: |
+            DATABASE_URL=${{ secrets.DATABASE_URL }}
+            JOB_PORT=3002
+
+  push-mission-image:
+    name: Push Mission Image to Docker Hub
+    runs-on: ubuntu-latest
+    environment: production
+    needs: detect-changes
+    # if: ${{ needs.detect-changes.outputs.mission == 'true' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Push Mission Image to Docker Hub
+        uses: ./.github/actions/push-img-to-dockerhub
+        with:
+          microservice: mission
+          config: |
+            DATABASE_URL=${{ secrets.DATABASE_URL }}
+            MISSION_PORT=3003
+            STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }}
+            STRIPE_CHECKOUT_SUCCESS_URL=https://amazon.com
+            STRIPE_CHECKOUT_CANCEL_URL=https://about.meta.com/fr/
+
+  push-com-gateway-image:
+    name: Push Com Gateway Image to Docker Hub
+    runs-on: ubuntu-latest
+    environment: production
+    needs: detect-changes
+    # if: ${{ needs.detect-changes.outputs.com-gateway == 'true' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Push Com Gateway Image to Docker Hub
+        uses: ./.github/actions/push-img-to-dockerhub
+        with:
+          microservice: com-gateway
+          config: |
+            DATABASE_URL=${{ secrets.DATABASE_URL }}
+            COM_PORT=3005
+            COM_DB=${{ secrets.COM_DB }}
+            JWT_SECRET=${{ secrets.JWT_SECRET }}
+
+  deploy-to-gke:
+    name: Deploy microservices to GKE
+    runs-on: ubuntu-latest
+    environment: production
+    if: "!failure()"
+    needs: [push-api-gateway-image, push-auth-image, push-job-image, push-mission-image, push-com-gateway-image]
+
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          token_format: 'access_token'
+          credentials_json: ${{ env.GKE_SA_KEY }}
+
+      - name: Set up GKE credentials
+        uses: google-github-actions/get-gke-credentials@v1
+        with:
+          cluster_name: ${{ env.GKE_CLUSTER_NAME }}
+          location: ${{ env.GKE_CLUSTER_ZONE }}
+
+      - name: Deploy microservices Gto GKE cluster
+        shell: bash
+        run: |
+          helm upgrade repair-now ./k8s/repair-now \
+          --set GITHUB_SHA=${{ github.sha }} \
+          --set DOCKER_HUB_USERNAME=${{ env.DOCKER_HUB_USERNAME }} \
+          --install \

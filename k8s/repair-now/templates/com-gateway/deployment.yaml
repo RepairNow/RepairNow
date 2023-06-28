@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: com-gateway
+  name: com-gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: com-gateway
+  template:
+    metadata:
+      labels:
+        app: com-gateway
+    spec:
+      containers:
+      - image: {{ .Values.DOCKER_HUB_USERNAME }}/repair-now-com-gateway:{{ .Values.GITHUB_SHA }}
+        name: com-gateway
+        ports:
+        - containerPort: 3005
+      

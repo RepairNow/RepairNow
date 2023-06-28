@@ -4,7 +4,7 @@ import { MissionService } from './mission.service';
 import { CreateMissionDto } from './dto/create-mission.dto';
 import { UpdateMissionDto } from './dto/update-mission.dto';
 import { RpcValidationFilter } from 'src/filters/rpc-validation.filter';
-import {CurrentUserI} from "front/src/interfaces/user";
+import { CurrentUserI } from './dto/current-user.dto';
 
 @Controller()
 export class MissionController {
@@ -27,13 +27,13 @@ export class MissionController {
 
   @MessagePattern({ cmd: 'createMission' })
   @UseFilters(RpcValidationFilter)
-  create(@Payload(ValidationPipe) payload: {createMissionDto: CreateMissionDto, announcementId: string}) {
+  create(@Payload(ValidationPipe) payload: { createMissionDto: CreateMissionDto, announcementId: string }) {
     return this.missionService.create(payload);
   }
 
   @MessagePattern({ cmd: 'updateMission' })
   @UseFilters(RpcValidationFilter)
-  update(@Payload(ValidationPipe) payload: {updateMissionDto: UpdateMissionDto, id: string}) {
+  update(@Payload(ValidationPipe) payload: { updateMissionDto: UpdateMissionDto, id: string }) {
     return this.missionService.update(payload);
   }
 
