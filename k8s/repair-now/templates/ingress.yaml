@@ -2,10 +2,19 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: repair-now-ing
+  annotations:
+    nginx.ingress.kubernetes.io/websocket-services: com-gateway-svc
 spec:
   rules:
     - http:
         paths:
+          - path: /com
+            pathType: Prefix
+            backend:
+              service:
+                name: com-gateway-svc
+                port:
+                  number: 3005
           - path: /
             pathType: Prefix
             backend:

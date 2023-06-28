@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: com-gateway
+  name: com-gateway-svc
+spec:
+  type: NodePort
+  selector:
+    app: com-gateway
+  ports:
+  - name: http
+    port: 3005
+    targetPort: 3005

@@ -41,23 +41,3 @@ runs:
         file: ./apps/back/${{ inputs.microservice }}/Dockerfile
         push: true
         tags: "${{ env.DOCKER_HUB_USERNAME }}/repair-now-${{ inputs.microservice }}:${{ github.sha }}"
-
-    - id: 'auth'
-      uses: 'google-github-actions/auth@v1'
-      with:
-        token_format: 'access_token'
-        credentials_json: ${{ env.GKE_SA_KEY }}
-
-    - name: Set up GKE credentials
-      uses: google-github-actions/get-gke-credentials@v1
-      with:
-        cluster_name: ${{ env.GKE_CLUSTER_NAME }}
-        location: ${{ env.GKE_CLUSTER_ZONE }}
-
-    - name: Deploy microservices Gto GKE cluster
-      shell: bash
-      run: |
-        helm upgrade repair-now ./k8s/repair-now \
-        --set GITHUB_SHA=${{ github.sha }} \
-        --set DOCKER_HUB_USERNAME=${{ env.DOCKER_HUB_USERNAME }} \
-        --install \
