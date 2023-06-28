@@ -33,6 +33,13 @@ export class EstimatesController {
     return this.missionClient.send({ cmd: "updateEstimate" }, updateEstimateDto);
   }
 
+  @Patch('/:estimateId/accept_estimate')
+  @UseFilters(new ExceptionFilter())
+  @UseGuards(AuthGuard)
+  acceptEstimate(@Param() params: { announcementId: string, estimateId: string }): Observable<any> {
+    return this.missionClient.send({ cmd: "acceptEstimate" }, params);
+  }
+
   @Delete('/:estimateId')
   @UseGuards(AuthGuard)
   remove(@Param() param: { id: string }): Observable<any> {

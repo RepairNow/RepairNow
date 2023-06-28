@@ -31,6 +31,11 @@ export class EstimatesController {
     return this.estimatesService.update(updateEstimateDto);
   }
 
+  @MessagePattern({ cmd: 'acceptEstimate' })
+  acceptEstimate(@Payload(ValidationPipe) payload: { announcementId: string, estimateId: string }) {
+    return this.estimatesService.acceptEstimate(payload);
+  }
+
   @MessagePattern({ cmd: 'removeEstimate' })
   remove(@Payload() payload: { id: string, estimateId: string }) {
     return this.estimatesService.remove(payload);

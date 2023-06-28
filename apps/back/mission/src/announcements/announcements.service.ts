@@ -5,7 +5,7 @@ import { Prisma, PrismaService } from '@repairnow/prisma';
 import { RpcException } from '@nestjs/microservices';
 import { CurrentUserDto } from "@repairnow/dto";
 
-enum AnnouncementStatus {
+export enum AnnouncementStatus {
   PUBLISHED = "PUBLISHED",
   DRAFT = "DRAFT",
   CANCEL = "CANCEL",
