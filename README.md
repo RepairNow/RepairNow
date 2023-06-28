@@ -43,7 +43,7 @@ docker compose -f docker-compose-bdd.yml up -d
 3 - Update BDD (init Tables)
 
 ```
-yarn workspace @repairnow/prisma db:push
+yarn workspace @repairnow/prisma db:migrate:dev
 ```
 
 4 - Launch all projects
