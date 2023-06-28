@@ -86,6 +86,7 @@ export class AnnouncementsService {
 
   async update(payload: { updateAnnouncementDto: UpdateAnnouncementDto, user: CurrentUserDto, id: string }): Promise<any> {
     try {
+      console.log(payload)
       let updatableAnnouncementStatus = [AnnouncementStatus.DRAFT.toString(), AnnouncementStatus.PUBLISHED.toString()];
 
       let announcement = await this.prismaService.announcement.findUnique({

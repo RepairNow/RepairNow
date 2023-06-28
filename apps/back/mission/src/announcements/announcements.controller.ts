@@ -60,7 +60,7 @@ export class AnnouncementsController {
   }
 
   @MessagePattern({ cmd: 'removeMissionOfAnnouncement' })
-  removeMissionOfAnnouncement(@Payload() payload: { id: string }) {
-    //return this.missionService.removeByAnnouncement(payload)
+  removeMissionOfAnnouncement(@Payload() payload: { announcementId: string }) {
+    return this.missionService.removeByAnnouncement(payload)
   }
 }

@@ -203,4 +203,33 @@ export class MissionService {
       return new BadRequestException(error.message);
     }
   }
+  async removeByAnnouncement(payload: { announcementId: string }) {
+    try {
+      const mission = await this.prismaService.mission.findUnique({
+        where: {
+          announcementId: payload.announcementId
+        }
+      });
+
+      console.log(mission)
+      console.log(payload)
+      if (!mission) {
+        return new NotFoundException("La mission n'existe pas");
+      }
+
+      await this.prismaService.validationCode.delete({
+        where: {
+          missionId: mission.id
+        }
+      })
+
+      return await this.prismaService.mission.delete({
+        where: {
+          id: mission.id
+        }
+      });
+    } catch (error) {
+      return new BadRequestException(error.message);
+    }
+  }
 }

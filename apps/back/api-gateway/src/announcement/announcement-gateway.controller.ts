@@ -38,7 +38,7 @@ export class AnnouncementsController {
   @UseGuards(AuthGuard)
   updateAnnouncement(@Param() params, @Body() updateAnnouncementDto, @Request() request): Observable<any> {
     const { user } = request;
-    return this.missionClient.send({ cmd: "updateAnnouncement" }, { id: params.id, updateAnnouncementDto, user });
+    return this.missionClient.send({ cmd: "updateAnnouncement" }, { updateAnnouncementDto: updateAnnouncementDto, user: user, id: params.id });
   }
 
   @Delete('/:id')
@@ -72,6 +72,6 @@ export class AnnouncementsController {
   @Delete('/:id/mission')
   @UseGuards(AuthGuard)
   removeMissionOfAnnouncement(@Param('id') id: string) {
-    return this.missionClient.send({ cmd: 'removeMissionOfAnnouncement' }, id);
+    return this.missionClient.send({ cmd: 'removeMissionOfAnnouncement' }, { announcementId: id });
   }
 }
