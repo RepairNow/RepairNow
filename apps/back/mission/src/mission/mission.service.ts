@@ -3,6 +3,7 @@ import { CreateMissionDto } from './dto/create-mission.dto';
 import { UpdateMissionDto } from './dto/update-mission.dto';
 import { PrismaService } from '@repairnow/prisma';
 import { MissionStatus } from './enums/mission-status.enum';
+import {CurrentUserI} from "front/src/interfaces/user";
 
 function generateRandomNumber() {
   return Math.floor(Math.random() * 9000) + 1000;
@@ -73,6 +74,19 @@ export class MissionService {
     try {
       return await this.prismaService.mission.findMany();
     } catch (error) {
+      return new BadRequestException(error.message);
+    }
+  }
+
+  async findUserAll(payload: { user: CurrentUserI }) {
+    try {
+      console.log(payload)
+      return await this.prismaService.mission.findMany({
+        where: {
+          prestataireId: payload.user.id
+        }
+      })
+    }  catch (error) {
       return new BadRequestException(error.message);
     }
   }

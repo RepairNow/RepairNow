@@ -18,9 +18,10 @@ export class MissionController {
     //     return this.missionClient.send({ cmd: 'findAllMission' }, '');
     // }
 
-    @Get()
-    findUserMissions(@Param('announcementId') id: string) {
-        return this.missionClient.send({ cmd: 'findOneMission' }, id);
+    @Get('/my-missions')
+    findUserMissions(@Request() request) {
+        const { user } = request;
+        return this.missionClient.send({ cmd: 'findUserMissions' }, {user: user});
     }
 
     @Get('/:id')

@@ -4,6 +4,7 @@ import { MissionService } from './mission.service';
 import { CreateMissionDto } from './dto/create-mission.dto';
 import { UpdateMissionDto } from './dto/update-mission.dto';
 import { RpcValidationFilter } from 'src/filters/rpc-validation.filter';
+import {CurrentUserI} from "front/src/interfaces/user";
 
 @Controller()
 export class MissionController {
@@ -17,6 +18,11 @@ export class MissionController {
   @MessagePattern({ cmd: 'findOneMission' })
   findOne(@Payload() payload: { id: string }) {
     return this.missionService.findOne(payload);
+  }
+
+  @MessagePattern({ cmd: 'findUserMissions' })
+  findUserAll(@Payload() payload: { user: CurrentUserI }) {
+    return this.missionService.findUserAll(payload);
   }
 
   @MessagePattern({ cmd: 'createMission' })
