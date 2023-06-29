@@ -100,4 +100,11 @@ export class UsersService {
       data: { password: await hash(payload.new_password, 10) },
     });
   }
+
+  async markPhoneNumberAsConfirmed(id: string): Promise<User> {
+    return await this.prismaService.user.update({
+      where: { id },
+      data: { isPhoneVerified: true },
+    });
+  }
 }

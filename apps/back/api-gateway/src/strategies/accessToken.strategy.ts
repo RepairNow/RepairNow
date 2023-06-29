@@ -8,6 +8,7 @@ type JwtPayload = {
   firstname: string;
   lastname: string;
   phoneNumber: string;
+  isPhoneVerified: boolean;
   role: string;
   sub: string;
 };

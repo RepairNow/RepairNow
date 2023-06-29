@@ -81,4 +81,19 @@ export class ApiGatewayController {
   ) {
     return this.apiGatewayService.signUp(signUpDto);
   }
+
+  @UseGuards(AccessTokenGuard)
+  @Post('initiate-verification')
+  initiateVerification(@Request() req) {
+    return this.apiGatewayService.initiateVerification(req.user);
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @Post('check-verification-code')
+  checkVerificationCode(@Request() req, @Body() verificationData) {
+    return this.apiGatewayService.checkVerificationCode({
+      user: req.user,
+      verificationData,
+    });
+  }
 }

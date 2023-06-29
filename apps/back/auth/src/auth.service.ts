@@ -12,6 +12,7 @@ interface IJwtPayload {
   firstname: string;
   lastname: string;
   phoneNumber: string;
+  isPhoneVerified: boolean;
   role: string;
   sub: string;
 }
@@ -46,6 +47,7 @@ export class AuthService {
       firstname: string | null;
       lastname: string | null;
       phoneNumber: string | null;
+      isPhoneVerified: boolean;
       role: string;
     };
   } | null> {
@@ -61,6 +63,7 @@ export class AuthService {
       firstname: user.firstname,
       lastname: user.lastname,
       phoneNumber: user.phoneNumber,
+      isPhoneVerified: user.isPhoneVerified,
       role: user.role,
       sub: user.id,
     };
@@ -75,6 +78,7 @@ export class AuthService {
         firstname: user.firstname,
         lastname: user.lastname,
         phoneNumber: user.phoneNumber,
+        isPhoneVerified: user.isPhoneVerified,
         role: user.role,
       },
     };
@@ -103,6 +107,7 @@ export class AuthService {
       firstname: userCreated.firstname,
       lastname: userCreated.lastname,
       phoneNumber: userCreated.phoneNumber,
+      isPhoneVerified: userCreated.isPhoneVerified,
       role: userCreated.role,
       sub: userCreated.id,
     };
@@ -147,6 +152,7 @@ export class AuthService {
           firstname: payload.firstname,
           lastname: payload.lastname,
           phoneNumber: payload.phoneNumber,
+          isPhoneVerified: payload.isPhoneVerified,
           role: payload.role,
         },
         {
@@ -161,6 +167,7 @@ export class AuthService {
           firstname: payload.firstname,
           lastname: payload.lastname,
           phoneNumber: payload.phoneNumber,
+          isPhoneVerified: payload.isPhoneVerified,
           role: payload.role,
         },
         {
@@ -190,6 +197,7 @@ export class AuthService {
       firstname: user.firstname,
       lastname: user.lastname,
       phoneNumber: user.phoneNumber,
+      isPhoneVerified: user.isPhoneVerified,
       role: user.role,
       sub: user.id,
     };

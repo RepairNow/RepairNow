@@ -57,4 +57,15 @@ export class ApiGatewayService {
   getUsers(): Observable<any> {
     return this.authClient.send({ cmd: 'get_users' }, {});
   }
+
+  initiateVerification(user: any): Observable<any> {
+    return this.authClient.send({ cmd: 'initiate-verification' }, user);
+  }
+
+  checkVerificationCode(payload: {
+    user: any;
+    verificationData: any;
+  }): Observable<any> {
+    return this.authClient.send({ cmd: 'check-verification-code' }, payload);
+  }
 }

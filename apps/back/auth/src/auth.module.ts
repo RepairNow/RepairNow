@@ -5,6 +5,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PrismaService } from '@repairnow/prisma';
 import { UsersModule } from './users/users.module';
 import { JwtModule } from '@nestjs/jwt';
+import SmsController from './sms/sms.controller';
+import SmsService from './sms/sms.service';
 
 @Module({
   imports: [
@@ -28,7 +30,7 @@ import { JwtModule } from '@nestjs/jwt';
       signOptions: { expiresIn: '120s' },
     }),
   ],
-  controllers: [AuthController],
-  providers: [AuthService, PrismaService],
+  controllers: [AuthController, SmsController],
+  providers: [AuthService, PrismaService, SmsService],
 })
-export class AuthModule { }
+export class AuthModule {}
