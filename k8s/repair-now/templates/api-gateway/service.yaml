@@ -9,6 +9,6 @@ spec:
   selector:
     app: api-gateway
   ports:
-  - name: TCP
+  - name: tcp
     port: 3000
     targetPort: 3000

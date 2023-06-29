@@ -9,6 +9,6 @@ spec:
   selector:
     app: com-gateway
   ports:
-  - name: TCP
+  - name: tcp
     port: 3005
     targetPort: 3005
