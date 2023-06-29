@@ -15,16 +15,16 @@ export class StatusInterceptor implements NestInterceptor {
       map((response) => {
         const httpResponse = context.switchToHttp().getResponse();
         // change status if received a rpc exception
-        if (response.error) {
+        if (response?.error) {
           // modify response status of the api-gateway
           httpResponse.status(
-            response.error.status || response.error.statusCode || 500,
+            response.error?.status || response.error?.statusCode || 500,
           );
           return response;
         }
 
         // change status if received a Nest built in exception (BadRequestException, NotFoundException, etc...)
-        if (response.status && response.status.toString().match(/^[45]/)) {
+        if (response?.status && response?.status?.toString().match(/^[45]/)) {
           // modify response status of the api-gateway
           httpResponse.status(response.status);
         }

@@ -6,6 +6,25 @@ import { Observable } from 'rxjs';
 export class ApiGatewayService {
   constructor(@Inject('AUTH_SERVICE') private authClient: ClientProxy) {}
 
+  refreshTokens(userId: string, refreshToken: string): Observable<string> {
+    return this.authClient.send(
+      { cmd: 'refresh_tokens' },
+      {
+        userId,
+        refreshToken,
+      },
+    );
+  }
+
+  logout(userId: string): Observable<string> {
+    return this.authClient.send(
+      { cmd: 'logout' },
+      {
+        userId,
+      },
+    );
+  }
+
   signIn(email: string, password: string): Observable<string> {
     return this.authClient.send(
       { cmd: 'sign_in_email' },

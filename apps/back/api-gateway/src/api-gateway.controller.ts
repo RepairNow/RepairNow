@@ -8,9 +8,11 @@ import {
   Inject,
 } from '@nestjs/common';
 import { ApiGatewayService } from './api-gateway.service';
-import { AuthGuard } from './guards/auth.guard';
 import { ClientProxy } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
+import { AccessTokenGuard } from './guards/accessToken.guard';
+import { RefreshTokenGuard } from './guards/refreshToken.guard';
+
 @Controller('/')
 export class ApiGatewayController {
   constructor(
@@ -40,10 +42,25 @@ export class ApiGatewayController {
     return this.apiGatewayService.getUsers();
   }
 
-  @UseGuards(AuthGuard)
+  @UseGuards(AccessTokenGuard)
   @Get('me')
   getMe(@Request() req) {
     return req.user;
+  }
+
+  @UseGuards(RefreshTokenGuard)
+  @Get('refresh_tokens')
+  refreshTokens(@Request() req) {
+    return this.apiGatewayService.refreshTokens(
+      req.user['sub'],
+      req.user['refreshToken'],
+    );
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @Get('logout')
+  logout(@Request() req) {
+    return this.apiGatewayService.logout(req.user['sub']);
   }
 
   @Post('signIn')

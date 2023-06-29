@@ -7,7 +7,7 @@
                     class="tw-text-md tw-py-2 tw-px-4 tw-font-medium tw-truncate tw-flex tw-flex-col hover:tw-bg-primary/20 tw-justify-center"
                     color="none"
                     stacked
-                    :to="{name: 'become-contractor'}"
+                    :to="{name: 'home-page'}"
             >
                 <span>
                     Devenir prestataire
@@ -45,7 +45,7 @@ const items = ref([
     {
         title: 'Devenir prestataire',
         value: 'devenir-prestataire',
-        to: 'become-contractor',
+        to: 'home-page',
     },
     {
         title: 'Inscription',

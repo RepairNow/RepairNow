@@ -4,7 +4,7 @@
             {
                 title: 'Devenir prestataire',
                 value: 'devenir-prestataire',
-                to: 'become-contractor',
+                to: 'home-page',
             },
             {
                 title: 'Connexion',

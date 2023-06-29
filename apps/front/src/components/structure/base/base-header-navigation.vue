@@ -6,7 +6,7 @@
 					class="tw-text-md tw-py-2 tw-px-4 tw-rounded-full tw-font-medium tw-truncate tw-flex tw-flex-col tw-items-center hover:tw-bg-primary/20 tw-h-full tw-justify-center"
 					color="none"
 					stacked
-					:to="{ name: 'become-contractor' }">
+					:to="{ name: 'home-page' }">
 					<span> Devenir prestataire </span>
 				</router-link>
 				<login-form>
@@ -40,7 +40,7 @@ const items = ref([
 	{
 		title: "Devenir prestataire",
 		value: "devenir-prestataire",
-		to: "become-contractor",
+		to: "home-page",
 	},
 	{
 		title: "Inscription",

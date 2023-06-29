@@ -40,11 +40,12 @@ export class CreateUserDto {
 }
 
 export class UpdateUserDto {
-  avatar: string;
-  phoneNumber: string;
-  firstname: string;
-  lastname: string;
-  birthdate: Date;
+  avatar?: string;
+  phoneNumber?: string;
+  firstname?: string;
+  lastname?: string;
+  birthdate?: Date;
+  refreshToken?: string;
 }
 
 export class ChangeRoleDto {

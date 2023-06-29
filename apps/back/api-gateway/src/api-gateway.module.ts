@@ -13,6 +13,8 @@ import { MissionController } from './mission/mission.controller';
 import { ReviewController } from './review/review.controller';
 import { GeolocationController } from './geolocation/geolocation.controller';
 import { ValicationCodeController } from './valication.code/valication.code.controller';
+import { AccessTokenStrategy } from './strategies/accessToken.strategy';
+import { RefreshTokenStrategy } from './strategies/refreshToken.strategy';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -65,6 +67,10 @@ import { ValicationCodeController } from './valication.code/valication.code.cont
   controllers: [ApiGatewayController, JobController, EstimatesController, AnnouncementsController, MissionController, ReviewController, GeolocationController, ValicationCodeController],
   providers: [
     ApiGatewayService,
+    // 👇 Both tokens strategies replace our previous @useGuards(AuthGuard) in controllers
+    // went from api-gateway/src/guards/auth.guard.ts
+    AccessTokenStrategy,
+    RefreshTokenStrategy,
     // list of global interceptors, not needed if you use the interceptor only in one controller
     {
       provide: APP_INTERCEPTOR,

@@ -184,7 +184,7 @@ watch(docState, (val) => {
 onMounted(() => {
 	// if query.category is not in categories, redirect to home
 	if (!categories.includes(query.category as string)) {
-		router.push({ name: "home" });
+		router.push({ name: "home-page" });
 	}
 });
 </script>

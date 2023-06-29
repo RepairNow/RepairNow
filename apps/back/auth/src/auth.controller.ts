@@ -4,12 +4,11 @@ import {
   Get,
   HttpException,
   HttpStatus,
-  Request,
   UseFilters,
   ValidationPipe,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { MessagePattern } from '@nestjs/microservices';
+import { MessagePattern, Payload } from '@nestjs/microservices';
 import { RpcValidationFilter } from './filters/rpc-validation.filter';
 import { SignInDto, SignUpDto } from './dto/sign-with-email.dto';
 
@@ -25,6 +24,18 @@ export class AuthController {
   @MessagePattern({ cmd: 'get_users' })
   getUsers(): any {
     return this.authService.getUsers();
+  }
+
+  @UseFilters(new RpcValidationFilter())
+  @MessagePattern({ cmd: 'refresh_tokens' })
+  refreshTokens(@Payload() payload: { userId: string; refreshToken: string }) {
+    return this.authService.refreshTokens(payload.userId, payload.refreshToken);
+  }
+
+  @UseFilters(new RpcValidationFilter())
+  @MessagePattern({ cmd: 'logout' })
+  logout(@Payload() payload: { userId: string }) {
+    return this.authService.logout(payload.userId);
   }
 
   @UseFilters(new RpcValidationFilter())
@@ -44,11 +55,5 @@ export class AuthController {
       return new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     }
     return this.authService.signUpEmail(params);
-  }
-
-  @UseFilters(new RpcValidationFilter())
-  @MessagePattern({ cmd: 'get_profile' })
-  getProfile(@Request() req) {
-    return req.user;
   }
 }
