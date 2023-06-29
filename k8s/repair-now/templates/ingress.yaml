@@ -14,6 +14,8 @@ spec:
                 name: com-gateway-svc
                 port:
                   number: 3005
+            rewrite:
+              path: /
           - path: /*
             backend:
               service:
