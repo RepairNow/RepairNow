@@ -18,7 +18,8 @@ spec:
                 name: com-gateway-svc
                 port:
                   number: 3005
-          - path: /socket.io/.*
+          - path: /socket.io(/|$)(.*)
+            pathType: Prefix
             backend:
               serviceName: com-gateway-svc
               servicePort: 3005
