@@ -8,7 +8,8 @@ spec:
   rules:
     - http:
         paths:
-          - path: /com/*
+          - path: /com/
+            pathType: Prefix
             backend:
               service:
                 name: com-gateway-svc
@@ -16,7 +17,8 @@ spec:
                   number: 3005
             rewrite:
               path: /
-          - path: /*
+          - path: /
+            pathType: Prefix
             backend:
               service:
                 name: api-gateway-svc
