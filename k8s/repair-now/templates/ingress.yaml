@@ -4,7 +4,6 @@ metadata:
   name: repair-now-ing
   annotations:
     nginx.ingress.kubernetes.io/websocket-services: com-gateway-svc
-    kubernetes.io/ingress.class: "nginx"
 spec:
   rules:
     - http:
@@ -16,8 +15,6 @@ spec:
                 name: com-gateway-svc
                 port:
                   number: 3005
-            rewrite:
-              path: /
           - path: /
             pathType: Prefix
             backend:
