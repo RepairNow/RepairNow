@@ -5,10 +5,10 @@ metadata:
     app: api-gateway
   name: api-gateway-svc
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: api-gateway
   ports:
-  - name: http
+  - name: TCP
     port: 3000
     targetPort: 3000

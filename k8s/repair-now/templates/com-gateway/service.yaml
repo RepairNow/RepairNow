@@ -5,10 +5,10 @@ metadata:
     app: com-gateway
   name: com-gateway-svc
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: com-gateway
   ports:
-  - name: http
+  - name: TCP
     port: 3005
     targetPort: 3005
