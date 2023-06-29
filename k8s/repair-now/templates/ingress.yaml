@@ -3,19 +3,23 @@ kind: Ingress
 metadata:
   name: repair-now-ing
   annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
     nginx.ingress.kubernetes.io/websocket-services: com-gateway-svc
 spec:
+  ingressClassName: nginx
   rules:
     - http:
         paths:
-          - path: /com/
+          - path: /com(/|$)(.*)
             pathType: Prefix
             backend:
               service:
                 name: com-gateway-svc
                 port:
                   number: 3005
-          - path: /api/
+          - path: /api(/|$)(.*)
             pathType: Prefix
             backend:
               service:
