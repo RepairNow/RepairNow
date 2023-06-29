@@ -8,15 +8,13 @@ spec:
   rules:
     - http:
         paths:
-          - path: /com/
-            pathType: Prefix
+          - path: /com/*
             backend:
               service:
                 name: com-gateway-svc
                 port:
                   number: 3005
-          - path: /
-            pathType: Prefix
+          - path: /*
             backend:
               service:
                 name: api-gateway-svc
