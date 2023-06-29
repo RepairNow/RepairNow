@@ -158,8 +158,7 @@ jobs:
     name: Deploy microservices to GKE
     runs-on: ubuntu-latest
     environment: production
-    if: "!skipped()"
-    needs: [push-api-gateway-image, push-auth-image, push-job-image, push-mission-image, push-com-gateway-image]
+    needs: [push-com-gateway-image]
 
 
     steps:
