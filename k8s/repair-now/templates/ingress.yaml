@@ -7,7 +7,6 @@ metadata:
     nginx.ingress.kubernetes.io/use-regex: "true"
     nginx.ingress.kubernetes.io/rewrite-target: /$2
     nginx.org/websocket-services: "com-gateway-svc"
-    nginx.ingress.kubernetes.io/websocket-services: "com-gateway-svc"
 spec:
   rules:
     - http:
@@ -19,6 +18,10 @@ spec:
                 name: com-gateway-svc
                 port:
                   number: 3005
+          - path: /socket.io/.*
+            backend:
+              serviceName: com-gateway-svc
+              servicePort: 3005
           - path: /api(/|$)(.*)
             pathType: Prefix
             backend:
