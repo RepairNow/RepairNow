@@ -47,91 +47,96 @@ jobs:
             - './apps/back/com-gateway/**'
           
 
-  # push-api-gateway-image:
-  #   name: Push Api Gateway Image to Docker Hub
-  #   runs-on: ubuntu-latest
-  #   environment: production
-  #   needs: detect-changes
-  #   # if: ${{ needs.detect-changes.outputs.api-gateway == 'true' }}
+  push-api-gateway-image:
+    name: Push Api Gateway Image to Docker Hub
+    runs-on: ubuntu-latest
+    environment: production
+    needs: detect-changes
+    # if: ${{ needs.detect-changes.outputs.api-gateway == 'true' }}
 
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
-  #     - name: Push Api Gateway Image to Docker Hub
-  #       uses: ./.github/actions/push-img-to-dockerhub
-  #       with:
-  #         microservice: api-gateway
-  #         config: |
-  #           API_GATEWAY_PORT=3000
-  #           JWT_SECRET=${{ secrets.JWT_SECRET }}
-  #           AUTH_HOST=auth-svc
-  #           AUTH_PORT=3001
-  #           JOB_HOST=job-svc
-  #           JOB_PORT=3002
-  #           MISSION_HOST=mission-svc
-  #           MISSION_PORT=3003
+      - name: Push Api Gateway Image to Docker Hub
+        uses: ./.github/actions/push-img-to-dockerhub
+        with:
+          microservice: api-gateway
+          config: |
+            API_GATEWAY_PORT=3000
+            JWT_SECRET=${{ secrets.JWT_SECRET }}
+            JWT_REFRESH_SECRET=${{ secrets.JWT_REFRESH_SECRET }}
+            AUTH_HOST=auth-svc
+            AUTH_PORT=3001
+            JOB_HOST=job-svc
+            JOB_PORT=3002
+            MISSION_HOST=mission-svc
+            MISSION_PORT=3003
 
-  # push-auth-image:
-  #   name: Push Auth Image to Docker Hub
-  #   runs-on: ubuntu-latest
-  #   environment: production
-  #   needs: detect-changes
-  #   # if: ${{ needs.detect-changes.outputs.auth == 'true' }}
+  push-auth-image:
+    name: Push Auth Image to Docker Hub
+    runs-on: ubuntu-latest
+    environment: production
+    needs: detect-changes
+    # if: ${{ needs.detect-changes.outputs.auth == 'true' }}
 
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
-  #     - name: Push Auth Image to Docker Hub
-  #       uses: ./.github/actions/push-img-to-dockerhub
-  #       with:
-  #         microservice: auth
-  #         config: |
-  #           DATABASE_URL=${{ secrets.DATABASE_URL }}
-  #           JWT_SECRET=${{ secrets.JWT_SECRET }}
-  #           AUTH_PORT=3001
+      - name: Push Auth Image to Docker Hub
+        uses: ./.github/actions/push-img-to-dockerhub
+        with:
+          microservice: auth
+          config: |
+            DATABASE_URL=${{ secrets.DATABASE_URL }}
+            JWT_SECRET=${{ secrets.JWT_SECRET }}
+            AUTH_PORT=3001
+            TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID }}
+            TWILIO_AUTH_TOKEN=${{ secrets.TWILIO_AUTH_TOKEN }}
+            TWILIO_VERIFICATION_SERVICE_SID=${{ secrets.TWILIO_VERIFICATION_SERVICE_SID }}
+            TWILIO_SENDER_PHONE_NUMBER=''
 
-  # push-job-image:
-  #   name: Push Job Image to Docker Hub
-  #   runs-on: ubuntu-latest
-  #   environment: production
-  #   needs: detect-changes
-  #   # if: ${{ needs.detect-changes.outputs.job == 'true' }}
+  push-job-image:
+    name: Push Job Image to Docker Hub
+    runs-on: ubuntu-latest
+    environment: production
+    needs: detect-changes
+    # if: ${{ needs.detect-changes.outputs.job == 'true' }}
 
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
-  #     - name: Push Job Image to Docker Hub
-  #       uses: ./.github/actions/push-img-to-dockerhub
-  #       with:
-  #         microservice: job
-  #         config: |
-  #           DATABASE_URL=${{ secrets.DATABASE_URL }}
-  #           JOB_PORT=3002
+      - name: Push Job Image to Docker Hub
+        uses: ./.github/actions/push-img-to-dockerhub
+        with:
+          microservice: job
+          config: |
+            DATABASE_URL=${{ secrets.DATABASE_URL }}
+            JOB_PORT=3002
 
-  # push-mission-image:
-  #   name: Push Mission Image to Docker Hub
-  #   runs-on: ubuntu-latest
-  #   environment: production
-  #   needs: detect-changes
-  #   # if: ${{ needs.detect-changes.outputs.mission == 'true' }}
+  push-mission-image:
+    name: Push Mission Image to Docker Hub
+    runs-on: ubuntu-latest
+    environment: production
+    needs: detect-changes
+    # if: ${{ needs.detect-changes.outputs.mission == 'true' }}
 
-  #   steps:
-  #     - name: Checkout
-  #       uses: actions/checkout@v3
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
 
-  #     - name: Push Mission Image to Docker Hub
-  #       uses: ./.github/actions/push-img-to-dockerhub
-  #       with:
-  #         microservice: mission
-  #         config: |
-  #           DATABASE_URL=${{ secrets.DATABASE_URL }}
-  #           MISSION_PORT=3003
-  #           STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }}
-  #           STRIPE_CHECKOUT_SUCCESS_URL=https://amazon.com
-  #           STRIPE_CHECKOUT_CANCEL_URL=https://about.meta.com/fr/
+      - name: Push Mission Image to Docker Hub
+        uses: ./.github/actions/push-img-to-dockerhub
+        with:
+          microservice: mission
+          config: |
+            DATABASE_URL=${{ secrets.DATABASE_URL }}
+            MISSION_PORT=3003
+            STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }}
+            STRIPE_CHECKOUT_SUCCESS_URL=https://amazon.com
+            STRIPE_CHECKOUT_CANCEL_URL=https://about.meta.com/fr/
 
   push-com-gateway-image:
     name: Push Com Gateway Image to Docker Hub
@@ -158,8 +163,7 @@ jobs:
     name: Deploy microservices to GKE
     runs-on: ubuntu-latest
     environment: production
-    needs: [push-com-gateway-image]
-
+    needs: [push-api-gateway-image, push-auth-image, push-job-image, push-mission-image, push-com-gateway-image]
 
     steps:
       - name: Checkout

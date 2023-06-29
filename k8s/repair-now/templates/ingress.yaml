@@ -15,7 +15,7 @@ spec:
                 name: com-gateway-svc
                 port:
                   number: 3005
-          - path: /
+          - path: /api/
             pathType: Prefix
             backend:
               service:
