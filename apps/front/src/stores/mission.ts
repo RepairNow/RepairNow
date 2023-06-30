@@ -1,50 +1,41 @@
 import { defineStore } from "pinia";
 import { Ref, ref } from "vue";
-import announcementService from "@/services/api/announcement";
-import { CreateMission, DeleteMission, MissionI, UpdateMission } from "@/interfaces/mission";
+import { MissionI } from "@/interfaces/mission";
+import missionService from "@/services/api/mission";
 
 export const useMissionStore = defineStore("mission", () => {
-    const { _getMission, _createMission, _updateMission, _deleteMission } = announcementService;
+    const { _getMissions, _getSelfMissions, _getMission } = missionService;
 
     // @ts-ignore
     const mission: Ref<MissionI> = ref({});
+    const missions: Ref<MissionI[]> = ref([]);
 
-    async function getMission(announcementId: string) {
+    async function getMissions() {
         try {
-            const res = await _getMission(announcementId);
+            const res = await _getMissions();
+            missions.value = res;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async function getMission(missionId: string) {
+        try {
+            const res = await _getMission(missionId);
             mission.value = res;
         } catch (error) {
             throw error;
         }
     }
 
-    async function createMission(payload: CreateMission) {
+    async function getSelfMissions() {
         try {
-            const res = await _createMission(payload);
-            mission.value = res;
+            const res = await _getSelfMissions();
+            missions.value = res;
         } catch (error) {
             throw error;
         }
     }
 
-    async function updateMission(payload: UpdateMission) {
-        try {
-            const res = await _updateMission(payload);
-            mission.value = res;
-        } catch (error) {
-            throw error;
-        }
-    }
-
-    async function deleteMission(payload: DeleteMission) {
-        try {
-            const res = await _deleteMission(payload);
-            // @ts-ignore
-            mission.value = {};
-        } catch (error) {
-            throw error;
-        }
-    }
-
-    return { mission, getMission, createMission, updateMission, deleteMission };
+    return { mission, missions, getMission, getMissions, getSelfMissions };
 });

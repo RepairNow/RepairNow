@@ -16,7 +16,7 @@
             </v-btn>
         </div>
         <div
-            v-if="announcements.length"
+            v-if="announcements?.length"
             class="tw-flex tw-flex-col tw-gap-4 tw-my-4"
         >
             <announcement
@@ -51,10 +51,10 @@ import {storeToRefs} from "pinia";
 
 const annoucementsStore = useAnnouncementStore()
 const {announcements} = storeToRefs(annoucementsStore)
-const {getAnnouncements} = annoucementsStore
+const {getSelfAnnouncement} = annoucementsStore
 
 onMounted(async () => {
-    await getAnnouncements()
+    await getSelfAnnouncement();
 });
 </script>
 

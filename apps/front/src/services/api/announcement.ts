@@ -28,6 +28,16 @@ class Announcement {
         }
     }
 
+    async _getSelfAnnouncement(): Promise<AnnouncementI[]> {
+        try {
+            const uri = `${namespace}/my-announcements`;
+            const res = await client.get(uri);
+            return res.data;
+        } catch (err) {
+            throw err;
+        }
+    }
+
     async _createAnnouncement(payload: CreateAnnouncement): Promise<AnnouncementI> {
         try {
             const res = await client.post(namespace, payload);
@@ -107,7 +117,7 @@ class Announcement {
         }
     }
 
-    async _getMission(announcementId: string): Promise<MissionI> {
+    async _getAnnouncementMission(announcementId: string): Promise<MissionI> {
         try {
             const uri = `${namespace}/${announcementId}/mission`;
             const res = await client.get(uri);
@@ -117,7 +127,7 @@ class Announcement {
         }
     }
 
-    async _createMission(payload: CreateMission): Promise<MissionI> {
+    async _createAnnouncementMission(payload: CreateMission): Promise<MissionI> {
         try {
             const uri = `${namespace}/${payload.announcementId}/mission`;
             const res = await client.post(uri, payload);
@@ -127,7 +137,7 @@ class Announcement {
         }
     }
 
-    async _updateMission(payload: UpdateMission): Promise<MissionI> {
+    async _updateAnnouncementMission(payload: UpdateMission): Promise<MissionI> {
         try {
             const uri = `${namespace}/${payload.announcementId}/mission`;
             const res = await client.patch(uri, payload);
@@ -137,7 +147,7 @@ class Announcement {
         }
     }
 
-    async _deleteMission(payload: DeleteMission): Promise<MissionI> {
+    async _deleteAnnouncementMission(payload: DeleteMission): Promise<MissionI> {
         try {
             const uri = `${namespace}/${payload.announcementId}/mission`;
             const res = await client.delete(uri);

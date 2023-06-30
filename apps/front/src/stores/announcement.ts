@@ -2,9 +2,21 @@ import { defineStore } from "pinia";
 import { Ref, ref } from "vue";
 import announcementService from "@/services/api/announcement";
 import { AnnouncementI, CreateAnnouncement, UpdateAnnouncement } from "@/interfaces/announcement";
+import {CreateMission, DeleteMission, MissionI, UpdateMission} from "@/interfaces/mission";
 
 export const useAnnouncementStore = defineStore("announcement", () => {
-    const { _getAnnouncements, _createAnnouncement, _updateAnnouncement, _deleteAnnouncement, _getAnnouncement } = announcementService;
+    const {
+        _getSelfAnnouncement,
+        _getAnnouncements,
+        _createAnnouncement,
+        _updateAnnouncement,
+        _deleteAnnouncement,
+        _getAnnouncement,
+        _getAnnouncementMission,
+        _createAnnouncementMission,
+        _updateAnnouncementMission,
+        _deleteAnnouncementMission
+    } = announcementService;
 
     const announcements: Ref<AnnouncementI[]> = ref([]);
     // @ts-ignore
@@ -23,6 +35,15 @@ export const useAnnouncementStore = defineStore("announcement", () => {
         try {
             const res = await _getAnnouncement(announcementId);
             announcement.value = res;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async function getSelfAnnouncement(){
+        try {
+            const res = await _getSelfAnnouncement();
+            announcements.value = res;
         } catch (error) {
             throw error;
         }
@@ -57,5 +78,48 @@ export const useAnnouncementStore = defineStore("announcement", () => {
         }
     }
 
-    return { announcement, announcements, getAnnouncements, getAnnouncement, createAnnouncement, updateAnnouncement, deleteAnnouncement };
+    /**
+     * Announcement mission
+     */
+
+    // @ts-ignore
+    const announcementMission: Ref<MissionI> = ref({})
+
+    async function getAnnouncementMission(announcementId: string)
+    {
+        try {
+            const res = await _getAnnouncementMission(announcementId);
+            announcementMission.value = res
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    async function createAnnouncementMission(payload: CreateMission) {
+        try {
+            const res = await _createAnnouncementMission(payload);
+            announcementMission.value = res
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    async function updateAnnouncementMission(payload: UpdateMission) {
+        try {
+            const res = await _updateAnnouncementMission(payload);
+            announcementMission.value = res
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    async function deleteAnnouncementMission(payload: DeleteMission) {
+        try {
+            const res = await _deleteAnnouncementMission(payload);
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    return { announcement, announcements, getAnnouncements, getAnnouncement, getSelfAnnouncement, createAnnouncement, updateAnnouncement, deleteAnnouncement };
 });

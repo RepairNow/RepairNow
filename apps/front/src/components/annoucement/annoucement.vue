@@ -6,26 +6,37 @@
                     image
                 </div>
                 <div class="tw-my-4">
-                    <p>{{announcement.title}}</p>
+                    <p class="tw-text-xl tw-font-bold">{{announcement.title}}</p>
                     <p>{{announcement.startTime}}</p>
                 </div>
             </div>
             <div class="tw-w-full">
-                <div class="tw-border-y tw-p-6">
+                <div class="tw-border-y tw-p-6" v-if="announcement.mission">
+                    Vous avez réservé un prestataire
+                </div>
+                <div v-else class="tw-border-y tw-p-6">
                     Vous n'avez pas réservé de prestataire
                 </div>
                 <div class="tw-my-3 tw-p-3 tw-border tw-rounded-xl">
-                    Vous avez reçu 17 offres
-                    + 14 autres offres
+                    Vous avez reçu {{ announcement.estimate?.length ?? 0 }} offre(s)
                 </div>
             </div>
         </div>
-        <div>
+        <div v-if="false">
             <router-link :to="{name: 'client-announcement', params: { id: announcement.id }}">
                 <v-btn
                     block
                 >
                     Gérer ma demande
+                </v-btn>
+            </router-link>
+        </div>
+        <div v-else>
+            <router-link :to="{name: 'contractor-announcement', params: { id: announcement.id }}">
+                <v-btn
+                        block
+                >
+                    En savoir plus
                 </v-btn>
             </router-link>
         </div>
