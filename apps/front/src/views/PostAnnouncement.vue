@@ -1,9 +1,11 @@
 <template class="tw-h-screen">
 	<v-progress-linear v-model="progressBarValue" color="primary" :height="8" />
-	<div class="tw-flex tw-h-full tw-justify-center">
+	<div class="tw-flex tw-justify-center">
 		<div class="tw-w-96 tw-mt-14 tw-relative">
-			<!-- TODO: Replace "plomberie" by real variable -->
-			<h1 class="tw-font-semibold tw-text-lg tw-mb-5">Plomberie</h1>
+			<h1 class="tw-font-semibold tw-text-lg tw-mb-5">
+				<!-- TODO: See why query from useRouter are not reactive -->
+				{{ getCurrentJob()?.name }}
+			</h1>
 			<Transition
 				:name="
 					previousDocState === 'left' ? 'slide-left' : 'slide-right'
@@ -83,8 +85,7 @@
 			<v-btn
 				color="primary"
 				variant="plain"
-				@click="handleClickPrev()"
-				:disabled="docState === 0">
+				@click="docState === 0 ? router.go(-1) : handleClickPrev()">
 				Précédent</v-btn
 			>
 			<v-btn
@@ -121,7 +122,45 @@ const MAX_DOC_STATE_VALUE = 2;
 const { query } = useRoute();
 const router = useRouter();
 
-const categories = ["plomberie", "electricite", "maconnerie", "menuiserie"];
+const jobs = [
+	{
+		link: "plomberie",
+		name: "Plomberie",
+	},
+	{
+		link: "electricite",
+		name: "Electricité",
+	},
+	{
+		link: "bricolage",
+		name: "Bricolage",
+	},
+	{
+		link: "serrurier",
+		name: "Serrurier",
+	},
+	{
+		link: "electromenager",
+		name: "Electromenager",
+	},
+	{
+		link: "jardinage",
+		name: "Jardinage",
+	},
+	{
+		link: "reparation-2-roues",
+		name: "Réparation 2 roues",
+	},
+	{
+		link: "reparation-auto",
+		name: "Réparation auto",
+	},
+];
+
+const getCurrentJob = () => {
+	const currentJob = jobs.find((job) => job.link === query.job);
+	return currentJob;
+};
 
 const progressBarValue = ref(10);
 const datePicker = ref();
@@ -161,9 +200,13 @@ const handleSendFormValues = () => {
 	console.log(formValues);
 };
 
+const date = new Date();
 watch(datePicker, (val) => {
 	// if val is inferior to today, set it to today
-	if (val[0].toLocaleDateString() < new Date().toLocaleDateString()) {
+	if (
+		val[0] < date &&
+		val[0].toLocaleDateString() !== date.toLocaleDateString()
+	) {
 		isDatePickerError.value = true;
 	} else {
 		isDatePickerError.value = false;
@@ -182,8 +225,8 @@ watch(docState, (val) => {
 });
 
 onMounted(() => {
-	// if query.category is not in categories, redirect to home
-	if (!categories.includes(query.category as string)) {
+	// if query.job is not in jobs, redirect to home
+	if (!jobs.map((job) => job.link).includes(query.job as string)) {
 		router.push({ name: "home-page" });
 	}
 });
