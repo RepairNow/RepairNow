@@ -37,8 +37,8 @@
                 </p>
             </div>
             <div>
-                <v-text-field variant="filled" label="Tarif" type="" v-model="announcementForm.title"/>
-                <v-text-field variant="filled" label="Description" v-model="announcementForm.description"/>
+                <v-text-field variant="filled" label="Tarif" type="" v-model="announcementEstimateForm.title"/>
+                <v-text-field variant="filled" label="Description" v-model="announcementEstimateForm.description"/>
                 <!--<v-file-input variant="filled" label="Images" v-model="announcementForm.images"/>-->
                 <v-btn
                         text="S'inscrire"
@@ -57,6 +57,7 @@ import {CreateAnnouncement} from "@/interfaces/announcement";
 import {useScreenSize} from "@/stores/screen-size";
 import {storeToRefs} from "pinia";
 import {useAnnouncementStore} from "@/stores/announcement"
+import {CreateEstimate} from "@/interfaces/estimate";
 
 const dialog = ref(false);
 const screenSizeStore = useScreenSize()
@@ -65,28 +66,22 @@ const { isSizeMD } = storeToRefs(screenSizeStore)
 const announcementStore = useAnnouncementStore()
 const { createAnnouncement } = announcementStore
 
-const announcementForm = ref<CreateAnnouncement>({
-    title: '',
+const announcementEstimateForm = ref<CreateEstimate>({
     description: '',
+    price: 0,
     images: [],
-    address: '',
-    startTime: new Date(),
-    endTime: new Date(),
 })
 
 const handleAnnouncement = async () => {
     try {
-        await createAnnouncement(announcementForm.value)
+        await createAnnouncementEstimate(announcementEstimateForm.value)
     } catch (e) {
 
     } finally {
-        announcementForm.value = {
-            title: '',
+        announcementEstimateForm.value = {
             description: '',
+            price: 0,
             images: [],
-            address: '',
-            startTime: new Date(),
-            endTime: new Date(),
         }
     }
 }

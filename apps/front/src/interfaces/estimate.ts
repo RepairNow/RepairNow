@@ -1,9 +1,6 @@
 export interface CreateEstimate {
-    announcementId: string
-    providerId: string
     price: number
     description: string
-    status: string
     images: File[]
 }
 

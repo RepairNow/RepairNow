@@ -67,7 +67,11 @@ class Announcement {
         }
     }
 
-    async _getEstimates(announcementId: string): Promise<EstimateI[]> {
+    /**
+     * Estimate
+     */
+
+    async _getAnnouncementEstimates(announcementId: string): Promise<EstimateI[]> {
         try {
             const uri = `${namespace}/${announcementId}/estimates`;
             const res = await client.get(uri);
@@ -77,7 +81,7 @@ class Announcement {
         }
     }
 
-    async _getEstimate(payload: { estimateId: string, announcementId: string }): Promise<EstimateI> {
+    async _getAnnouncementEstimate(payload: { estimateId: string, announcementId: string }): Promise<EstimateI> {
         try {
             const uri = `${namespace}/${payload.announcementId}/estimates/${payload.estimateId}`;
             const res = await client.get(uri);
@@ -87,9 +91,9 @@ class Announcement {
         }
     }
 
-    async _createEstimate(payload: CreateEstimate): Promise<EstimateI> {
+    async _createAnnouncementEstimate(announcementId: string, payload: CreateEstimate): Promise<EstimateI> {
         try {
-            const uri = `${namespace}/${payload.announcementId}/estimates`;
+            const uri = `${namespace}/${announcementId}/estimates`;
             const res = await client.post(uri, payload);
             return res.data;
         } catch (err) {
@@ -97,7 +101,7 @@ class Announcement {
         }
     }
 
-    async _updateEstimate(payload: UpdateEstimate): Promise<EstimateI> {
+    async _updateAnnouncementEstimate(payload: UpdateEstimate): Promise<EstimateI> {
         try {
             const uri = `${namespace}/${payload.announcementId}/estimates/${payload.id}`;
             const res = await client.patch(uri, payload);
@@ -107,7 +111,7 @@ class Announcement {
         }
     }
 
-    async _deleteEstimate(payload: { estimateId: string, announcementId: string }): Promise<EstimateI> {
+    async _deleteAnnouncementEstimate(payload: { estimateId: string, announcementId: string }): Promise<EstimateI> {
         try {
             const uri = `${namespace}/${payload.announcementId}/estimates/${payload.estimateId}`;
             const res = await client.delete(uri);
@@ -116,6 +120,10 @@ class Announcement {
             throw err;
         }
     }
+
+    /**
+     * Mission
+     */
 
     async _getAnnouncementMission(announcementId: string): Promise<MissionI> {
         try {
@@ -156,6 +164,10 @@ class Announcement {
             throw err;
         }
     }
+
+    /**
+     * Review
+     */
 
     async _getReview(announcementId: string): Promise<ReviewI> {
         try {
