@@ -1,5 +1,5 @@
 <template>
-    <v-card class="tw-flex sm:tw-hidden">
+    <v-card class="tw-flex lg:tw-hidden">
         <v-layout>
             <!-- <v-system-bar color="deep-purple darken-3"></v-system-bar> -->
             <v-app-bar
@@ -76,7 +76,7 @@
                             </div>
                         </div>
                         <router-link
-                                v-for="item in items"
+                                v-for="item in (items as any[])"
                                 :to="{name: item.to}"
                         >
                             <v-btn

@@ -6,7 +6,7 @@
                 class="tw-bg-white tw-w-full"
             >
                 <v-list-item
-                        v-for="item in items"
+                        v-for="item in (items as any[])"
                         :value="item.value"
                         class="tw-flex tw-items-center"
                         :to="{name: item.to}"
