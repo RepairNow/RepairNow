@@ -3,8 +3,7 @@
 	<div class="tw-flex tw-justify-center">
 		<div class="tw-w-96 tw-mt-14 tw-relative">
 			<h1 class="tw-font-semibold tw-text-lg tw-mb-5">
-				<!-- TODO: See why query from useRouter are not reactive -->
-				{{ getCurrentJob()?.name }}
+				{{ getCurrentJob($route.query.job as string)?.name }}
 			</h1>
 			<Transition
 				:name="
@@ -78,6 +77,33 @@
 						class="tw-w-full tw-mt-8"
 						v-model="formValues.address" />
 				</div>
+				<div
+					id="moreInfos"
+					v-else-if="docState === 3"
+					class="slidingCard">
+					<h2 class="tw-font-bold tw-text-4xl">
+						Décrivez nous en détail votre besoin
+					</h2>
+					<small
+						>Plus vous nous donnez des détails et plus vous pourrez
+						espérer une réponse de qualité de la part de nos
+						prestataires 🤫</small
+					>
+					<v-text-field
+						label="Titre utilisé pour l'annonce"
+						class="tw-w-full tw-mt-8"
+						:counter="50"
+						flat
+						:rules="rulesTitleInput"
+						v-model="formValues.title" />
+					<v-textarea
+						id="desc"
+						label="Décrivez nous votre besoin"
+						class="tw-w-full tw-mt-8"
+						:counter="255"
+						:rules="rulesDescriptionInput"
+						v-model="formValues.description" />
+				</div>
 			</Transition>
 		</div>
 		<footer
@@ -101,7 +127,14 @@
 						docState === 1 &&
 						!formValues.date) ||
 					(docState === 1 && isDatePickerError) ||
-					(docState === 2 && !(formValues.address.length > 5))
+					(docState === 2 && !(formValues.address.length > 5)) ||
+					(docState === 3 &&
+						!(
+							formValues.title.length > 5 &&
+							formValues.title.length < 50 &&
+							formValues.description.length > 5 &&
+							formValues.description.length < 255
+						))
 				">
 				{{
 					docState === MAX_DOC_STATE_VALUE ? "Envoyer" : "Suivant"
@@ -117,11 +150,12 @@ import { onMounted } from "vue";
 import { ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
-const MAX_DOC_STATE_VALUE = 2;
+const MAX_DOC_STATE_VALUE = 3;
 
 const { query } = useRoute();
 const router = useRouter();
 
+// TODO: Use jobs from backend
 const jobs = [
 	{
 		link: "plomberie",
@@ -157,8 +191,8 @@ const jobs = [
 	},
 ];
 
-const getCurrentJob = () => {
-	const currentJob = jobs.find((job) => job.link === query.job);
+const getCurrentJob = (job: string) => {
+	const currentJob = jobs.find((j) => j.link === job);
 	return currentJob;
 };
 
@@ -175,6 +209,8 @@ const formValues = reactive({
 	urgency: false,
 	address: "",
 	date: "",
+	title: "",
+	description: "",
 });
 
 const handleClickNext = () => {
@@ -220,6 +256,8 @@ watch(docState, (val) => {
 	} else if (val === 1) {
 		progressBarValue.value = 50;
 	} else if (val === 2) {
+		progressBarValue.value = 75;
+	} else if (val === 3) {
 		progressBarValue.value = 100;
 	}
 });
@@ -230,6 +268,18 @@ onMounted(() => {
 		router.push({ name: "home-page" });
 	}
 });
+
+const rulesTitleInput = [
+	(v: string) => !!v || "Le titre est requis",
+	(v: string) =>
+		v.length <= 50 || "Le titre doit faire moins de 50 caractères",
+];
+
+const rulesDescriptionInput = [
+	(v: string) => !!v || "Pas de détails = pas d'aide 😵",
+	(v: string) =>
+		v.length <= 255 || "La description doit faire moins de 255 caractères",
+];
 </script>
 
 <style scoped>
