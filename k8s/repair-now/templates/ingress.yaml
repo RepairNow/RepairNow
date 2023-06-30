@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: repair-now-ing
-  # annotations:
+  annotations:
     kubernetes.io/ingress.class: "gce"
     # nginx.ingress.kubernetes.io/rewrite-target: /$2
     # nginx.org/websocket-services: "com-gateway-svc"
