@@ -1,104 +1,172 @@
 <template>
-    <v-dialog
-            v-model="dialog"
-            transition="dialog-bottom-transition"
-            :fullscreen="isSizeMD"
-    >
-        <template v-slot:activator="{ props }">
-            <div
-                    v-bind="props"
-            >
-                <slot name="button">
-                    <v-btn
-                            color="primary"
-                    >
-                        Obtenir un réparateur
-                    </v-btn>
-                </slot>
-            </div>
+	<v-dialog
+		v-model="dialog"
+		transition="dialog-bottom-transition"
+		:fullscreen="isSizeMD">
+		<template v-slot:activator="{ props }">
+			<div v-bind="props">
+				<slot name="button">
+					<v-btn color="primary"> Obtenir un réparateur </v-btn>
+				</slot>
+			</div>
+		</template>
 
-
-        </template>
-
-        <v-card class="tw-w-2/3 tw-mx-auto tw-p-4 rounded-lg">
-            <div class="tw-flex">
-                <v-btn
-                        icon="mdi-close"
-                        color="none"
-                        @click="dialog = false"
-
-                />
-            </div>
-            <div class="mb-4">
-                <p
-                    class="tw-text-3xl tw-font-bold tw-flex tw-items-center tw-h-16"
-                >
-                    Demander un service
-                </p>
-            </div>
-            <div>
-                <v-text-field variant="filled" label="Titre" v-model="announcementForm.title"/>
-                <v-text-field variant="filled" label="Description" v-model="announcementForm.description"/>
-                <!--<v-file-input variant="filled" label="Images" v-model="announcementForm.images"/>-->
-                <v-text-field variant="filled" label="Adresse" v-model="announcementForm.address"/>
-                <v-text-field type="date" variant="filled" label="Date de début" v-model="announcementForm.startTime"/>
-                <v-text-field type="date" variant="filled" label="Date de fin" v-model="announcementForm.endTime"/>
-                <v-btn
-                        text="S'inscrire"
-                        block
-                        class="tw-normal-case"
-                        @click="handleAnnouncement()"
-                />
-            </div>
-        </v-card>
-    </v-dialog>
+		<v-card class="tw-w-2/3 tw-mx-auto tw-p-4 rounded-lg">
+			<div class="tw-flex">
+				<v-btn icon="mdi-close" color="none" @click="dialog = false" />
+			</div>
+			<div class="mb-4">
+				<p
+					class="tw-text-3xl tw-font-bold tw-flex tw-items-center tw-h-16">
+					Demander un service
+				</p>
+			</div>
+			<div class="grid-container">
+				<div v-for="item in items">
+					<div class="grid-item" @click="handleClickItem(item.job)">
+						<img width="60" :src="item.image" :alt="item.text" />
+						{{ item.text }}
+					</div>
+				</div>
+			</div>
+		</v-card>
+	</v-dialog>
 </template>
 
 <script setup lang="ts">
-import {ref} from "vue";
-import {CreateAnnouncement} from "@/interfaces/announcement";
-import {useScreenSize} from "@/stores/screen-size";
-import {storeToRefs} from "pinia";
-import {useAnnouncementStore} from "@/stores/announcement"
+import { ref } from "vue";
+import { CreateAnnouncement } from "@/interfaces/announcement";
+import { useScreenSize } from "@/stores/screen-size";
+import { storeToRefs } from "pinia";
+import { useAnnouncementStore } from "@/stores/announcement";
+import repairImg from "@/assets/svg/jobs/repair.png";
+import electricityImg from "@/assets/svg/jobs/electricity.svg";
+import gardenImg from "@/assets/svg/jobs/garden.svg";
+import bikeImg from "@/assets/svg/jobs/bike-repair.svg";
+import plumbingImg from "@/assets/svg/jobs/plumbing.svg";
+import carImg from "@/assets/svg/jobs/car-repair.svg";
+import locksmithImg from "@/assets/svg/jobs/locksmith.svg";
+import houseApplianceImg from "@/assets/svg/jobs/house-appliance.png";
+import { useRouter } from "vue-router";
+
+const items = [
+	{
+		text: "Bricolage",
+		job: "bricolage",
+		image: repairImg,
+	},
+	{
+		text: "Electricité",
+		job: "electricite",
+		image: electricityImg,
+	},
+	{
+		text: "Plomberie",
+		job: "plomberie",
+		image: plumbingImg,
+	},
+	{
+		text: "Serrurier",
+		job: "serrurier",
+		image: locksmithImg,
+	},
+	{
+		text: "Electroménager",
+		job: "electromenager",
+		image: houseApplianceImg,
+	},
+	{
+		text: "Jardinage",
+		job: "jardinage",
+		image: gardenImg,
+	},
+	{
+		text: "Réparation 2 roues (vélo, moto, scooter)",
+		job: "reparation-2-roues",
+		image: bikeImg,
+	},
+	{
+		text: "Réparation voiture",
+		job: "reparation-auto",
+		image: carImg,
+	},
+];
 
 const dialog = ref(false);
-const screenSizeStore = useScreenSize()
-const { isSizeMD } = storeToRefs(screenSizeStore)
+const screenSizeStore = useScreenSize();
+const { isSizeMD } = storeToRefs(screenSizeStore);
 
-const announcementStore = useAnnouncementStore()
-const { createAnnouncement } = announcementStore
+const announcementStore = useAnnouncementStore();
+const { createAnnouncement } = announcementStore;
+
+const router = useRouter();
+
+const handleClickItem = (job: string) => {
+	router.push({ name: "post-announcement", query: { job } });
+	dialog.value = false;
+};
 
 const announcementForm = ref<CreateAnnouncement>({
-    title: '',
-    description: '',
-    images: [],
-    address: '',
-    startTime: new Date(),
-    endTime: new Date(),
-})
+	title: "",
+	description: "",
+	images: [],
+	address: "",
+	startTime: new Date(),
+	endTime: new Date(),
+});
 
 const handleAnnouncement = async () => {
-    try {
-        await createAnnouncement(announcementForm.value)
-    } catch (e) {
-
-    } finally {
-        announcementForm.value = {
-            title: '',
-            description: '',
-            images: [],
-            address: '',
-            startTime: new Date(),
-            endTime: new Date(),
-        }
-    }
-}
-
-//todo pour le path post announcement, set le current user automatiquement
-
-
+	try {
+		await createAnnouncement(announcementForm.value);
+	} catch (e) {
+	} finally {
+		announcementForm.value = {
+			title: "",
+			description: "",
+			images: [],
+			address: "",
+			startTime: new Date(),
+			endTime: new Date(),
+		};
+	}
+};
 </script>
 
 <style scoped>
+.grid-container {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	grid-gap: 12px;
+}
 
+.grid-item {
+	border-radius: 5px;
+	display: flex;
+	align-items: center;
+	padding: 10px;
+	gap: 10px;
+	text-align: center;
+	box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+	cursor: pointer;
+	transition-property: background-color;
+	transition-duration: 0.5s; /* Définir la durée souhaitée */
+
+	& img {
+		background-color: rgb(226, 226, 226);
+		border-radius: 4px;
+		width: 60px;
+		height: 60px;
+		object-fit: cover;
+		transition: transform 0.5s;
+	}
+}
+
+.grid-item:hover {
+	background-color: rgb(226, 226, 226);
+
+	& img {
+		transform: scale(1.1);
+		transition: transform 0.5s;
+	}
+}
 </style>
