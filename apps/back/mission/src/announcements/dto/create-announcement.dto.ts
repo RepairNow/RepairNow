@@ -15,8 +15,5 @@ export class CreateAnnouncementDto {
   address: string
 
   // @IsDate()
-  startTime: Date
-
-  // @IsDate()
-  endTime: Date
+  date: Date
 }
