@@ -4,6 +4,7 @@ import { EstimatesService } from './estimates.service';
 import { CreateEstimateDto } from './dto/create-estimate.dto';
 import { UpdateEstimateDto } from './dto/update-estimate.dto';
 import { RpcValidationFilter } from 'src/filters/rpc-validation.filter';
+import {CurrentUserI} from "../mission/dto/current-user.dto";
 @Controller()
 export class EstimatesController {
   constructor(private readonly estimatesService: EstimatesService) { }
@@ -11,8 +12,8 @@ export class EstimatesController {
   @MessagePattern({ cmd: 'createEstimate' })
   @UsePipes(new ValidationPipe())
   @UseFilters(new RpcValidationFilter())
-  create(@Payload(ValidationPipe) createEstimateDto: CreateEstimateDto) {
-    return this.estimatesService.create(createEstimateDto);
+  create(@Payload(ValidationPipe) payload: { createEstimateDto: CreateEstimateDto, announcementId: string, user: CurrentUserI }) {
+    return this.estimatesService.create(payload);
   }
 
   @MessagePattern({ cmd: 'findAllEstimates' })

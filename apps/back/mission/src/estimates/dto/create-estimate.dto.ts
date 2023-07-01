@@ -1,7 +1,5 @@
 export class CreateEstimateDto {
-  announcementId: string
-  prestataireId: string
-  price: Number
+  price: number
   description: string
   images: string[]
   currentStatus: string

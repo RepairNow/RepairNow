@@ -1,4 +1,18 @@
-import { Controller, UsePipes, ValidationPipe, Inject, Body, UseGuards, Post, Get, Param, Patch, UseFilters, Delete } from "@nestjs/common";
+import {
+  Controller,
+  UsePipes,
+  ValidationPipe,
+  Inject,
+  Body,
+  UseGuards,
+  Post,
+  Get,
+  Param,
+  Patch,
+  UseFilters,
+  Delete,
+  Req, Request
+} from "@nestjs/common";
 import { ClientProxy } from "@nestjs/microservices";
 import { AuthGuard } from "../guards/auth.guard";
 import { Observable } from "rxjs";
@@ -10,8 +24,13 @@ export class EstimatesController {
 
   @Post()
   @UseGuards(AuthGuard)
-  createEstimate(@Body() createEstimateDto: any): Observable<any> {
-    return this.missionClient.send({ cmd: "createEstimate" }, createEstimateDto);
+  createEstimate(
+      @Request() request,
+      @Param('announcementId') announcementId: string,
+      @Body() createEstimateDto: any
+  ): Observable<any> {
+    const { user } = request;
+    return this.missionClient.send({ cmd: "createEstimate" }, {createEstimateDto: createEstimateDto, announcementId: announcementId, user: user});
   }
 
   @Get()

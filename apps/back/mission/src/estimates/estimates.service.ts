@@ -4,6 +4,7 @@ import { UpdateEstimateDto } from './dto/update-estimate.dto';
 import { PrismaService } from '@repairnow/prisma';
 import { StripeService } from 'src/stripe/stripe.service';
 import { AnnouncementStatus } from 'src/announcements/announcements.service';
+import {CurrentUserI} from "../mission/dto/current-user.dto";
 
 enum EstimateStatus {
   PENDING = "PENDING",
@@ -14,25 +15,31 @@ enum EstimateStatus {
 export class EstimatesService {
   constructor(private prismaService: PrismaService, private stripeService: StripeService) { }
 
-  async create(createEstimateDto: CreateEstimateDto) {
+  async create(payload: { createEstimateDto: CreateEstimateDto, announcementId: string, user: CurrentUserI}) {
+
     try {
       const announcement = await this.prismaService.announcement.findUnique({
         where: {
-          id: createEstimateDto.announcementId
+          id: payload.announcementId
         }
       })
       if (!announcement) {
         throw new NotFoundException();
       }
+
+      console.log('ok')
+
       const estimate = await this.prismaService.estimate.create({
-        // @ts-ignore
         data: {
-          ...createEstimateDto,
+          images: payload.createEstimateDto.images,
+          description: payload.createEstimateDto.description,
+          price: payload.createEstimateDto.price,
           currentStatus: EstimateStatus.PENDING,
-          announcementId: createEstimateDto.announcementId,
-          prestataireId: createEstimateDto.prestataireId
+          announcementId: payload.announcementId,
+          prestataireId: payload.user.id
         },
       });
+
       return estimate;
     } catch (error) {
       return error;

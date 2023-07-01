@@ -8,7 +8,7 @@ export class UpdateEstimateDto extends PartialType(CreateEstimateDto) {
   @IsUUID()
   announcementId: string
   prestataireId: string
-  price: Number
+  price: number
   description: string
   images: string[]
   @IsIn(["ACCEPTED", "PENDING", "REFUSED"])
