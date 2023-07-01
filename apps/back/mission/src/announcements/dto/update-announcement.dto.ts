@@ -9,12 +9,12 @@ export class UpdateAnnouncementDto extends PartialType(CreateAnnouncementDto) {
   @IsString()
   title: string
   description: string
+  urgency: boolean
   images: File[]
   address: string
   @IsString()
   @IsOptional()
   currentStatus: string
   acceptedAt: Date
-  startTime: Date
-  endTime: Date
+  date: Date
 }

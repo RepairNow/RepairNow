@@ -1,8 +1,8 @@
-<template class="tw-h-screen">
+<template>
 	<v-progress-linear v-model="progressBarValue" color="primary" :height="8" />
 	<div class="tw-flex tw-justify-center">
 		<div class="tw-w-96 tw-mt-14 tw-relative">
-			<h1 class="tw-font-semibold tw-text-lg tw-mb-5">
+			<h1 class="tw-font-semibold tw-text-lg tw-mb-5 tw-px-2">
 				{{ getCurrentJob($route.query.job as string)?.name }}
 			</h1>
 			<Transition
@@ -54,15 +54,19 @@
 						hide-actions
 						class="tw-my-5 tw-mx-auto"
 						v-model="datePicker" />
-					<Transition name="bounce">
-						<p v-if="isDatePickerError" style="text-align: center">
-							On ne peut pas retourner dans le passé!
-							<br />
-							<span class="tw-text-red-600 tw-font-bold"
-								>Choisis une autre date</span
-							>
-						</p>
-					</Transition>
+					<div class="tw-h-36">
+						<Transition name="bounce">
+							<p
+								v-if="isDatePickerError"
+								style="text-align: center">
+								On ne peut pas retourner dans le passé!
+								<br />
+								<span class="tw-text-red-600 tw-font-bold"
+									>Choisis une autre date</span
+								>
+							</p>
+						</Transition>
+					</div>
 				</div>
 				<div id="where" v-else-if="docState === 2" class="slidingCard">
 					<h2 class="tw-font-bold tw-text-4xl">
@@ -80,7 +84,7 @@
 				<div
 					id="moreInfos"
 					v-else-if="docState === 3"
-					class="slidingCard">
+					class="slidingCard tw-pb-24">
 					<h2 class="tw-font-bold tw-text-4xl">
 						Décrivez nous en détail votre besoin
 					</h2>
@@ -90,7 +94,7 @@
 						prestataires 🤫</small
 					>
 					<v-text-field
-						label="Titre utilisé pour l'annonce"
+						label="Titre de la demande"
 						class="tw-w-full tw-mt-8"
 						:counter="50"
 						flat
@@ -103,6 +107,29 @@
 						:counter="255"
 						:rules="rulesDescriptionInput"
 						v-model="formValues.description" />
+					<small class="tw-text-center tw-w-full tw-inline-block"
+						>Une demande illustrée à 7 fois plus de chance d'être
+						vue 💡</small
+					>
+					<!-- TODO: add rules to v-file-input to limit size of documents see https://vuetifyjs.com/en/components/file-inputs/#validation -->
+					<v-file-input
+						v-if="!previewUrl"
+						accept="image/png, image/jpeg, image/jpg"
+						show-size
+						counter
+						class="tw-mt-2"
+						v-model="selectedFile"
+						label="Dépose ici une photo (optionnel)"
+						@change="handleFileChange" />
+
+					<div class="tw-relative tw-w-fit tw-mx-auto tw-mt-2" v-else>
+						<v-img :src="previewUrl" width="120" />
+						<v-btn
+							icon="mdi-close"
+							color="none"
+							class="tw-absolute tw-top-0 tw-right-0"
+							@click="removeFile" />
+					</div>
 				</div>
 			</Transition>
 		</div>
@@ -145,12 +172,17 @@
 </template>
 
 <script lang="ts" setup>
+import { CreateAnnouncement } from "@/interfaces/announcement";
+import { useAnnouncementStore } from "@/stores/announcement";
+import { useUserStore } from "@/stores/user";
+import { storeToRefs } from "pinia";
 import { reactive } from "vue";
 import { onMounted } from "vue";
 import { ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
 const MAX_DOC_STATE_VALUE = 3;
+const { createAnnouncement } = useAnnouncementStore();
 
 const { query } = useRoute();
 const router = useRouter();
@@ -205,13 +237,22 @@ const docState = ref(0);
 const previousDocState = ref();
 
 /* reactive form values */
-const formValues = reactive({
+const formValues = reactive<CreateAnnouncement>({
 	urgency: false,
-	address: "",
-	date: "",
 	title: "",
 	description: "",
+	address: "",
+	date: new Date(),
+	images: [],
 });
+
+const handleSendFormValues = async () => {
+	try {
+		await createAnnouncement(formValues);
+	} catch (e) {
+		console.log("error when creating announcement", e);
+	}
+};
 
 const handleClickNext = () => {
 	if (docState.value === MAX_DOC_STATE_VALUE) {
@@ -232,10 +273,6 @@ const handleClickPrev = () => {
 	docState.value -= 1;
 };
 
-const handleSendFormValues = () => {
-	console.log(formValues);
-};
-
 const date = new Date();
 watch(datePicker, (val) => {
 	// if val is inferior to today, set it to today
@@ -246,7 +283,7 @@ watch(datePicker, (val) => {
 		isDatePickerError.value = true;
 	} else {
 		isDatePickerError.value = false;
-		formValues.date = val[0].toLocaleDateString();
+		formValues.date = val[0];
 	}
 });
 
@@ -262,7 +299,14 @@ watch(docState, (val) => {
 	}
 });
 
+const userStore = useUserStore();
+const { currentUser } = storeToRefs(userStore);
+
 onMounted(() => {
+	if (!currentUser.value) {
+		router.push({ name: "register" });
+	}
+
 	// if query.job is not in jobs, redirect to home
 	if (!jobs.map((job) => job.link).includes(query.job as string)) {
 		router.push({ name: "home-page" });
@@ -280,11 +324,37 @@ const rulesDescriptionInput = [
 	(v: string) =>
 		v.length <= 255 || "La description doit faire moins de 255 caractères",
 ];
+
+const selectedFile = ref();
+const previewUrl = ref();
+
+const handleFileChange = (event: any) => {
+	const file = event.target.files[0];
+	if (file) {
+		const reader = new FileReader();
+		reader.onload = (e) => {
+			previewUrl.value = e.target?.result;
+		};
+		reader.readAsDataURL(file);
+		// @ts-ignore
+		formValues.images.push(file);
+	} else {
+		previewUrl.value = null;
+	}
+};
+
+const removeFile = () => {
+	previewUrl.value = null;
+	selectedFile.value = null;
+	formValues.images = [];
+};
 </script>
 
 <style scoped>
 .slidingCard {
 	position: absolute;
+	width: inherit;
+	padding: 0 8px;
 }
 .slide-right-enter-active,
 .slide-right-leave-active,
