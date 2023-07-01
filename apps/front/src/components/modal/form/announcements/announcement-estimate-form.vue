@@ -58,14 +58,16 @@ import {useScreenSize} from "@/stores/screen-size";
 import {storeToRefs} from "pinia";
 import {useAnnouncementStore} from "@/stores/announcement"
 import {CreateEstimate} from "@/interfaces/estimate";
+import {useRoute} from "vue-router";
 
 const dialog = ref(false);
 const screenSizeStore = useScreenSize()
 const { isSizeMD } = storeToRefs(screenSizeStore)
 
 const announcementStore = useAnnouncementStore()
-const { createAnnouncement } = announcementStore
+const { createAnnouncementEstimate } = announcementStore
 
+const route = useRoute()
 const announcementEstimateForm = ref<CreateEstimate>({
     description: '',
     price: 0,
@@ -74,7 +76,7 @@ const announcementEstimateForm = ref<CreateEstimate>({
 
 const handleAnnouncement = async () => {
     try {
-        await createAnnouncementEstimate(announcementEstimateForm.value)
+        await createAnnouncementEstimate(route.params.id.toString(), announcementEstimateForm.value)
     } catch (e) {
 
     } finally {
