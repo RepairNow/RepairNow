@@ -96,15 +96,15 @@ export class EstimatesService {
     }
   }
 
-  async update(updateEstimateDto: UpdateEstimateDto) {
+  async update(payload: { updateEstimateDto: UpdateEstimateDto, announcementId: string, estimateId: string }) {
     try {
-      if (Object.keys(updateEstimateDto).length === 0) {
+      if (Object.keys(payload.updateEstimateDto).length === 0) {
         throw new BadRequestException();
       }
 
       const announcement = await this.prismaService.announcement.findUnique({
         where: {
-          id: updateEstimateDto.announcementId
+          id: payload.announcementId
         },
       })
 
@@ -114,7 +114,7 @@ export class EstimatesService {
 
       const estimateAccepted = await this.prismaService.estimate.findFirst({
         where: {
-          announcementId: updateEstimateDto.announcementId,
+          announcementId: payload.announcementId,
           currentStatus: EstimateStatus.ACCEPTED
         },
       });
@@ -125,7 +125,7 @@ export class EstimatesService {
 
       const estimate = await this.prismaService.estimate.findUnique({
         where: {
-          id: updateEstimateDto.id
+          id: payload.estimateId
         }
       });
 
@@ -140,11 +140,11 @@ export class EstimatesService {
       // TODO: If Accepted, map through all estimates and set status refused ?
       const estimateUpdated = await this.prismaService.estimate.update({
         where: {
-          id: updateEstimateDto.id
+          id: payload.estimateId
         },
         // @ts-ignore
         data: {
-          ...updateEstimateDto
+          ...payload.updateEstimateDto
         }
       });
 

@@ -28,8 +28,8 @@ export class EstimatesController {
 
   @MessagePattern({ cmd: 'updateEstimate' })
   @UsePipes(new ValidationPipe())
-  update(@Payload(ValidationPipe) updateEstimateDto: UpdateEstimateDto) {
-    return this.estimatesService.update(updateEstimateDto);
+  update(@Payload(ValidationPipe) payload: { updateEstimateDto: UpdateEstimateDto, announcementId: string}) {
+    return this.estimatesService.update(payload);
   }
 
   @MessagePattern({ cmd: 'acceptEstimate' })
