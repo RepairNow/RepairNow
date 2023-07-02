@@ -18,11 +18,11 @@
                     Vous n'avez pas réservé de prestataire
                 </div>
                 <div class="tw-my-3 tw-p-3 tw-border tw-rounded-xl">
-                    Vous avez reçu {{ announcement.estimate?.length ?? 0 }} offre(s)
+                    Vous avez reçu {{ announcement.estimates?.length ?? 0 }} offre(s)
                 </div>
             </div>
         </div>
-        <div v-if="false">
+        <div v-if="true">
             <router-link :to="{name: 'client-announcement', params: { id: announcement.id }}">
                 <v-btn
                     block

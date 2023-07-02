@@ -121,6 +121,16 @@ class Announcement {
         }
     }
 
+    async _acceptAnnouncementEstimate(payload: { estimateId: string, announcementId: string}): Promise<EstimateI> {
+        try {
+            const uri = `${namespace}/${payload.announcementId}/estimates/${payload.estimateId}/accept_estimate`;
+            const res = await client.patch(uri);
+            return res.data;
+        } catch (err) {
+            throw err;
+        }
+    }
+
     /**
      * Mission
      */

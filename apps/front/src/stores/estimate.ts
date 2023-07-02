@@ -2,44 +2,45 @@ import { defineStore } from "pinia";
 import { Ref, ref } from "vue";
 import announcementService from "@/services/api/announcement";
 import { CreateEstimate, EstimateI, UpdateEstimate } from "@/interfaces/estimate";
+import {ca} from "vuetify/locale";
 
 export const useEstimateStore = defineStore("estimate", () => {
-    const { _getEstimates, _getEstimate, _createEstimate, _updateEstimate, _deleteEstimate } = announcementService;
+    const { _getAnnouncementEstimates, _getAnnouncementEstimate, _createAnnouncementEstimate, _updateAnnouncementEstimate, _deleteAnnouncementEstimate, _acceptAnnouncementEstimate } = announcementService;
 
     const estimates: Ref<EstimateI[]> = ref([]);
     // @ts-ignore
     const estimate: Ref<EstimateI> = ref({});
 
-    async function getEstimates(announcementId: string) {
+    async function getAnnouncementEstimates(announcementId: string) {
         try {
-            const res = await _getEstimates(announcementId);
+            const res = await _getAnnouncementEstimates(announcementId);
             estimates.value = res;
         } catch (error) {
             throw error;
         }
     }
 
-    async function getEstimate(payload: { estimateId: string, announcementId: string }) {
+    async function getAnnouncementEstimate(payload: { estimateId: string, announcementId: string }) {
         try {
-            const res = await _getEstimate(payload);
+            const res = await _getAnnouncementEstimate(payload);
             estimate.value = res;
         } catch (error) {
             throw error;
         }
     }
 
-    async function createEstimate(payload: CreateEstimate) {
+    async function createAnnouncementEstimate(payload: CreateEstimate) {
         try {
-            const res = await _createEstimate(payload);
+            const res = await _createAnnouncementEstimate(payload);
             estimates.value.push(res);
         } catch (error) {
             throw error;
         }
     }
 
-    async function updateEstimate(payload: UpdateEstimate) {
+    async function updateAnnouncementEstimate(payload: UpdateEstimate) {
         try {
-            const res = await _updateEstimate(payload);
+            const res = await _updateAnnouncementEstimate(payload);
             const estimateIdToUpdateIndex = estimates.value.findIndex(e => e.id === res.id);
             estimates.value.splice(estimateIdToUpdateIndex, 1, res);
         } catch (error) {
@@ -47,9 +48,9 @@ export const useEstimateStore = defineStore("estimate", () => {
         }
     }
 
-    async function deleteEstimate(payload: { estimateId: string, announcementId: string }) {
+    async function deleteAnnouncementEstimate(payload: { estimateId: string, announcementId: string }) {
         try {
-            const res = await _deleteEstimate(payload);
+            const res = await _deleteAnnouncementEstimate(payload);
             const estimateIdToDeleteIndex = estimates.value.findIndex(e => e.id === payload.estimateId);
             estimates.value.splice(estimateIdToDeleteIndex, 1);
         } catch (error) {
@@ -57,5 +58,13 @@ export const useEstimateStore = defineStore("estimate", () => {
         }
     }
 
-    return { estimates, estimate, getEstimates, getEstimate, createEstimate, updateEstimate, deleteEstimate };
+    async function acceptAnnouncementEstimate(payload: { estimateId: string, announcementId: string}) {
+        try {
+            const res = await _acceptAnnouncementEstimate(payload);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    return { estimates, estimate, getAnnouncementEstimates, getAnnouncementEstimate, createAnnouncementEstimate, updateAnnouncementEstimate, deleteAnnouncementEstimate, acceptAnnouncementEstimate };
 });

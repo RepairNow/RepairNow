@@ -27,8 +27,6 @@ export class EstimatesService {
         throw new NotFoundException();
       }
 
-      console.log('ok')
-
       const estimate = await this.prismaService.estimate.create({
         data: {
           images: payload.createEstimateDto.images,
@@ -36,7 +34,7 @@ export class EstimatesService {
           price: payload.createEstimateDto.price,
           currentStatus: EstimateStatus.PENDING,
           announcementId: payload.announcementId,
-          prestataireId: payload.user.id
+          prestataireId: payload.user.sub
         },
       });
 

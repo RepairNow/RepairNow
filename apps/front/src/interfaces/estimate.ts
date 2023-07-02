@@ -1,3 +1,5 @@
+import {UserI} from "@/interfaces/user";
+
 export interface CreateEstimate {
     price: number
     description: string
@@ -15,6 +17,7 @@ export interface EstimateI {
     id: string
     announcementId: string
     providerId: string
+    prestataire: UserI
     price: number
     description: string
     status: string
