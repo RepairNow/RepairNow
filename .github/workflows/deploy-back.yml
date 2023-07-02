@@ -3,7 +3,7 @@ name: Deploy Back
 on:
   push:
     branches:
-      - feature/back-cicd
+      - feature/domain-name
     # paths:
     #   - 'apps/back/**'
     #   - .github/workflows/deploy-back.yml

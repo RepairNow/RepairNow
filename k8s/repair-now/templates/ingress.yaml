@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: repair-now-ing
   annotations:
-    nginx.ingress.kubernetes.io/websocket-services: com-gateway-svc
+    kubernetes.io/ingress.global-static-ip-name: repair-now-ip
 spec:
   rules:
     - http:
