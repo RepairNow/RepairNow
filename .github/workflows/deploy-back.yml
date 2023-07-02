@@ -183,7 +183,7 @@ jobs:
           cluster_name: ${{ env.GKE_CLUSTER_NAME }}
           location: ${{ env.GKE_CLUSTER_ZONE }}
 
-      - name: Deploy microservices Gto GKE cluster
+      - name: Deploy microservices to GKE cluster
         shell: bash
         run: |
           helm upgrade repair-now ./k8s/repair-now \
