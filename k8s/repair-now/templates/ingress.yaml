@@ -4,6 +4,7 @@ metadata:
   name: repair-now-ing
   annotations:
     kubernetes.io/ingress.global-static-ip-name: repair-now-ip
+    networking.gke.io/managed-certificates: managed-cert
 spec:
   rules:
     - http:
