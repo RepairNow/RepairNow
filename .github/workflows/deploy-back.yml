@@ -33,7 +33,7 @@ jobs:
     - uses: dorny/paths-filter@v2
       id: filter
       with:
-        base: feature/back-cicd
+        base: feature/domain-name
         filters: |
           api-gateway:
             - './apps/back/api-gateway/**'
@@ -177,6 +177,12 @@ jobs:
         with:
           cluster_name: ${{ env.GKE_CLUSTER_NAME }}
           location: ${{ env.GKE_CLUSTER_ZONE }}
+
+      - name: Install ingress-nginx
+        run: |
+          helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+          helm repo update
+          helm upgrade ingress-nginx ingress-nginx/ingress-nginx --install
 
       - name: Deploy microservices Gto GKE cluster
         shell: bash
