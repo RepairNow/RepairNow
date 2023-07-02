@@ -65,6 +65,7 @@ jobs:
           config: |
             API_GATEWAY_PORT=3000
             JWT_SECRET=${{ secrets.JWT_SECRET }}
+            JWT_REFRESH_SECRET=${{ secrets.JWT_REFRESH_SECRET }}
             AUTH_HOST=auth-svc
             AUTH_PORT=3001
             JOB_HOST=job-svc
@@ -91,6 +92,10 @@ jobs:
             DATABASE_URL=${{ secrets.DATABASE_URL }}
             JWT_SECRET=${{ secrets.JWT_SECRET }}
             AUTH_PORT=3001
+            TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID }}
+            TWILIO_AUTH_TOKEN=${{ secrets.TWILIO_AUTH_TOKEN }}
+            TWILIO_VERIFICATION_SERVICE_SID=${{ secrets.TWILIO_VERIFICATION_SERVICE_SID }}
+            TWILIO_SENDER_PHONE_NUMBER=''
 
   push-job-image:
     name: Push Job Image to Docker Hub
