@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsEmail, IsString } from 'class-validator';
+import { IsNotEmpty, IsEmail, IsString, IsBoolean } from 'class-validator';
 
 enum ERole {
   ADMIN = 'ADMIN',
@@ -37,6 +37,9 @@ export class CreateUserDto {
 
   avatar?: string;
   birthdate?: Date;
+
+  @IsBoolean()
+  isContractorRoleAsked?: boolean;
 }
 
 export class UpdateUserDto {

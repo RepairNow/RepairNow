@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsBoolean, IsEmail, IsNotEmpty, IsString } from 'class-validator';
 
 export class SignInDto {
   @IsEmail()
@@ -29,4 +29,7 @@ export class SignUpDto {
   @IsNotEmpty()
   @IsString()
   phoneNumber: string;
+
+  @IsBoolean()
+  isContractorRoleAsked: boolean;
 }

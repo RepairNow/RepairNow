@@ -77,6 +77,7 @@ export class ApiGatewayController {
       firstname: string;
       lastname: string;
       phoneNumber: string;
+      isContractorRoleAsked: boolean;
     },
   ) {
     return this.apiGatewayService.signUp(signUpDto);

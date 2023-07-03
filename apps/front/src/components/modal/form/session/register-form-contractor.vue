@@ -106,6 +106,7 @@ const props = defineProps({
 });
 
 const registerForm = ref<Signup>({
+	isContractorRoleAsked: true,
 	firstname: "",
 	lastname: "",
 	email: "",
