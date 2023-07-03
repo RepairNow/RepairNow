@@ -5,7 +5,7 @@ import { token, refreshToken } from "@/services";
 import userService from "@/services/api/user";
 
 export const useUserStore = defineStore("user", () => {
-    const { _signin, _signup, _getSelfUser, _resetPassword, _getUsers, _signinWithToken } = userService;
+    const { _signin, _signup, _getSelfUser, _resetPassword, _getUsers, _getUserById, _signinWithToken } = userService;
     // @ts-ignore
     const currentUser: Ref<UserI | null> = ref(null);
     const user: Ref<UserI | null> = ref(null);
@@ -68,6 +68,15 @@ export const useUserStore = defineStore("user", () => {
             throw error;
         }
     }
+    
+    async function getUserById(userId: string) {
+        try {
+            const res = await _getUserById(userId);
+            user.value = res;
+        } catch (error) {
+            throw error;
+        }
+    }
 
     function isAdmin() {
         return currentUser.value?.role === "ADMIN"
@@ -81,5 +90,5 @@ export const useUserStore = defineStore("user", () => {
         return currentUser.value?.role === "CLIENT" || currentUser.value?.role === "CONTRACTOR" || currentUser.value?.role === "ADMIN"
     }
 
-    return { signout, currentUser, user, users, signin, getSelf, signup, resetPassword, getUsers };
+    return { signout, currentUser, user, users, signin, getSelf, signup, resetPassword, getUsers, getUserById };
 });

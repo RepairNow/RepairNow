@@ -130,6 +130,14 @@ export class AuthService {
     return this.prismaService.user.findMany();
   }
 
+  getUser(userId: string) {
+    return this.prismaService.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+  }
+
   async logout(userId: string) {
     await this.usersService.updateUser({ refreshToken: null }, userId);
     return 'Logout success';

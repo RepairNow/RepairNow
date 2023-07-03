@@ -24,13 +24,14 @@ export class AuthController {
 
   @UseFilters(new RpcValidationFilter())
   @MessagePattern({ cmd: 'get_users' })
-  getUsers(@Payload() user: any): any {
-    if (user.userRole !== 'ADMIN') {
-      throw new ForbiddenException(
-        'Seuls les admins peuvent avoir cette liste',
-      );
-    }
+  getUsers(): any {
     return this.authService.getUsers();
+  }
+
+  @UseFilters(new RpcValidationFilter())
+  @MessagePattern({ cmd: 'get_user' })
+  getUser(@Payload() payload: { userId: string }): any {
+    return this.authService.getUser(payload.userId);
   }
 
   @UseFilters(new RpcValidationFilter())

@@ -24,17 +24,17 @@ const routes = [
 				path: "announcement/:id",
 				component: () => import("@/views/Announcement.vue"),
 			},
-            {
-                name: "post-announcement",
-                path: "/poster-une-annonce",
-                component: () => import("@/views/PostAnnouncement.vue"),
-                meta: {
-                    admin: false,
-                    contractor: false,
-                    mobile: true,
-                    connected: false
-                }
-            },
+			{
+				name: "post-announcement",
+				path: "/poster-une-annonce",
+				component: () => import("@/views/PostAnnouncement.vue"),
+				meta: {
+					admin: false,
+					contractor: false,
+					mobile: true,
+					connected: false,
+				},
+			},
 			{
 				path: "/:pathMatch(.*)*",
 				component: () => import("@/views/NotFound.vue"),
@@ -44,8 +44,8 @@ const routes = [
 			admin: false,
 			contractor: false,
 			mobile: true,
-			connected: false
-		}
+			connected: false,
+		},
 	},
 	{
 		name: "session",
@@ -56,14 +56,14 @@ const routes = [
 				name: "register",
 				path: "register",
 				component: () => import("@/views/Session/Register.vue"),
-			}
+			},
 		],
 		meta: {
 			admin: false,
 			contractor: false,
 			mobile: true,
-			connected: false
-		}
+			connected: false,
+		},
 	},
 	{
 		name: "client",
@@ -73,22 +73,26 @@ const routes = [
 			{
 				name: "client-announcement",
 				path: "announcement/:id",
-				component: () => import("@/views/Client/Announcement/Announcement.vue"),
+				component: () =>
+					import("@/views/Client/Announcement/Announcement.vue"),
 			},
 			{
 				name: "client-announcements",
 				path: "announcements",
-				component: () => import("@/views/Client/Announcement/Announcements.vue"),
+				component: () =>
+					import("@/views/Client/Announcement/Announcements.vue"),
 			},
 			{
 				name: "client-contractor",
 				path: "contractor/:id",
-				component: () => import("@/views/Client/Contractor/Contractor.vue"),
+				component: () =>
+					import("@/views/Client/Contractor/Contractor.vue"),
 			},
 			{
 				name: "client-contractors",
 				path: "contractors",
-				component: () => import("@/views/Client/Contractor/Contractors.vue"),
+				component: () =>
+					import("@/views/Client/Contractor/Contractors.vue"),
 			},
 			{
 				name: "client-chats",
@@ -141,7 +145,7 @@ const routes = [
 			contractor: true,
 			mobile: true,
 			connected: true,
-		}
+		},
 	},
 	{
 		name: "contractor",
@@ -151,22 +155,26 @@ const routes = [
 			{
 				name: "contractor-announcement",
 				path: "announcement/:id",
-				component: () => import("@/views/Contractor/Announcement/Announcement.vue"),
+				component: () =>
+					import("@/views/Contractor/Announcement/Announcement.vue"),
 			},
 			{
 				name: "contractor-announcements",
 				path: "announcements",
-				component: () => import("@/views/Contractor/Announcement/Announcements.vue"),
+				component: () =>
+					import("@/views/Contractor/Announcement/Announcements.vue"),
 			},
 			{
 				name: "contractor-mission",
 				path: "mission/:id",
-				component: () => import("@/views/Contractor/Mission/Mission.vue"),
+				component: () =>
+					import("@/views/Contractor/Mission/Mission.vue"),
 			},
 			{
 				name: "contractor-missions",
 				path: "missions",
-				component: () => import("@/views/Contractor/Mission/Missions.vue"),
+				component: () =>
+					import("@/views/Contractor/Mission/Missions.vue"),
 			},
 			{
 				name: "contractor-chat",
@@ -208,9 +216,8 @@ const routes = [
 			admin: true,
 			contractor: true,
 			mobile: true,
-			connected: true
-		}
-
+			connected: true,
+		},
 	},
 	{
 		name: "admin",
@@ -224,7 +231,7 @@ const routes = [
 			},
 			{
 				name: "admin-user",
-				path: "user",
+				path: "user/:id",
 				component: () => import("@/views/Admin/User/User.vue"),
 			},
 			{
@@ -240,12 +247,14 @@ const routes = [
 			{
 				name: "admin-announcement",
 				path: "announcement",
-				component: () => import("@/views/Admin/Announcement/Announcement.vue"),
+				component: () =>
+					import("@/views/Admin/Announcement/Announcement.vue"),
 			},
 			{
 				name: "admin-announcements",
 				path: "announcements",
-				component: () => import("@/views/Admin/Announcement/Announcements.vue"),
+				component: () =>
+					import("@/views/Admin/Announcement/Announcements.vue"),
 			},
 			{
 				name: "admin-chat",
@@ -276,15 +285,15 @@ const routes = [
 				name: "admin-reviews",
 				path: "reviews",
 				component: () => import("@/views/Admin/Reviews.vue"),
-			}
+			},
 		],
 		meta: {
 			admin: true,
 			contractor: false,
 			mobile: false,
-			connected: true
-		}
-	}
+			connected: true,
+		},
+	},
 ];
 
 export default routes;

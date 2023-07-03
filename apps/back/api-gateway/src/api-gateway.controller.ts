@@ -6,12 +6,14 @@ import {
   Request,
   UseGuards,
   Inject,
+  Param,
 } from '@nestjs/common';
 import { ApiGatewayService } from './api-gateway.service';
 import { ClientProxy } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
 import { AccessTokenGuard } from './guards/accessToken.guard';
 import { RefreshTokenGuard } from './guards/refreshToken.guard';
+import PermissionGuard from './guards/permissionGuard';
 
 @Controller('/')
 export class ApiGatewayController {
@@ -37,10 +39,16 @@ export class ApiGatewayController {
     return this.missionClient.send({ cmd: 'findAllMission' }, {});
   }
 
-  @UseGuards(AccessTokenGuard)
+  @UseGuards(PermissionGuard('ADMIN'))
+  @Get('user/:userId')
+  getUser(@Param('userId') userId: string): any {
+    return this.apiGatewayService.getUser(userId);
+  }
+
+  @UseGuards(PermissionGuard('ADMIN'))
   @Get('users')
-  getUsers(@Request() req): any {
-    return this.apiGatewayService.getUsers(req.user.role);
+  getUsers(): any {
+    return this.apiGatewayService.getUsers();
   }
 
   @UseGuards(AccessTokenGuard)

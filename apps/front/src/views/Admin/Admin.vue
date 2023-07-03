@@ -1,5 +1,5 @@
 <template>
-    <div v-if="!isSizeSM" class="tw-flex tw-h-screen tw-w-screen tw-py-16 sm:tw-pb-0">
+    <div v-if="!isSizeLG" class="tw-flex tw-h-screen tw-w-screen tw-py-16 sm:tw-pb-0">
         <header-navigation/>
         <div class="tw-bg-green-100 tw-h-full tw-w-80 tw-hidden sm:tw-flex">
             <sidebar-navigation/>
@@ -14,10 +14,10 @@
     >
         <img src="/undraw_no_data_re_kwbl.svg" alt="" class="tw-w-1/3"/>
         <p class="tw-text-xl tw-px-10 tw-text-center tw-font-bold">
-            Admin interface is not available in mobile device
+            L'interface Admin n'est pas disponible sur cet appareil.
         </p>
         <router-link :to="{name: 'home'}" class="tw-text-primary tw-underline">
-            Go back to homepage
+            Retour à la page d'accueil
         </router-link>
     </div>
 </template>
@@ -31,7 +31,7 @@ import { useScreenSize } from "@/stores/screen-size";
 import {storeToRefs} from "pinia";
 
 const screenSize = useScreenSize()
-const { isSizeSM } = storeToRefs(screenSize)
+const { isSizeLG } = storeToRefs(screenSize)
 </script>
 
 <style scoped>

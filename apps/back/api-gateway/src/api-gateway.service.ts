@@ -56,8 +56,12 @@ export class ApiGatewayService {
     );
   }
 
-  getUsers(userRole: string): Observable<any> {
-    return this.authClient.send({ cmd: 'get_users' }, { userRole });
+  getUsers(): Observable<any> {
+    return this.authClient.send({ cmd: 'get_users' }, {});
+  }
+
+  getUser(userId: string): any {
+    return this.authClient.send({ cmd: 'get_user' }, { userId });
   }
 
   initiateVerification(user: any): Observable<any> {

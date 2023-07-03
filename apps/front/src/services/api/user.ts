@@ -89,6 +89,16 @@ class User {
             throw error;
         }
     }
+    
+    async _getUserById(userId: string): Promise<UserI> {
+        try {
+            const uri = '/user/' + userId;
+            const res = await client.get(uri);
+            return res.data;
+        } catch (error) {
+            throw error;
+        }
+    }
 
 
     async _updateUser(payload: UpdateUser): Promise<UserI> {

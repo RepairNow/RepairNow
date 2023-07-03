@@ -33,13 +33,17 @@ export interface CurrentUserI {
 export interface UserI {
     sub: string
     role: string
-    phone: string | number
+    phoneNumber: string | number
     email: string
     firstname: string
     lastname: string
     address: string
     verification: boolean
     password: string
+    isPhoneVerified: boolean
+    isEmailVerified: boolean 
+    isUserDeleted: boolean
+    createdAt: Date
     jobs: JobI[]
 }
 
