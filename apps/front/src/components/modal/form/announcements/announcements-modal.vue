@@ -25,7 +25,9 @@
 				<div v-for="item in items">
 					<div class="grid-item" @click="handleClickItem(item.job)">
 						<img width="60" :src="item.image" :alt="item.text" />
-						{{ item.text }}
+						<span>
+							{{ item.text }}
+						</span>
 					</div>
 				</div>
 			</div>
@@ -35,10 +37,8 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { CreateAnnouncement } from "@/interfaces/announcement";
 import { useScreenSize } from "@/stores/screen-size";
 import { storeToRefs } from "pinia";
-import { useAnnouncementStore } from "@/stores/announcement";
 import repairImg from "@/assets/svg/jobs/repair.png";
 import electricityImg from "@/assets/svg/jobs/electricity.svg";
 import gardenImg from "@/assets/svg/jobs/garden.svg";
@@ -96,39 +96,11 @@ const dialog = ref(false);
 const screenSizeStore = useScreenSize();
 const { isSizeMD } = storeToRefs(screenSizeStore);
 
-const announcementStore = useAnnouncementStore();
-const { createAnnouncement } = announcementStore;
-
 const router = useRouter();
 
 const handleClickItem = (job: string) => {
 	router.push({ name: "post-announcement", query: { job } });
 	dialog.value = false;
-};
-
-const announcementForm = ref<CreateAnnouncement>({
-	title: "",
-	description: "",
-	images: [],
-	address: "",
-	startTime: new Date(),
-	endTime: new Date(),
-});
-
-const handleAnnouncement = async () => {
-	try {
-		await createAnnouncement(announcementForm.value);
-	} catch (e) {
-	} finally {
-		announcementForm.value = {
-			title: "",
-			description: "",
-			images: [],
-			address: "",
-			startTime: new Date(),
-			endTime: new Date(),
-		};
-	}
 };
 </script>
 
@@ -140,6 +112,7 @@ const handleAnnouncement = async () => {
 }
 
 .grid-item {
+	word-break: break-word;
 	border-radius: 5px;
 	display: flex;
 	align-items: center;
