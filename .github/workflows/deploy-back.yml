@@ -3,10 +3,9 @@ name: Deploy Back
 on:
   push:
     branches:
-      - feature/back-cicd
-    # paths:
-    #   - 'apps/back/**'
-    #   - .github/workflows/deploy-back.yml
+      - main
+    paths:
+      - 'apps/back/**'
 
 env:
   GCLOUD_PROJECT_ID: ${{ secrets.GCLOUD_PROJECT_ID }}
@@ -33,7 +32,7 @@ jobs:
     - uses: dorny/paths-filter@v2
       id: filter
       with:
-        base: feature/back-cicd
+        base: feature/domain-name
         filters: |
           api-gateway:
             - './apps/back/api-gateway/**'
@@ -52,7 +51,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     needs: detect-changes
-    # if: ${{ needs.detect-changes.outputs.api-gateway == 'true' }}
+    if: ${{ needs.detect-changes.outputs.api-gateway == 'true' }}
 
     steps:
       - name: Checkout
@@ -65,6 +64,7 @@ jobs:
           config: |
             API_GATEWAY_PORT=3000
             JWT_SECRET=${{ secrets.JWT_SECRET }}
+            JWT_REFRESH_SECRET=${{ secrets.JWT_REFRESH_SECRET }}
             AUTH_HOST=auth-svc
             AUTH_PORT=3001
             JOB_HOST=job-svc
@@ -77,7 +77,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     needs: detect-changes
-    # if: ${{ needs.detect-changes.outputs.auth == 'true' }}
+    if: ${{ needs.detect-changes.outputs.auth == 'true' }}
 
     steps:
       - name: Checkout
@@ -91,13 +91,17 @@ jobs:
             DATABASE_URL=${{ secrets.DATABASE_URL }}
             JWT_SECRET=${{ secrets.JWT_SECRET }}
             AUTH_PORT=3001
+            TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID }}
+            TWILIO_AUTH_TOKEN=${{ secrets.TWILIO_AUTH_TOKEN }}
+            TWILIO_VERIFICATION_SERVICE_SID=${{ secrets.TWILIO_VERIFICATION_SERVICE_SID }}
+            TWILIO_SENDER_PHONE_NUMBER=''
 
   push-job-image:
     name: Push Job Image to Docker Hub
     runs-on: ubuntu-latest
     environment: production
     needs: detect-changes
-    # if: ${{ needs.detect-changes.outputs.job == 'true' }}
+    if: ${{ needs.detect-changes.outputs.job == 'true' }}
 
     steps:
       - name: Checkout
@@ -116,7 +120,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     needs: detect-changes
-    # if: ${{ needs.detect-changes.outputs.mission == 'true' }}
+    if: ${{ needs.detect-changes.outputs.mission == 'true' }}
 
     steps:
       - name: Checkout
@@ -138,7 +142,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     needs: detect-changes
-    # if: ${{ needs.detect-changes.outputs.com-gateway == 'true' }}
+    if: ${{ needs.detect-changes.outputs.com-gateway == 'true' }}
 
     steps:
       - name: Checkout
@@ -178,7 +182,7 @@ jobs:
           cluster_name: ${{ env.GKE_CLUSTER_NAME }}
           location: ${{ env.GKE_CLUSTER_ZONE }}
 
-      - name: Deploy microservices Gto GKE cluster
+      - name: Deploy microservices to GKE cluster
         shell: bash
         run: |
           helm upgrade repair-now ./k8s/repair-now \
