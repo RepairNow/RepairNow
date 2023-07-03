@@ -9,8 +9,8 @@ import {CurrentUserI} from "../mission/dto/current-user.dto";
 enum EstimateStatus {
   PENDING = "PENDING",
   ACCEPTED = "ACCEPTED",
-  PAID = "ACCEPTED",
-  REFUSED = "REFUSED"
+  REFUSED = "REFUSED",
+  WAITING_PAYMENT = "WAITING_PAYMENT"
 }
 @Injectable()
 export class EstimatesService {
@@ -208,7 +208,7 @@ export class EstimatesService {
           id: payload.estimateId
         },
         data: {
-          currentStatus: EstimateStatus.ACCEPTED
+          currentStatus: EstimateStatus.WAITING_PAYMENT
         }
       });
 

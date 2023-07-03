@@ -90,5 +90,9 @@ export const useUserStore = defineStore("user", () => {
         return currentUser.value?.role === "CLIENT" || currentUser.value?.role === "CONTRACTOR" || currentUser.value?.role === "ADMIN"
     }
 
-    return { signout, currentUser, user, users, signin, getSelf, signup, resetPassword, getUsers, getUserById };
+    function isConnected() {
+        return !!token.value
+    }
+
+    return { signout, currentUser, user, users, signin, getSelf, signup, resetPassword, getUsers, isAdmin, isContractor, isClient, isConnected, getUserById };
 });

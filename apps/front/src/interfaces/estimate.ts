@@ -18,9 +18,10 @@ export interface EstimateI {
     announcementId: string
     providerId: string
     prestataire: UserI
+    prestataireId: string
     price: number
     description: string
-    status: string
+    currentStatus: string
     images: File[]
     checkoutPageUrl: string
 }
