@@ -20,7 +20,7 @@ export interface EstimateI {
     prestataire: UserI
     price: number
     description: string
-    status: string
+    currentStatus: string
     images: File[]
     checkoutPageUrl: string
 }

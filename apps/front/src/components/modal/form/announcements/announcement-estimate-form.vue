@@ -37,11 +37,10 @@
                 </p>
             </div>
             <div>
-                <v-text-field variant="filled" label="Tarif" type="" v-model="announcementEstimateForm.title"/>
+                <v-text-field variant="filled" label="Tarif" type="number" v-model="announcementEstimateForm.price"/>
                 <v-text-field variant="filled" label="Description" v-model="announcementEstimateForm.description"/>
-                <!--<v-file-input variant="filled" label="Images" v-model="announcementForm.images"/>-->
                 <v-btn
-                        text="S'inscrire"
+                        text="Confirmer le devis"
                         block
                         class="tw-normal-case"
                         @click="handleAnnouncement()"
@@ -76,7 +75,12 @@ const announcementEstimateForm = ref<CreateEstimate>({
 
 const handleAnnouncement = async () => {
     try {
-        await createAnnouncementEstimate(route.params.id.toString(), announcementEstimateForm.value)
+        await createAnnouncementEstimate(route.params.id.toString(),
+            {
+                price: parseFloat(announcementEstimateForm.value.price.toString()),
+                description: announcementEstimateForm.value.description,
+                images: announcementEstimateForm.value.images
+            })
     } catch (e) {
 
     } finally {

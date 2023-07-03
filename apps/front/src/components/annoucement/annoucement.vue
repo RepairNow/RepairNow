@@ -22,7 +22,7 @@
                 </div>
             </div>
         </div>
-        <div v-if="true">
+        <div v-if="!contractorView">
             <router-link :to="{name: 'client-announcement', params: { id: announcement.id }}">
                 <v-btn
                     block
@@ -51,6 +51,10 @@ const props = defineProps({
     announcement: {
         type: Object as PropType<AnnouncementI>,
         required: true
+    },
+    contractorView: {
+        type: Boolean,
+        default: false
     }
 })
 /**

@@ -35,7 +35,9 @@
                     </div>
                 </div>
                 <div class="xl:tw-w-4/12">
-                    <div class="tw-flex tw-flex-col tw-w-full xl:tw-p-4">
+                    <div v-if="!filteredArray?.length"
+                         class="tw-flex tw-flex-col tw-w-full xl:tw-p-4"
+                    >
                         <div class="tw-grow-1 tw-w-full tw-text-xl tw-font-bold xl:tw-text-2xl">
                             Offres
                         </div>
@@ -70,6 +72,47 @@
                             Aucune offres disponible
                         </div>
                     </div>
+                    <div
+                        v-else
+                    >
+                        <div>
+                            <div v-for="estimate in filteredArray"
+                                 class="tw-border tw-my-2 tw-rounded-lg tw-p-4"
+                            >
+                                <div v-if="estimate.currentStatus === 'ACCEPTED'" class="tw-flex">
+                                    {{estimate.currentStatus}}
+                                </div>
+                                <div v-if="estimate.currentStatus === 'WAITING_PAYMENT'">
+                                    <div>
+                                        {{estimate.currentStatus}}
+                                    </div>
+                                    <div>
+                                        Pay
+                                    </div>
+                                </div>
+                                <div class="tw-flex tw-items-center">
+                                    <div>
+                                        <v-avatar color="surface-variant" size="45" class="tw-mr-3"/>
+                                    </div>
+                                    <div>
+                                        {{estimate.prestataire.firstname}}
+                                        {{estimate.prestataire.lastname}}
+                                    </div>
+                                </div>
+                                <div>
+                                    {{estimate.price}} €
+                                </div>
+                                <div>
+                                    {{estimate.description}}
+                                </div>
+                                <div v-if="estimate.currentStatus === 'ACCEPTED'">
+                                    <v-btn>
+                                        Annuler
+                                    </v-btn>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -94,8 +137,11 @@ const route = useRoute()
 const startTime = new Date(announcement.value.startTime).toLocaleDateString('fr-FR', { day: "2-digit", month: "long", hour: "2-digit", minute: "2-digit" })
 const endTime = new Date(announcement.value.endTime).toLocaleDateString('fr-FR', { day: "2-digit", month: "long", hour: "2-digit", minute: "2-digit" })
 
+const filteredArray = ref()
 onMounted(async () => {
     await getAnnouncement(route.params.id.toString())
+    const estimates = announcement.value.estimates
+    filteredArray.value = estimates.filter(estimate => estimate.currentStatus === 'ACCEPTED' || estimate.currentStatus === 'WAITING_PAYMENT');
 })
 </script>
 
