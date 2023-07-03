@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   HttpException,
+  ForbiddenException,
   HttpStatus,
   UseFilters,
   ValidationPipe,
@@ -21,8 +22,14 @@ export class AuthController {
     return this.authService.getHello();
   }
 
+  @UseFilters(new RpcValidationFilter())
   @MessagePattern({ cmd: 'get_users' })
-  getUsers(): any {
+  getUsers(@Payload() user: any): any {
+    if (user.userRole !== 'ADMIN') {
+      throw new ForbiddenException(
+        'Seuls les admins peuvent avoir cette liste',
+      );
+    }
     return this.authService.getUsers();
   }
 

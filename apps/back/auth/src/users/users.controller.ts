@@ -4,7 +4,7 @@ import { CreateUserDto } from './dto/user.dto';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly userService: UsersService) { }
+  constructor(private readonly userService: UsersService) {}
 
   @Post()
   async createUser(
@@ -15,6 +15,8 @@ export class UsersController {
     @Body('phoneNumber') phoneNumber: CreateUserDto['phoneNumber'],
     @Body('avatar') avatar: CreateUserDto['avatar'],
     @Body('birthdate') birthdate: CreateUserDto['birthdate'],
+    @Body('isContractorRoleAsked')
+    isContractorRoleAsked: CreateUserDto['isContractorRoleAsked'],
   ) {
     const generatedId = await this.userService.createUser({
       email,
@@ -24,6 +26,7 @@ export class UsersController {
       phoneNumber,
       avatar,
       birthdate,
+      isContractorRoleAsked,
     });
     return { id: generatedId };
   }

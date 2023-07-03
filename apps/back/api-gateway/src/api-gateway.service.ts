@@ -41,6 +41,7 @@ export class ApiGatewayService {
     firstname: string;
     lastname: string;
     phoneNumber: string;
+    isContractorRoleAsked: boolean;
   }): Observable<string> {
     return this.authClient.send(
       { cmd: 'sign_up_email' },
@@ -50,12 +51,13 @@ export class ApiGatewayService {
         firstname: signUpDto.firstname,
         lastname: signUpDto.lastname,
         phoneNumber: signUpDto.phoneNumber,
+        isContractorRoleAsked: signUpDto.isContractorRoleAsked,
       },
     );
   }
 
-  getUsers(): Observable<any> {
-    return this.authClient.send({ cmd: 'get_users' }, {});
+  getUsers(userRole: string): Observable<any> {
+    return this.authClient.send({ cmd: 'get_users' }, { userRole });
   }
 
   initiateVerification(user: any): Observable<any> {

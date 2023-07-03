@@ -37,9 +37,10 @@ export class ApiGatewayController {
     return this.missionClient.send({ cmd: 'findAllMission' }, {});
   }
 
+  @UseGuards(AccessTokenGuard)
   @Get('users')
-  getHelloTwo(): any {
-    return this.apiGatewayService.getUsers();
+  getUsers(@Request() req): any {
+    return this.apiGatewayService.getUsers(req.user.role);
   }
 
   @UseGuards(AccessTokenGuard)
@@ -77,6 +78,7 @@ export class ApiGatewayController {
       firstname: string;
       lastname: string;
       phoneNumber: string;
+      isContractorRoleAsked: boolean;
     },
   ) {
     return this.apiGatewayService.signUp(signUpDto);

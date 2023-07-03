@@ -3,10 +3,7 @@ name: Deploy Back
 on:
   push:
     branches:
-      - feature/back-cicd
-    # paths:
-    #   - 'apps/back/**'
-    #   - .github/workflows/deploy-back.yml
+      - main
 
 env:
   GCLOUD_PROJECT_ID: ${{ secrets.GCLOUD_PROJECT_ID }}
@@ -18,41 +15,10 @@ env:
   DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
 jobs:
-  detect-changes:
-    name: Detect changes
-    runs-on: ubuntu-latest
-    outputs:
-      api-gateway: ${{ steps.filter.outputs.api-gateway }}
-      auth: ${{ steps.filter.outputs.auth }}
-      job: ${{ steps.filter.outputs.job }}
-      mission: ${{ steps.filter.outputs.mission }}
-      com-gateway: ${{ steps.filter.outputs.com-gateway }}
-
-    steps:
-    - uses: actions/checkout@v3
-    - uses: dorny/paths-filter@v2
-      id: filter
-      with:
-        base: feature/back-cicd
-        filters: |
-          api-gateway:
-            - './apps/back/api-gateway/**'
-          auth:
-            - './apps/back/auth/**'
-          job:
-            - './apps/back/job/**'
-          mission:
-            - './apps/back/mission/**'
-          com-gateway:
-            - './apps/back/com-gateway/**'
-          
-
   push-api-gateway-image:
     name: Push Api Gateway Image to Docker Hub
     runs-on: ubuntu-latest
     environment: production
-    needs: detect-changes
-    # if: ${{ needs.detect-changes.outputs.api-gateway == 'true' }}
 
     steps:
       - name: Checkout
@@ -65,6 +31,7 @@ jobs:
           config: |
             API_GATEWAY_PORT=3000
             JWT_SECRET=${{ secrets.JWT_SECRET }}
+            JWT_REFRESH_SECRET=${{ secrets.JWT_REFRESH_SECRET }}
             AUTH_HOST=auth-svc
             AUTH_PORT=3001
             JOB_HOST=job-svc
@@ -76,8 +43,6 @@ jobs:
     name: Push Auth Image to Docker Hub
     runs-on: ubuntu-latest
     environment: production
-    needs: detect-changes
-    # if: ${{ needs.detect-changes.outputs.auth == 'true' }}
 
     steps:
       - name: Checkout
@@ -91,13 +56,15 @@ jobs:
             DATABASE_URL=${{ secrets.DATABASE_URL }}
             JWT_SECRET=${{ secrets.JWT_SECRET }}
             AUTH_PORT=3001
+            TWILIO_ACCOUNT_SID=${{ secrets.TWILIO_ACCOUNT_SID }}
+            TWILIO_AUTH_TOKEN=${{ secrets.TWILIO_AUTH_TOKEN }}
+            TWILIO_VERIFICATION_SERVICE_SID=${{ secrets.TWILIO_VERIFICATION_SERVICE_SID }}
+            TWILIO_SENDER_PHONE_NUMBER=''
 
   push-job-image:
     name: Push Job Image to Docker Hub
     runs-on: ubuntu-latest
     environment: production
-    needs: detect-changes
-    # if: ${{ needs.detect-changes.outputs.job == 'true' }}
 
     steps:
       - name: Checkout
@@ -115,8 +82,6 @@ jobs:
     name: Push Mission Image to Docker Hub
     runs-on: ubuntu-latest
     environment: production
-    needs: detect-changes
-    # if: ${{ needs.detect-changes.outputs.mission == 'true' }}
 
     steps:
       - name: Checkout
@@ -137,8 +102,6 @@ jobs:
     name: Push Com Gateway Image to Docker Hub
     runs-on: ubuntu-latest
     environment: production
-    needs: detect-changes
-    # if: ${{ needs.detect-changes.outputs.com-gateway == 'true' }}
 
     steps:
       - name: Checkout
@@ -178,7 +141,8 @@ jobs:
           cluster_name: ${{ env.GKE_CLUSTER_NAME }}
           location: ${{ env.GKE_CLUSTER_ZONE }}
 
-      - name: Deploy microservices Gto GKE cluster
+
+      - name: Deploy microservices to GKE cluster
         shell: bash
         run: |
           helm upgrade repair-now ./k8s/repair-now \

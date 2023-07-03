@@ -54,6 +54,7 @@ export interface Signup {
     email: string
     password: string
     phoneNumber: string
+    isContractorRoleAsked?: boolean
 }
 
 export interface ResetPassword {

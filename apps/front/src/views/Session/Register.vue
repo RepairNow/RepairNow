@@ -26,7 +26,7 @@
 			<register-form-contractor dialog-class="tw-w-full">
 				<template #button>
 					<div
-						class="tw-border tw-w-full tw-rounded hover:tw-shadow-lg tw-p-6 tw-gap-y-2 tw-flex tw-flex-col lg:tw-w-96">
+						class="tw-border tw-w-full tw-rounded hover:tw-shadow-lg tw-p-6 tw-gap-y-2 tw-flex tw-flex-col lg:tw-w-96 tw-cursor-pointer">
 						<v-icon icon="mdi-briefcase-variant" size="100" />
 						<span class="tw-font-bold tw-text-lg"
 							>Devenir prestataire</span

@@ -90,6 +90,7 @@ export class AuthService {
     firstname,
     lastname,
     phoneNumber,
+    isContractorRoleAsked,
   }): Promise<{
     access_token: string;
     refresh_token: string;
@@ -101,6 +102,7 @@ export class AuthService {
       phoneNumber,
       firstname,
       lastname,
+      isContractorRoleAsked,
     });
     const payload: IJwtPayload = {
       email: userCreated.email,
