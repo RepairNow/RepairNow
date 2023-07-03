@@ -129,6 +129,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Apply prisma seed
+        run: |
+          cd prisma
+          yarn db:seed
+
       - id: 'auth'
         uses: 'google-github-actions/auth@v1'
         with:
@@ -141,9 +146,6 @@ jobs:
           cluster_name: ${{ env.GKE_CLUSTER_NAME }}
           location: ${{ env.GKE_CLUSTER_ZONE }}
 
-      - name: Apply prisma seed
-        run: |
-          yarn workspace @repairnow/prisma db:seed
 
       - name: Deploy microservices to GKE cluster
         shell: bash
