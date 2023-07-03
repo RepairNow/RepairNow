@@ -1,4 +1,5 @@
-import { Controller, Request, Inject, Body, UseGuards, Post, Get, Param, Patch, UseFilters, Delete } from "@nestjs/common";
+import { Controller, Request, Inject, Body, UseGuards, Post, Get, Param, Patch, UseFilters, Delete, UseInterceptors, UploadedFiles } from "@nestjs/common";
+import { FilesInterceptor } from "@nestjs/platform-express";
 import { ClientProxy } from "@nestjs/microservices";
 import { AuthGuard } from "../guards/auth.guard";
 import { Observable } from "rxjs";
@@ -11,7 +12,8 @@ export class AnnouncementsController {
 
   @Post()
   @UseGuards(AuthGuard)
-  createAnnouncement(@Body() createAnnouncementDto, @Request() request): Observable<any> {
+  @UseInterceptors(FilesInterceptor('files'))
+  createAnnouncement(@UploadedFiles() files: Array<Express.Multer.File>, @Body() createAnnouncementDto, @Request() request): Observable<any> {
     const { user } = request;
     return this.missionClient.send({ cmd: "createAnnouncement" }, { createAnnouncementDto, user });
   }
