@@ -143,6 +143,10 @@ jobs:
           cluster_name: ${{ env.GKE_CLUSTER_NAME }}
           location: ${{ env.GKE_CLUSTER_ZONE }}
 
+      - name: Apply prisma seed
+        run: |
+          yarn workspace @repairnow/prisma db:seed
+
       - name: Deploy microservices to GKE cluster
         shell: bash
         run: |
