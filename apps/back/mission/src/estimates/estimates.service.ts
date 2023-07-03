@@ -9,6 +9,7 @@ import {CurrentUserI} from "../mission/dto/current-user.dto";
 enum EstimateStatus {
   PENDING = "PENDING",
   ACCEPTED = "ACCEPTED",
+  PAID = "ACCEPTED",
   REFUSED = "REFUSED"
 }
 @Injectable()
@@ -148,9 +149,9 @@ export class EstimatesService {
 
       // Send stripe checkout page url to the client if estimate is accepted
       if (estimateUpdated.currentStatus === EstimateStatus.ACCEPTED) {
-        const checkoutPageUrl = await this.stripeService.createCheckoutSession(estimateUpdated.price);
+        const checkoutSession = await this.stripeService.createCheckoutSession(estimateUpdated.price);
 
-        return { ...estimateUpdated, checkoutPageUrl: checkoutPageUrl };
+        return { ...estimateUpdated, checkoutPageUrl: checkoutSession.url };
       }
 
       return estimateUpdated;
@@ -175,7 +176,7 @@ export class EstimatesService {
         throw new BadRequestException("L'annonce est n'est plus valable");
       }
 
-      const estimateAccepted = await this.prismaService.estimate.findFirst({
+      /*const estimateAccepted = await this.prismaService.estimate.findFirst({
         where: {
           announcementId: payload.announcementId,
           currentStatus: EstimateStatus.ACCEPTED
@@ -184,7 +185,7 @@ export class EstimatesService {
 
       if (estimateAccepted) {
         throw new BadRequestException("Un devis est déjà accepté pour cette mission");
-      }
+      }*/
 
       const estimate = await this.prismaService.estimate.findUnique({
         where: {
@@ -212,15 +213,19 @@ export class EstimatesService {
 
       // Send stripe checkout page url to the client if estimate is accepted
       if (estimateUpdated.currentStatus === EstimateStatus.ACCEPTED) {
-        const checkoutPageUrl = await this.stripeService.createCheckoutSession(estimateUpdated.price);
+        const checkoutSession = await this.stripeService.createCheckoutSession(estimateUpdated.price);
 
-        return { ...estimateUpdated, checkoutPageUrl: checkoutPageUrl };
+        return { ...estimateUpdated, checkoutPageUrl: checkoutSession.url };
       }
 
       return estimateUpdated;
     } catch (error) {
       return error;
     }
+  }
+
+  checkEstimate(payload: { announcementId: string, estimateId: string }) {
+
   }
 
   remove(payload: { id: string, estimateId: string }) {

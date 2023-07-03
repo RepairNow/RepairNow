@@ -82,6 +82,7 @@ export class AnnouncementsService {
               prestataire: true
             }
           },
+          mission: true
         }
       });
       if (!announcement) {

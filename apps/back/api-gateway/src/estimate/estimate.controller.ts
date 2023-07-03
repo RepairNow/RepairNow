@@ -64,4 +64,11 @@ export class EstimatesController {
   remove(@Param() param: { id: string }): Observable<any> {
     return this.missionClient.send({ cmd: "removeEstimate" }, { id: param.id });
   }
+
+  @Get('/:estimateId/check_estimate')
+  @UseFilters(new ExceptionFilter())
+  @UseGuards(AuthGuard)
+  checkEstimate(@Param() params: { announcementId: string, estimateId: string }): Observable<any> {
+    return this.missionClient.send({ cmd: "checkEstimate"}, params)
+  }
 }
