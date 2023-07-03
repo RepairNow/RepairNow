@@ -20,7 +20,6 @@ export class AnnouncementsService {
   async create(payload: { createAnnouncementDto: CreateAnnouncementDto, user: CurrentUserDto }): Promise<any> {
 
     try {
-      console.log(payload.createAnnouncementDto)
       const announcement = await this.prismaService.announcement.create({
         // @ts-ignore
         data: {
