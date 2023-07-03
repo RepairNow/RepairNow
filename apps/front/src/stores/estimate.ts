@@ -61,6 +61,8 @@ export const useEstimateStore = defineStore("estimate", () => {
     async function acceptAnnouncementEstimate(payload: { estimateId: string, announcementId: string}) {
         try {
             const res = await _acceptAnnouncementEstimate(payload);
+
+            if (res.checkoutPageUrl) window.location.href = res.checkoutPageUrl
         } catch (error) {
             throw error;
         }

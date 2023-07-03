@@ -22,4 +22,5 @@ export interface EstimateI {
     description: string
     status: string
     images: File[]
+    checkoutPageUrl: string
 }
