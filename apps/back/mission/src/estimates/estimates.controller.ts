@@ -5,7 +5,6 @@ import { CreateEstimateDto } from './dto/create-estimate.dto';
 import { UpdateEstimateDto } from './dto/update-estimate.dto';
 import { RpcValidationFilter } from 'src/filters/rpc-validation.filter';
 import {CurrentUserI} from "../mission/dto/current-user.dto";
-import {Message} from "com-gateway/dist/_schemas/message.schema";
 @Controller()
 export class EstimatesController {
   constructor(private readonly estimatesService: EstimatesService) { }
