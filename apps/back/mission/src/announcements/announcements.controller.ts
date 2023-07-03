@@ -7,6 +7,7 @@ import { CurrentUserDto } from '@repairnow/dto';
 import {MissionService} from "../mission/mission.service";
 import {CreateMissionDto} from "../mission/dto/create-mission.dto";
 import {UpdateMissionDto} from "../mission/dto/update-mission.dto";
+import { CreateFileDto } from './dto/create-file.dto';
 @Controller()
 export class AnnouncementsController {
   constructor(
@@ -15,7 +16,7 @@ export class AnnouncementsController {
   ) { }
 
   @MessagePattern({ cmd: 'createAnnouncement' })
-  create(@Payload() payload: { createAnnouncementDto: CreateAnnouncementDto, user: CurrentUserDto, files: any }) {
+  create(@Payload() payload: { createAnnouncementDto: CreateAnnouncementDto, user: CurrentUserDto}) {
     return this.announcementsService.create(payload);
   }
 
@@ -37,6 +38,11 @@ export class AnnouncementsController {
   @MessagePattern({ cmd: 'updateAnnouncement' })
   update(@Payload() payload: { updateAnnouncementDto: UpdateAnnouncementDto, user: CurrentUserDto, id: string }) {
     return this.announcementsService.update(payload);
+  }
+
+  @MessagePattern({ cmd: 'uploadAnnouncementImages' })
+  upload(@Payload() payload: { files: CreateFileDto, user: CurrentUserDto, id: string }) {
+    return this.announcementsService.upload(payload);
   }
 
   @MessagePattern({ cmd: 'removeAnnouncement' })

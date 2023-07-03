@@ -1,10 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
+import { resolve, join } from 'path';
 import { ClientProxy } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
-
+import { PrismaService } from '@repairnow/prisma';
 @Injectable()
 export class ApiGatewayService {
-  constructor(@Inject('AUTH_SERVICE') private authClient: ClientProxy) {}
+  constructor(@Inject('AUTH_SERVICE') private authClient: ClientProxy, private prismaService: PrismaService,) {}
 
   refreshTokens(userId: string, refreshToken: string): Observable<string> {
     return this.authClient.send(
@@ -62,6 +63,17 @@ export class ApiGatewayService {
 
   getUser(userId: string): any {
     return this.authClient.send({ cmd: 'get_user' }, { userId });
+  }
+  
+  async getImage(payload: { res: any, id: string }) {
+    const file = await this.prismaService.files.findUnique({
+      where: {
+        id: payload.id
+      }
+    });
+    const dirname = resolve();
+    const fullfilepath = join(dirname, file.path);
+    return payload.res.type(file.mimetype).sendFile(fullfilepath)
   }
 
   initiateVerification(user: any): Observable<any> {

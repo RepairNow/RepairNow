@@ -12,11 +12,9 @@ export class AnnouncementsController {
 
   @Post()
   @UseGuards(AuthGuard)
-  @UseInterceptors(FilesInterceptor('files'))
-  createAnnouncement(@UploadedFiles() files: Array<Express.Multer.File>, @Body() createAnnouncementDto, @Request() request): Observable<any> {
-    console.log(files);
+  createAnnouncement(@Body() createAnnouncementDto, @Request() request): Observable<any> {
     const { user } = request;
-    return this.missionClient.send({ cmd: "createAnnouncement" }, { createAnnouncementDto, user, files });
+    return this.missionClient.send({ cmd: "createAnnouncement" }, { createAnnouncementDto, user });
   }
 
   @Get()
@@ -41,7 +39,16 @@ export class AnnouncementsController {
   @UseGuards(AuthGuard)
   updateAnnouncement(@Param() params, @Body() updateAnnouncementDto, @Request() request): Observable<any> {
     const { user } = request;
-    return this.missionClient.send({ cmd: "updateAnnouncement" }, { updateAnnouncementDto: updateAnnouncementDto, user: user, id: params.id });
+    return this.missionClient.send({ cmd: "updateAnnouncement" }, { updateAnnouncementDto: updateAnnouncementDto, user, id: params.id });
+  }
+
+  @Patch('/:id/uploads')
+  @UseFilters(new ExceptionFilter())
+  @UseGuards(AuthGuard)
+  @UseInterceptors(FilesInterceptor('files'))
+  uploadAnnouncementImages(@UploadedFiles() files: Array<Express.Multer.File>, @Param() params, @Request() request): Observable<any> {
+    const { user } = request;
+    return this.missionClient.send({ cmd: "uploadAnnouncementImages" }, { files, user, id: params.id });
   }
 
   @Delete('/:id')

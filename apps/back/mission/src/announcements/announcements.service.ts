@@ -108,17 +108,40 @@ export class AnnouncementsService {
     }
   }
 
-  async update(payload: {
-    updateAnnouncementDto: UpdateAnnouncementDto;
-    user: CurrentUserDto;
-    id: string;
-  }): Promise<any> {
+  async upload(payload: { id: string, files: any }) {
+    let announcement = await this.prismaService.announcement.findUnique({
+      where: {
+        id: payload.id
+      }
+    });
+    if (!announcement) {
+      throw new RpcException(new NotFoundException());
+    }
+
+    const file = payload.files[0];
+    const files = await this.prismaService.files.create({
+      data: {
+        announcementId: payload.id,
+        ...file
+      }
+    });
+
+    return 'files created'
+    // const updatedAnnouncement = await this.prismaService.announcement.update({
+    //   where: {
+    //     id: payload.id
+    //   },
+    //   data: {
+    //     images: payload.files
+    //   }
+    // });
+
+    // return updatedAnnouncement;
+  }
+
+  async update(payload: { updateAnnouncementDto: UpdateAnnouncementDto, user: CurrentUserDto, id: string }): Promise<any> {
     try {
-      console.log(payload);
-      let updatableAnnouncementStatus = [
-        AnnouncementStatus.DRAFT.toString(),
-        AnnouncementStatus.PUBLISHED.toString(),
-      ];
+      let updatableAnnouncementStatus = [AnnouncementStatus.DRAFT.toString(), AnnouncementStatus.PUBLISHED.toString()];
 
       let announcement = await this.prismaService.announcement.findUnique({
         where: {
