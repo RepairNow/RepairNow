@@ -1,6 +1,7 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import {createRouter, createWebHistory, useRouter} from 'vue-router'
 // import registerRouteGuard from './Interceptor'
 import routes from './routes'
+import {useUserStore} from "@/stores/user";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.VITE_ROUTER_BASE as string),
@@ -9,7 +10,44 @@ const router = createRouter({
 
 // registerRouteGuard(router)
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
+  const {isAdmin, isContractor, isClient, isConnected} = useUserStore()
+  const router = useRouter()
+  const { admin, contractor, connected } = to?.meta;
+
+  if (connected) {
+    if(!isConnected()) {
+      next({name: 'home-page'});
+    } else {
+      if (admin) {
+        if (!isAdmin()) {
+          next({name: 'home-page'});
+        }
+      } else if (contractor) {
+        if (!isContractor()) {
+          next({name: 'home-page'});
+        }
+      }
+    }
+  }
+  /*if (admin) {
+    if (!isAdmin()) {
+      next({name: 'home-page'});
+    }
+  }
+
+  if (contractor) {
+    if (!isContractor()) {
+      next({name: 'home-page'});
+    }
+  }
+
+  if (connected) {
+    if (!isConnected()) {
+      next({name: 'home-page'});
+    }
+  }*/
+
   next()
 })
 

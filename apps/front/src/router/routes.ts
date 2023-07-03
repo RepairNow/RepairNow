@@ -137,8 +137,8 @@ const routes = [
 			},
 		],
 		meta: {
-			admin: true,
-			contractor: true,
+			admin: false,
+			contractor: false,
 			mobile: true,
 			connected: true,
 		}
@@ -205,7 +205,7 @@ const routes = [
 			},
 		],
 		meta: {
-			admin: true,
+			admin: false,
 			contractor: true,
 			mobile: true,
 			connected: true
@@ -280,7 +280,7 @@ const routes = [
 		],
 		meta: {
 			admin: true,
-			contractor: false,
+			contractor: true,
 			mobile: false,
 			connected: true
 		}
