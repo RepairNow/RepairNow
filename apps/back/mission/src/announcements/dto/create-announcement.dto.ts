@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsUUID, IsString, IsDate } from "class-validator"
+import {Job} from "@repairnow/prisma";
 
 export class CreateAnnouncementDto {
   @IsNotEmpty()
@@ -19,4 +20,9 @@ export class CreateAnnouncementDto {
 
   // @IsDate()
   endTime: Date
+
+
+  @IsNotEmpty()
+  @IsString()
+  jobId: string
 }

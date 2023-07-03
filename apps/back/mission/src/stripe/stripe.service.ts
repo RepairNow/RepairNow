@@ -13,7 +13,7 @@ export class StripeService {
         });
     }
 
-    async createCheckoutSession(price: number): Promise<object> {
+    async createCheckoutSession(price: number): Promise<any> {
         return await this.stripe.checkout.sessions.create({
             payment_method_types: ['card'],
             line_items: [

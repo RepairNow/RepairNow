@@ -11,32 +11,32 @@ datasource db {
 }
 
 model User {
-  id                      String         @id @default(uuid()) @db.Uuid
-  email                   String         @unique
-  password                String
-  role                    String         @default("CLIENT")
-  phoneNumber             String
-  firstname               String
-  lastname                String
-  resetPasswordToken      String         @default(uuid())
-  isContractorRoleAsked   Boolean        @default(false)
-  isUserDeleted           Boolean        @default(false)
-  isEmailVerified         Boolean        @default(false)
-  isPhoneVerified         Boolean        @default(false)
-  refreshToken            String?         
-  avatar                  String?
-  birthdate               DateTime?
-  createdAt               DateTime       @default(now())
-  updatedAt               DateTime       @default(now()) @updatedAt
-  wallet                  Wallet?       
-  jobs                    Job[]          
-  notifications           Notification[]
-  estimates               Estimate[]  
-  partnerships            Partnership[]  
-  announcements           Announcement[] 
-  messages                Message[]     
-  missions                Mission[]      
-  geolocation             Geolocation[]
+  id                    String         @id @default(uuid()) @db.Uuid
+  email                 String         @unique
+  password              String
+  role                  String         @default("CLIENT")
+  phoneNumber           String
+  firstname             String
+  lastname              String
+  resetPasswordToken    String         @default(uuid())
+  isContractorRoleAsked Boolean        @default(false)
+  isUserDeleted         Boolean        @default(false)
+  isEmailVerified       Boolean        @default(false)
+  isPhoneVerified       Boolean        @default(false)
+  refreshToken          String?
+  avatar                String?
+  birthdate             DateTime?
+  createdAt             DateTime       @default(now())
+  updatedAt             DateTime       @default(now()) @updatedAt
+  wallet                Wallet?
+  jobs                  Job[]
+  notifications         Notification[]
+  estimates             Estimate[]
+  partnerships          Partnership[]
+  announcements         Announcement[]
+  messages              Message[]
+  missions              Mission[]
+  geolocation           Geolocation[]
 
   @@map(name: "u_user")
 }
@@ -46,7 +46,7 @@ model Wallet {
   amount            String
   user              User                @relation(fields: [userId], references: [id])
   userId            String              @unique @db.Uuid
-  walletTransaction WalletTransaction[] 
+  walletTransaction WalletTransaction[]
 
   @@map(name: "u_wallet")
 }
@@ -83,27 +83,30 @@ model Partnership {
 }
 
 model Job {
-  id    String @id @default(uuid()) @db.Uuid
-  title String @unique
-  users User[] 
+  id            String         @id @default(uuid()) @db.Uuid
+  title         String         @unique
+  users         User[]
+  announcements Announcement[]
 
   @@map(name: "j_job")
 }
 
 model Announcement {
-  id          String       @id @default(uuid()) @db.Uuid
-  user        User         @relation(fields: [userId], references: [id])
-  userId      String       @db.Uuid
-  title       String
-  description String
-  images      String[]
-  address     String
-  startTime   DateTime     @default(now())
-  endTime     DateTime     @default(now())
-  mission     Mission?     
-  estimates   Estimate[]
-  currentStatus  String   
-  acceptedAt  DateTime     @default("1970-01-01T00:00:00Z")
+  id            String     @id @default(uuid()) @db.Uuid
+  user          User       @relation(fields: [userId], references: [id])
+  userId        String     @db.Uuid
+  title         String
+  description   String
+  images        String[]
+  address       String
+  startTime     DateTime   @default(now())
+  endTime       DateTime   @default(now())
+  mission       Mission?
+  estimates     Estimate[]
+  currentStatus String
+  job           Job        @relation(fields: [jobId], references: [id])
+  jobId         String     @db.Uuid
+  acceptedAt    DateTime   @default("1970-01-01T00:00:00Z")
 
   @@map(name: "m_announcement")
 }
@@ -117,15 +120,15 @@ model Estimate {
   price          Float
   description    String
   images         String[]
-  currentStatus         String
+  currentStatus  String
 
   @@map(name: "m_estimation")
 }
 
 model Chat {
-  id      String    @id @default(uuid()) @db.Uuid
-  currentStatus  Boolean
-  Message Message[]
+  id            String    @id @default(uuid()) @db.Uuid
+  currentStatus Boolean
+  Message       Message[]
 
   @@map(name: "m_chat")
 }
@@ -149,7 +152,7 @@ model Mission {
   announcement      Announcement       @relation(fields: [announcementId], references: [id])
   announcementId    String             @unique @db.Uuid
   currentStatus     String
-  walletTransaction WalletTransaction? 
+  walletTransaction WalletTransaction?
   review            Review[]
   geolocation       Geolocation?
   validationCode    ValidationCode?
@@ -168,24 +171,24 @@ model Review {
 }
 
 model Geolocation {
-  id             String       @id @default(uuid()) @db.Uuid
-  x              Float
-  y              Float
-  z              Float
-  mission        Mission      @relation(fields: [missionId], references: [id])
-  missionId      String       @unique @db.Uuid
-  user           User         @relation(fields: [userId], references: [id])
-  userId         String       @db.Uuid
+  id        String  @id @default(uuid()) @db.Uuid
+  x         Float
+  y         Float
+  z         Float
+  mission   Mission @relation(fields: [missionId], references: [id])
+  missionId String  @unique @db.Uuid
+  user      User    @relation(fields: [userId], references: [id])
+  userId    String  @db.Uuid
 
   @@map(name: "m_geolocation")
 }
 
 model ValidationCode {
-  id              String    @id @default(uuid()) @db.Uuid
-  mission         Mission   @relation(fields: [missionId], references: [id])
-  missionId       String    @unique @db.Uuid
-  code            Float
-  currentStatus   String    @default("PENDING")
+  id            String  @id @default(uuid()) @db.Uuid
+  mission       Mission @relation(fields: [missionId], references: [id])
+  missionId     String  @unique @db.Uuid
+  code          Float
+  currentStatus String  @default("PENDING")
 
   @@map(name: "m_validation_code")
 }
