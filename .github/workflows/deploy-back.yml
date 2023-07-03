@@ -3,10 +3,9 @@ name: Deploy Back
 on:
   push:
     branches:
-      - feature/domain-name
-    # paths:
-    #   - 'apps/back/**'
-    #   - .github/workflows/deploy-back.yml
+      - main
+    paths:
+      - 'apps/back/**'
 
 env:
   GCLOUD_PROJECT_ID: ${{ secrets.GCLOUD_PROJECT_ID }}
@@ -52,7 +51,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     needs: detect-changes
-    # if: ${{ needs.detect-changes.outputs.api-gateway == 'true' }}
+    if: ${{ needs.detect-changes.outputs.api-gateway == 'true' }}
 
     steps:
       - name: Checkout
@@ -78,7 +77,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     needs: detect-changes
-    # if: ${{ needs.detect-changes.outputs.auth == 'true' }}
+    if: ${{ needs.detect-changes.outputs.auth == 'true' }}
 
     steps:
       - name: Checkout
@@ -102,7 +101,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     needs: detect-changes
-    # if: ${{ needs.detect-changes.outputs.job == 'true' }}
+    if: ${{ needs.detect-changes.outputs.job == 'true' }}
 
     steps:
       - name: Checkout
@@ -121,7 +120,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     needs: detect-changes
-    # if: ${{ needs.detect-changes.outputs.mission == 'true' }}
+    if: ${{ needs.detect-changes.outputs.mission == 'true' }}
 
     steps:
       - name: Checkout
@@ -143,7 +142,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: production
     needs: detect-changes
-    # if: ${{ needs.detect-changes.outputs.com-gateway == 'true' }}
+    if: ${{ needs.detect-changes.outputs.com-gateway == 'true' }}
 
     steps:
       - name: Checkout
