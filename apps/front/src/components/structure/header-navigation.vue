@@ -39,21 +39,21 @@
 					</slot>
 				</div>
 
-                <div v-if="isContractor()" class="tw-mx-4">
+                <div v-if="isContractor()" class="tw-mx-2">
                     <router-link :to="{name: 'contractor-announcements'}">
-                        interface prestataire
+                        Prestatations
                     </router-link>
                 </div>
 
-                <div v-if="isAdmin()" class="tw-mx-4">
+                <div v-if="isAdmin()" class="tw-mx-2">
                     <router-link :to="{name: 'admin-announcements'}">
-                        interface admin
+                        Admin
                     </router-link>
                 </div>
 
-                <div v-if="isClient()" class="tw-mx-4">
+                <div v-if="isClient()" class="tw-mx-2">
                     <router-link :to="{name: 'client-announcements'}">
-                        interface client
+                        Mon espace
                     </router-link>
                 </div>
 

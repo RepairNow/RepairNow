@@ -51,10 +51,17 @@ export class ApiGatewayController {
     return this.apiGatewayService.getUsers();
   }
 
+  /** Return infos inside token and tokens too */
   @UseGuards(AccessTokenGuard)
   @Get('me')
   getMe(@Request() req) {
     return req.user;
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @Get('me-all-infos')
+  getAllMyInfos(@Request() req) {
+    return this.apiGatewayService.getUser(req.user['sub']);
   }
 
   @UseGuards(RefreshTokenGuard)

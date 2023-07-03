@@ -79,6 +79,16 @@ class User {
             throw error;
         }
     }
+ 
+    async _getSelfAllInfos(): Promise<UserI> {
+        try {
+            const uri = '/me-all-infos'
+            const res = await client.get(uri);
+            return res.data;
+        } catch (error) {
+            throw error;
+        }
+    }
 
     async _getUsers(): Promise<UserI[]> {
         try {

@@ -5,9 +5,10 @@ import { token, refreshToken } from "@/services";
 import userService from "@/services/api/user";
 
 export const useUserStore = defineStore("user", () => {
-    const { _signin, _signup, _getSelfUser, _resetPassword, _getUsers, _getUserById, _signinWithToken } = userService;
+    const { _signin, _signup, _getSelfUser, _resetPassword, _getUsers, _getUserById, _signinWithToken, _getSelfAllInfos } = userService;
     // @ts-ignore
     const currentUser: Ref<UserI | null> = ref(null);
+    const currentUserAllInfos: Ref<UserI | null> = ref(null);
     const user: Ref<UserI | null> = ref(null);
     const users: Ref<UserI[]> = ref([]);
 
@@ -59,6 +60,16 @@ export const useUserStore = defineStore("user", () => {
             throw error;
         }
     }
+    
+    async function getSelfAllInfos() {
+        try {
+            const res = await _getSelfAllInfos();
+            currentUserAllInfos.value = res;
+        } catch (error) {
+            //await _signinWithToken()
+            throw error;
+        }
+    }
 
     async function getUsers() {
         try {
@@ -94,5 +105,5 @@ export const useUserStore = defineStore("user", () => {
         return !!token.value
     }
 
-    return { signout, currentUser, user, users, signin, getSelf, signup, resetPassword, getUsers, isAdmin, isContractor, isClient, isConnected, getUserById };
+    return { signout, currentUser, user, users, currentUserAllInfos, signin, getSelf, signup, resetPassword, getUsers, isAdmin, isContractor, isClient, isConnected, getUserById, getSelfAllInfos };
 });
