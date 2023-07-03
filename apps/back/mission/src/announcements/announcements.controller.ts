@@ -15,7 +15,7 @@ export class AnnouncementsController {
   ) { }
 
   @MessagePattern({ cmd: 'createAnnouncement' })
-  create(@Payload() payload: { createAnnouncementDto: CreateAnnouncementDto, user: CurrentUserDto }) {
+  create(@Payload() payload: { createAnnouncementDto: CreateAnnouncementDto, user: CurrentUserDto, files: any }) {
     return this.announcementsService.create(payload);
   }
 

@@ -14,8 +14,9 @@ export class AnnouncementsController {
   @UseGuards(AuthGuard)
   @UseInterceptors(FilesInterceptor('files'))
   createAnnouncement(@UploadedFiles() files: Array<Express.Multer.File>, @Body() createAnnouncementDto, @Request() request): Observable<any> {
+    console.log(files);
     const { user } = request;
-    return this.missionClient.send({ cmd: "createAnnouncement" }, { createAnnouncementDto, user });
+    return this.missionClient.send({ cmd: "createAnnouncement" }, { createAnnouncementDto, user, files });
   }
 
   @Get()
