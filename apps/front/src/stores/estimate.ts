@@ -29,9 +29,9 @@ export const useEstimateStore = defineStore("estimate", () => {
         }
     }
 
-    async function createAnnouncementEstimate(payload: CreateEstimate) {
+    async function createAnnouncementEstimate(announcementId: string, payload: CreateEstimate) {
         try {
-            const res = await _createAnnouncementEstimate(payload);
+            const res = await _createAnnouncementEstimate(announcementId, payload);
             estimates.value.push(res);
         } catch (error) {
             throw error;
