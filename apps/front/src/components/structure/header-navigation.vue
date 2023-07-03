@@ -39,6 +39,24 @@
 					</slot>
 				</div>
 
+                <div v-if="isContractor()" class="tw-mx-4">
+                    <router-link :to="{name: 'contractor-announcements'}">
+                        interface prestataire
+                    </router-link>
+                </div>
+
+                <div v-if="isAdmin()" class="tw-mx-4">
+                    <router-link :to="{name: 'admin-announcements'}">
+                        interface admin
+                    </router-link>
+                </div>
+
+                <div v-if="isClient()" class="tw-mx-4">
+                    <router-link :to="{name: 'client-announcements'}">
+                        interface client
+                    </router-link>
+                </div>
+
 				<slot name="after">
 					<v-menu :location="'bottom'">
 						<template v-slot:activator="{ props }">
@@ -106,7 +124,7 @@ const props = defineProps({
 
 const drawer = ref<boolean>(false);
 const userStore = useUserStore();
-const { getSelf, signout } = userStore;
+const { getSelf, signout, isAdmin, isContractor, isClient } = userStore;
 const { currentUser } = storeToRefs(userStore);
 
 const router = useRouter();

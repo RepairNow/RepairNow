@@ -122,6 +122,7 @@ model Estimate {
   description    String
   images         String[]
   currentStatus  String
+  checkoutUrl    String
 
   @@map(name: "m_estimation")
 }
