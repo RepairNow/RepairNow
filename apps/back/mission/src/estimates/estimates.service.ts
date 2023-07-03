@@ -151,6 +151,7 @@ export class EstimatesService {
       if (estimateUpdated.currentStatus === EstimateStatus.ACCEPTED) {
         const checkoutSession = await this.stripeService.createCheckoutSession(estimateUpdated.price);
 
+        // @ts-ignore
         return { ...estimateUpdated, checkoutPageUrl: checkoutSession.url };
       }
 
@@ -215,6 +216,7 @@ export class EstimatesService {
       if (estimateUpdated.currentStatus === EstimateStatus.ACCEPTED) {
         const checkoutSession = await this.stripeService.createCheckoutSession(estimateUpdated.price);
 
+        // @ts-ignore
         return { ...estimateUpdated, checkoutPageUrl: checkoutSession.url };
       }
 
