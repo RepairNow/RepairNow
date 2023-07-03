@@ -119,6 +119,10 @@ const formError = ref<string>("");
 const submit = async () => {
 	if (checkForm() && checkIsEmail()) {
 		formError.value = "";
+		registerForm.value.phoneNumber = registerForm.value.phoneNumber.replace(
+			/^0/,
+			"+33"
+		);
 		try {
 			await signup(registerForm.value);
 		} catch {
