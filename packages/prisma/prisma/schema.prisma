@@ -107,6 +107,7 @@ model Announcement {
   job           Job        @relation(fields: [jobId], references: [id])
   jobId         String     @db.Uuid
   acceptedAt    DateTime   @default("1970-01-01T00:00:00Z")
+  urgency       Boolean    @default(false)
 
   @@map(name: "m_announcement")
 }

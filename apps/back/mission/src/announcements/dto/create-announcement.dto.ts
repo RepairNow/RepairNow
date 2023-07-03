@@ -1,28 +1,29 @@
-import { IsNotEmpty, IsUUID, IsString, IsDate } from "class-validator"
-import {Job} from "@repairnow/prisma";
+import { IsNotEmpty, IsUUID, IsString, IsDate, IsBoolean } from 'class-validator';
 
 export class CreateAnnouncementDto {
   @IsNotEmpty()
   @IsString()
-  title: string
+  title: string;
 
   @IsNotEmpty()
   @IsString()
-  description: string
-  images: File[]
+  description: string;
+  images: File[];
 
   @IsNotEmpty()
   @IsString()
-  address: string
+  address: string;
 
   // @IsDate()
-  startTime: Date
+  startTime: Date;
 
   // @IsDate()
-  endTime: Date
-
+  endTime: Date;
 
   @IsNotEmpty()
   @IsString()
-  jobId: string
+  jobId: string;
+
+  @IsBoolean()
+  urgency: boolean;
 }
