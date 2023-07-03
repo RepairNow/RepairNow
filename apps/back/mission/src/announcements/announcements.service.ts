@@ -49,7 +49,11 @@ export class AnnouncementsService {
           currentStatus: AnnouncementStatus.PUBLISHED,
         },
         include: {
-          estimates: true,
+          estimates: {
+            include: {
+              prestataire: true
+            }
+          },
         },
       });
       return announcement;
@@ -66,7 +70,11 @@ export class AnnouncementsService {
         },
         include: {
           user: true,
-          estimates: true,
+          estimates: {
+            include: {
+              prestataire: true
+            }
+          },
         },
       });
       return announcement;

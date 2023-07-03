@@ -11,8 +11,14 @@
                 </div>
             </div>
             <div class="tw-w-full">
-                <div class="tw-border-y tw-p-6" v-if="announcement.mission">
-                    Vous avez réservé un prestataire
+                <div class="tw-border-y tw-p-6" v-if="filteredArray?.length" v-for="array in filteredArray">
+                    <div>
+
+                        Vous avez réservé un prestataire
+                    </div>
+                    <div>
+                        {{ array.prestataire.firstname }} {{ array.prestataire.lastname }}
+                    </div>
                 </div>
                 <div v-else class="tw-border-y tw-p-6">
                     Vous n'avez pas réservé de prestataire
@@ -44,7 +50,7 @@
 </template>
 
 <script setup lang="ts">
-import {PropType} from "vue";
+import {onMounted, PropType, ref} from "vue";
 import {AnnouncementI} from "@/interfaces/announcement";
 
 const props = defineProps({
@@ -56,6 +62,12 @@ const props = defineProps({
         type: Boolean,
         default: false
     }
+})
+
+const filteredArray = ref()
+onMounted(async () => {
+    const estimates = props.announcement.estimates
+    filteredArray.value = estimates.filter(estimate => estimate.currentStatus === 'ACCEPTED');
 })
 /**
  * Prestarire reservé

@@ -105,7 +105,7 @@
                                 <div>
                                     {{estimate.description}}
                                 </div>
-                                <div v-if="estimate.currentStatus === 'ACCEPTED'">
+                                <div v-if="estimate.currentStatus === 'WAITING_PAYMENT'">
                                     <v-btn>
                                         Annuler
                                     </v-btn>

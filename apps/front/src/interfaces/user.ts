@@ -31,6 +31,7 @@ export interface CurrentUserI {
 }
 
 export interface UserI {
+    id: string
     sub: string
     role: string
     phone: string | number
