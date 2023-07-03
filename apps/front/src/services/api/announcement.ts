@@ -28,6 +28,16 @@ class Announcement {
         }
     }
 
+    async _getSelfAnnouncement(): Promise<AnnouncementI[]> {
+        try {
+            const uri = `${namespace}/my-announcements`;
+            const res = await client.get(uri);
+            return res.data;
+        } catch (err) {
+            throw err;
+        }
+    }
+
     async _createAnnouncement(payload: CreateAnnouncement): Promise<AnnouncementI> {
         try {
             const res = await client.post(namespace, payload);
@@ -57,7 +67,11 @@ class Announcement {
         }
     }
 
-    async _getEstimates(announcementId: string): Promise<EstimateI[]> {
+    /**
+     * Estimate
+     */
+
+    async _getAnnouncementEstimates(announcementId: string): Promise<EstimateI[]> {
         try {
             const uri = `${namespace}/${announcementId}/estimates`;
             const res = await client.get(uri);
@@ -67,7 +81,7 @@ class Announcement {
         }
     }
 
-    async _getEstimate(payload: { estimateId: string, announcementId: string }): Promise<EstimateI> {
+    async _getAnnouncementEstimate(payload: { estimateId: string, announcementId: string }): Promise<EstimateI> {
         try {
             const uri = `${namespace}/${payload.announcementId}/estimates/${payload.estimateId}`;
             const res = await client.get(uri);
@@ -77,9 +91,9 @@ class Announcement {
         }
     }
 
-    async _createEstimate(payload: CreateEstimate): Promise<EstimateI> {
+    async _createAnnouncementEstimate(announcementId: string, payload: CreateEstimate): Promise<EstimateI> {
         try {
-            const uri = `${namespace}/${payload.announcementId}/estimates`;
+            const uri = `${namespace}/${announcementId}/estimates`;
             const res = await client.post(uri, payload);
             return res.data;
         } catch (err) {
@@ -87,7 +101,7 @@ class Announcement {
         }
     }
 
-    async _updateEstimate(payload: UpdateEstimate): Promise<EstimateI> {
+    async _updateAnnouncementEstimate(payload: UpdateEstimate): Promise<EstimateI> {
         try {
             const uri = `${namespace}/${payload.announcementId}/estimates/${payload.id}`;
             const res = await client.patch(uri, payload);
@@ -97,7 +111,7 @@ class Announcement {
         }
     }
 
-    async _deleteEstimate(payload: { estimateId: string, announcementId: string }): Promise<EstimateI> {
+    async _deleteAnnouncementEstimate(payload: { estimateId: string, announcementId: string }): Promise<EstimateI> {
         try {
             const uri = `${namespace}/${payload.announcementId}/estimates/${payload.estimateId}`;
             const res = await client.delete(uri);
@@ -107,7 +121,21 @@ class Announcement {
         }
     }
 
-    async _getMission(announcementId: string): Promise<MissionI> {
+    async _acceptAnnouncementEstimate(payload: { estimateId: string, announcementId: string}): Promise<EstimateI> {
+        try {
+            const uri = `${namespace}/${payload.announcementId}/estimates/${payload.estimateId}/accept_estimate`;
+            const res = await client.patch(uri);
+            return res.data;
+        } catch (err) {
+            throw err;
+        }
+    }
+
+    /**
+     * Mission
+     */
+
+    async _getAnnouncementMission(announcementId: string): Promise<MissionI> {
         try {
             const uri = `${namespace}/${announcementId}/mission`;
             const res = await client.get(uri);
@@ -117,7 +145,7 @@ class Announcement {
         }
     }
 
-    async _createMission(payload: CreateMission): Promise<MissionI> {
+    async _createAnnouncementMission(payload: CreateMission): Promise<MissionI> {
         try {
             const uri = `${namespace}/${payload.announcementId}/mission`;
             const res = await client.post(uri, payload);
@@ -127,7 +155,7 @@ class Announcement {
         }
     }
 
-    async _updateMission(payload: UpdateMission): Promise<MissionI> {
+    async _updateAnnouncementMission(payload: UpdateMission): Promise<MissionI> {
         try {
             const uri = `${namespace}/${payload.announcementId}/mission`;
             const res = await client.patch(uri, payload);
@@ -137,7 +165,7 @@ class Announcement {
         }
     }
 
-    async _deleteMission(payload: DeleteMission): Promise<MissionI> {
+    async _deleteAnnouncementMission(payload: DeleteMission): Promise<MissionI> {
         try {
             const uri = `${namespace}/${payload.announcementId}/mission`;
             const res = await client.delete(uri);
@@ -146,6 +174,10 @@ class Announcement {
             throw err;
         }
     }
+
+    /**
+     * Review
+     */
 
     async _getReview(announcementId: string): Promise<ReviewI> {
         try {

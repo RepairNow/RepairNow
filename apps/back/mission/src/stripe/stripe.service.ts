@@ -13,8 +13,8 @@ export class StripeService {
         });
     }
 
-    async createCheckoutSession(price: number): Promise<string> {
-        const session = await this.stripe.checkout.sessions.create({
+    async createCheckoutSession(price: number): Promise<object> {
+        return await this.stripe.checkout.sessions.create({
             payment_method_types: ['card'],
             line_items: [
                 {
@@ -32,7 +32,5 @@ export class StripeService {
             success_url: this.configService.get('STRIPE_CHECKOUT_SUCCESS_URL'),
             cancel_url: this.configService.get('STRIPE_CHECKOUT_CANCEL_URL')
         });
-
-        return session.url;
     }
 }

@@ -34,10 +34,40 @@
                         </p>
                     </div>
                 </div>
-                <div class="tw-font-bold xl:tw-w-4/12">
-                    <div class="tw-flex tw-items-center tw-w-full xl:tw-p-4">
+                <div class="xl:tw-w-4/12">
+                    <div class="tw-flex tw-flex-col tw-w-full xl:tw-p-4">
                         <div class="tw-grow-1 tw-w-full tw-text-xl tw-font-bold xl:tw-text-2xl">
                             Offres
+                        </div>
+                        <div v-if="announcement.estimates?.length">
+                            <div v-for="estimate in announcement.estimates"
+                                class="tw-border tw-my-2 tw-rounded-lg tw-p-4"
+                            >
+                                <div class="tw-flex tw-items-center">
+                                    <div>
+                                        <v-avatar color="surface-variant" size="45" class="tw-mr-3"/>
+                                    </div>
+                                    <div>
+                                        {{estimate.prestataire.firstname}}
+                                        {{estimate.prestataire.lastname}}
+                                    </div>
+                                </div>
+                                <div>
+                                    {{estimate.price}} €
+                                </div>
+
+                                <div>
+                                    {{estimate.description}}
+                                </div>
+                                <div>
+                                    <estimation-confirmation
+                                        :estimate="estimate"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <div v-else>
+                            Aucune offres disponible
                         </div>
                     </div>
                 </div>
@@ -50,13 +80,15 @@
 
 import {useAnnouncementStore} from "@/stores/announcement";
 import {storeToRefs} from "pinia";
-import {onMounted} from "vue";
+import {onMounted, ref} from "vue";
 import {useRoute} from "vue-router";
+import EstimationConfirmation from "@/components/modal/confirm/estimation-confirmation.vue";
 
 const announcementsStore = useAnnouncementStore()
 const {announcement} = storeToRefs(announcementsStore)
 const {getAnnouncement} = announcementsStore
 
+const dialog = ref(false)
 const route = useRoute()
 
 const startTime = new Date(announcement.value.startTime).toLocaleDateString('fr-FR', { day: "2-digit", month: "long", hour: "2-digit", minute: "2-digit" })

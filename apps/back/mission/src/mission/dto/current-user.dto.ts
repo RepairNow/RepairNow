@@ -1,4 +1,5 @@
 export interface CurrentUserI {
+    sub: string,
     email: string,
     firstname: string,
     id: string,

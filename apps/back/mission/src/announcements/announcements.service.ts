@@ -41,6 +41,9 @@ export class AnnouncementsService {
       const announcement = await this.prismaService.announcement.findMany({
         where: {
           currentStatus: AnnouncementStatus.PUBLISHED
+        },
+        include: {
+          estimates: true
         }
       })
       return announcement;
@@ -56,7 +59,8 @@ export class AnnouncementsService {
           currentStatus: AnnouncementStatus.PUBLISHED
         },
         include: {
-          user: true
+          user: true,
+          estimates: true,
         }
       })
       return announcement;
@@ -72,7 +76,13 @@ export class AnnouncementsService {
           id: payload.id
         },
         include: {
-          user: true
+          user: true,
+          estimates: {
+            include: {
+              prestataire: true
+            }
+          },
+          mission: true
         }
       });
       if (!announcement) {

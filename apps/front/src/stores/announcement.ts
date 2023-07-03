@@ -2,9 +2,28 @@ import { defineStore } from "pinia";
 import { Ref, ref } from "vue";
 import announcementService from "@/services/api/announcement";
 import { AnnouncementI, CreateAnnouncement, UpdateAnnouncement } from "@/interfaces/announcement";
+import {CreateMission, DeleteMission, MissionI, UpdateMission} from "@/interfaces/mission";
+import {CreateEstimate, EstimateI, UpdateEstimate} from "@/interfaces/estimate";
+import {Estimate} from "mission/dist/estimates/entities/estimate.entity";
 
 export const useAnnouncementStore = defineStore("announcement", () => {
-    const { _getAnnouncements, _createAnnouncement, _updateAnnouncement, _deleteAnnouncement, _getAnnouncement } = announcementService;
+    const {
+        _getSelfAnnouncement,
+        _getAnnouncements,
+        _createAnnouncement,
+        _updateAnnouncement,
+        _deleteAnnouncement,
+        _getAnnouncement,
+        _getAnnouncementMission,
+        _createAnnouncementMission,
+        _updateAnnouncementMission,
+        _deleteAnnouncementMission,
+        _createAnnouncementEstimate,
+        _updateAnnouncementEstimate,
+        _deleteAnnouncementEstimate,
+        _getAnnouncementEstimates,
+        _getAnnouncementEstimate
+    } = announcementService;
 
     const announcements: Ref<AnnouncementI[]> = ref([]);
     // @ts-ignore
@@ -23,6 +42,15 @@ export const useAnnouncementStore = defineStore("announcement", () => {
         try {
             const res = await _getAnnouncement(announcementId);
             announcement.value = res;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async function getSelfAnnouncement(){
+        try {
+            const res = await _getSelfAnnouncement();
+            announcements.value = res;
         } catch (error) {
             throw error;
         }
@@ -57,5 +85,121 @@ export const useAnnouncementStore = defineStore("announcement", () => {
         }
     }
 
-    return { announcement, announcements, getAnnouncements, getAnnouncement, createAnnouncement, updateAnnouncement, deleteAnnouncement };
+    /**
+     * Announcement mission
+     */
+
+    // @ts-ignore
+    const announcementMission: Ref<MissionI> = ref({})
+
+    async function getAnnouncementMission(announcementId: string)
+    {
+        try {
+            const res = await _getAnnouncementMission(announcementId);
+            announcementMission.value = res
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    async function createAnnouncementMission(payload: CreateMission) {
+        try {
+            const res = await _createAnnouncementMission(payload);
+            announcementMission.value = res
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    async function updateAnnouncementMission(payload: UpdateMission) {
+        try {
+            const res = await _updateAnnouncementMission(payload);
+            announcementMission.value = res
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    async function deleteAnnouncementMission(payload: DeleteMission) {
+        try {
+            const res = await _deleteAnnouncementMission(payload);
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    /**
+     * Announcement estimate
+     */
+
+    // @ts-ignore
+    const announcementEstimate: Ref<EstimateI> = ref({})
+    const announcementEstimates: Ref<EstimateI[]> = ref([])
+
+    async function createAnnouncementEstimate(announcementId: string, payload: CreateEstimate) {
+        try {
+            const res = await _createAnnouncementEstimate(announcementId, payload);
+            announcementEstimate.value = res
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    async function updateAnnouncementEstimate(payload: UpdateEstimate) {
+        try {
+            const res = await _updateAnnouncementEstimate(payload);
+            announcementEstimate.value = res
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    async function deleteAnnouncementEstimate(payload: {announcementId: string, estimateId: string}) {
+        try {
+            const res = await _deleteAnnouncementEstimate(payload);
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    async function getAnnouncementEstimates(announcementId: string) {
+        try {
+            const res = await _getAnnouncementEstimates(announcementId);
+            announcementEstimates.value = res
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    async function getAnnouncementEstimate(payload: { announcementId: string, estimateId: string }) {
+        try {
+            const res = await _getAnnouncementEstimate(payload);
+            announcementEstimate.value = res
+        } catch (e) {
+            throw e;
+        }
+    }
+
+    return {
+        announcement,
+        announcements,
+        getAnnouncements,
+        getAnnouncement,
+        getSelfAnnouncement,
+        createAnnouncement,
+        updateAnnouncement,
+        deleteAnnouncement,
+        announcementMission,
+        getAnnouncementMission,
+        createAnnouncementMission,
+        updateAnnouncementMission,
+        deleteAnnouncementMission,
+        announcementEstimate,
+        announcementEstimates,
+        createAnnouncementEstimate,
+        updateAnnouncementEstimate,
+        deleteAnnouncementEstimate,
+        getAnnouncementEstimate,
+        getAnnouncementEstimates,
+    };
 });

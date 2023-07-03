@@ -1,4 +1,18 @@
-import { Controller, UsePipes, ValidationPipe, Inject, Body, UseGuards, Post, Get, Param, Patch, UseFilters, Delete } from "@nestjs/common";
+import {
+  Controller,
+  UsePipes,
+  ValidationPipe,
+  Inject,
+  Body,
+  UseGuards,
+  Post,
+  Get,
+  Param,
+  Patch,
+  UseFilters,
+  Delete,
+  Req, Request
+} from "@nestjs/common";
 import { ClientProxy } from "@nestjs/microservices";
 import { AuthGuard } from "../guards/auth.guard";
 import { Observable } from "rxjs";
@@ -10,8 +24,13 @@ export class EstimatesController {
 
   @Post()
   @UseGuards(AuthGuard)
-  createEstimate(@Body() createEstimateDto: any): Observable<any> {
-    return this.missionClient.send({ cmd: "createEstimate" }, createEstimateDto);
+  createEstimate(
+      @Request() request,
+      @Param('announcementId') announcementId: string,
+      @Body() createEstimateDto: any
+  ): Observable<any> {
+    const { user } = request;
+    return this.missionClient.send({ cmd: "createEstimate" }, {createEstimateDto: createEstimateDto, announcementId: announcementId, user: user});
   }
 
   @Get()
@@ -29,8 +48,8 @@ export class EstimatesController {
   @Patch('/:estimateId')
   @UseFilters(new ExceptionFilter())
   @UseGuards(AuthGuard)
-  updateEstimate(@Body() updateEstimateDto: any): Observable<any> {
-    return this.missionClient.send({ cmd: "updateEstimate" }, updateEstimateDto);
+  updateEstimate(@Param() params: { announcementId: string, estimateId: string },@Body() updateEstimateDto: any): Observable<any> {
+    return this.missionClient.send({ cmd: "updateEstimate" }, { updateEstimateDto: updateEstimateDto, announcementId: params.announcementId, estimateId: params.estimateId});
   }
 
   @Patch('/:estimateId/accept_estimate')
@@ -44,5 +63,12 @@ export class EstimatesController {
   @UseGuards(AuthGuard)
   remove(@Param() param: { id: string }): Observable<any> {
     return this.missionClient.send({ cmd: "removeEstimate" }, { id: param.id });
+  }
+
+  @Get('/:estimateId/check_estimate')
+  @UseFilters(new ExceptionFilter())
+  @UseGuards(AuthGuard)
+  checkEstimate(@Param() params: { announcementId: string, estimateId: string }): Observable<any> {
+    return this.missionClient.send({ cmd: "checkEstimate"}, params)
   }
 }
