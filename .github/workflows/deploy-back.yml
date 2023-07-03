@@ -17,41 +17,10 @@ env:
   DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
 jobs:
-  detect-changes:
-    name: Detect changes
-    runs-on: ubuntu-latest
-    outputs:
-      api-gateway: ${{ steps.filter.outputs.api-gateway }}
-      auth: ${{ steps.filter.outputs.auth }}
-      job: ${{ steps.filter.outputs.job }}
-      mission: ${{ steps.filter.outputs.mission }}
-      com-gateway: ${{ steps.filter.outputs.com-gateway }}
-
-    steps:
-    - uses: actions/checkout@v3
-    - uses: dorny/paths-filter@v2
-      id: filter
-      with:
-        base: main
-        filters: |
-          api-gateway:
-            - './apps/back/api-gateway/**'
-          auth:
-            - './apps/back/auth/**'
-          job:
-            - './apps/back/job/**'
-          mission:
-            - './apps/back/mission/**'
-          com-gateway:
-            - './apps/back/com-gateway/**'
-          
-
   push-api-gateway-image:
     name: Push Api Gateway Image to Docker Hub
     runs-on: ubuntu-latest
     environment: production
-    needs: detect-changes
-    if: ${{ needs.detect-changes.outputs.api-gateway == 'true' }}
 
     steps:
       - name: Checkout
@@ -76,8 +45,6 @@ jobs:
     name: Push Auth Image to Docker Hub
     runs-on: ubuntu-latest
     environment: production
-    needs: detect-changes
-    if: ${{ needs.detect-changes.outputs.auth == 'true' }}
 
     steps:
       - name: Checkout
@@ -100,8 +67,6 @@ jobs:
     name: Push Job Image to Docker Hub
     runs-on: ubuntu-latest
     environment: production
-    needs: detect-changes
-    if: ${{ needs.detect-changes.outputs.job == 'true' }}
 
     steps:
       - name: Checkout
@@ -119,8 +84,6 @@ jobs:
     name: Push Mission Image to Docker Hub
     runs-on: ubuntu-latest
     environment: production
-    needs: detect-changes
-    if: ${{ needs.detect-changes.outputs.mission == 'true' }}
 
     steps:
       - name: Checkout
@@ -141,8 +104,6 @@ jobs:
     name: Push Com Gateway Image to Docker Hub
     runs-on: ubuntu-latest
     environment: production
-    needs: detect-changes
-    if: ${{ needs.detect-changes.outputs.com-gateway == 'true' }}
 
     steps:
       - name: Checkout
