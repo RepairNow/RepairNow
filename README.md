@@ -114,3 +114,33 @@ This Turborepo has some additional tools already setup for you:
 - [Jest](https://jestjs.io) test runner for all things JavaScript
 - [Prettier](https://prettier.io) for code formatting
 ```
+
+# Running Android and IOS apps
+
+## Android
+
+Install android package :
+
+```
+npx cap add android
+```
+
+Open android project :
+
+```
+npx cap open android
+```
+
+## IOS
+
+Install ios package :
+
+```
+npx cap add ios
+```
+
+Open ios project :
+
+```
+npx cap open ios
+```
