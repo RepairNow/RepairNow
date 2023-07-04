@@ -1,9 +1,10 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: repair-now-ing
+  name: repair-now-com-ing
   annotations:
-    kubernetes.io/ingress.global-static-ip-name: repair-now-ip
+    cloud.google.com/backend-config: "com-backendconfig"
+    kubernetes.io/ingress.global-static-ip-name: repair-now-com-ip
     networking.gke.io/managed-certificates: managed-cert
 spec:
   rules:
@@ -13,6 +14,6 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: api-gateway-svc
+                name: com-gateway-svc
                 port:
-                  number: 3000
+                  number: 3005
