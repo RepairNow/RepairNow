@@ -9,7 +9,8 @@ import { CreateAnnouncementDto } from './dto/create-announcement.dto';
 import { UpdateAnnouncementDto } from './dto/update-announcement.dto';
 import { Prisma, PrismaService } from '@repairnow/prisma';
 import { RpcException } from '@nestjs/microservices';
-import { CurrentUserDto } from '@repairnow/dto';
+import { CurrentUserDto } from "@repairnow/dto";
+import { MulterField } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
 
 export enum AnnouncementStatus {
   PUBLISHED = 'PUBLISHED',
@@ -70,6 +71,7 @@ export class AnnouncementsService {
         },
         include: {
           user: true,
+          images: true,
           estimates: {
             include: {
               prestataire: true
@@ -77,6 +79,7 @@ export class AnnouncementsService {
           },
         },
       });
+        
       return announcement;
     } catch (error) {
       return new BadRequestException(error.message);
@@ -91,6 +94,7 @@ export class AnnouncementsService {
         },
         include: {
           user: true,
+          images: true,
           estimates: {
             include: {
               prestataire: true,
@@ -108,7 +112,7 @@ export class AnnouncementsService {
     }
   }
 
-  async upload(payload: { id: string, files: any }) {
+  async upload(payload: { id: string, files: Array<Express.Multer.File> }) {
     let announcement = await this.prismaService.announcement.findUnique({
       where: {
         id: payload.id
@@ -118,25 +122,16 @@ export class AnnouncementsService {
       throw new RpcException(new NotFoundException());
     }
 
-    const file = payload.files[0];
-    const files = await this.prismaService.files.create({
-      data: {
-        announcementId: payload.id,
-        ...file
-      }
-    });
+    for (let file of payload.files) {
+      await this.prismaService.files.create({
+        data: {
+          announcementId: payload.id,
+          ...file
+        }
+      });
+    }
 
-    return 'files created'
-    // const updatedAnnouncement = await this.prismaService.announcement.update({
-    //   where: {
-    //     id: payload.id
-    //   },
-    //   data: {
-    //     images: payload.files
-    //   }
-    // });
-
-    // return updatedAnnouncement;
+    return 'file(s) created'
   }
 
   async update(payload: { updateAnnouncementDto: UpdateAnnouncementDto, user: CurrentUserDto, id: string }): Promise<any> {

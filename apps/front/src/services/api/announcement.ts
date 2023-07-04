@@ -57,6 +57,16 @@ class Announcement {
         }
     }
 
+    async _uploadAnnouncementImages(payload: { files: FormData[], id: string }): Promise<String> {
+        try {
+            const uri = `${namespace}/${payload.id}/uploads`;
+            const res = await client.patch(uri, payload);
+            return res.data;
+        } catch (err) {
+            throw err;
+        }
+    }
+
     async _deleteAnnouncement(announcementId: string): Promise<AnnouncementI> {
         try {
             const uri = `${namespace}/${announcementId}`;

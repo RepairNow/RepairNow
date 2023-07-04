@@ -41,7 +41,7 @@ export class AnnouncementsController {
   }
 
   @MessagePattern({ cmd: 'uploadAnnouncementImages' })
-  upload(@Payload() payload: { files: CreateFileDto, user: CurrentUserDto, id: string }) {
+  upload(@Payload() payload: { files: Array<Express.Multer.File>, user: CurrentUserDto, id: string }) {
     return this.announcementsService.upload(payload);
   }
 
