@@ -113,16 +113,16 @@ model Announcement {
 }
 
 model Estimate {
-  id             String       @id @default(uuid()) @db.Uuid
-  announcement   Announcement @relation(fields: [announcementId], references: [id])
-  announcementId String       @db.Uuid
-  prestataire    User         @relation(fields: [prestataireId], references: [id])
-  prestataireId  String       @db.Uuid
-  price          Float
-  description    String
-  images         String[]
-  currentStatus  String
-  checkoutUrl    String
+  id              String       @id @default(uuid()) @db.Uuid
+  announcement    Announcement @relation(fields: [announcementId], references: [id])
+  announcementId  String       @db.Uuid
+  prestataire     User         @relation(fields: [prestataireId], references: [id])
+  prestataireId   String       @db.Uuid
+  price           Float
+  description     String
+  images          String[]
+  currentStatus   String
+  checkoutSession String
 
   @@map(name: "m_estimation")
 }

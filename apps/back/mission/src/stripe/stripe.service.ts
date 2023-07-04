@@ -33,4 +33,15 @@ export class StripeService {
             cancel_url: this.configService.get('STRIPE_CHECKOUT_CANCEL_URL')
         });
     }
+
+    async retrieveCheckoutSession(id: string): Promise<any> {
+        try {
+            const session = await this.stripe.checkout.sessions.retrieve(id);
+
+            return session;
+        } catch (error) {
+            console.error('Failed to retrieve Stripe session:', error);
+            return null;
+        }
+    }
 }

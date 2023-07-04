@@ -1,4 +1,11 @@
-import { BadGatewayException, BadRequestException, Injectable, NotFoundException, ParseUUIDPipe } from '@nestjs/common';
+import {
+  BadGatewayException,
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+  ParseUUIDPipe
+} from '@nestjs/common';
 import { CreateEstimateDto } from './dto/create-estimate.dto';
 import { UpdateEstimateDto } from './dto/update-estimate.dto';
 import { PrismaService } from '@repairnow/prisma';
@@ -28,6 +35,25 @@ export class EstimatesService {
         throw new NotFoundException();
       }
 
+      const estimateExist = await this.prismaService.estimate.findMany({
+        where: {
+          announcementId: payload.announcementId,
+          prestataireId: payload.user.sub
+        }
+      })
+
+      if(estimateExist.length) {
+        throw new ForbiddenException(
+            'Vous avez déjà générer un devis',
+        );
+      }
+
+      if(payload.createEstimateDto.price <= 0) {
+        throw new ForbiddenException(
+            'Le prix ne peut pas être inférieur ou égal à 0'
+        )
+      }
+
       const estimate = await this.prismaService.estimate.create({
         data: {
           images: payload.createEstimateDto.images,
@@ -35,7 +61,8 @@ export class EstimatesService {
           price: payload.createEstimateDto.price,
           currentStatus: EstimateStatus.PENDING,
           announcementId: payload.announcementId,
-          prestataireId: payload.user.sub
+          prestataireId: payload.user.sub,
+          checkoutSession: ''
         },
       });
 
@@ -118,6 +145,8 @@ export class EstimatesService {
         },
       });
 
+      console.log(estimateAccepted)
+
       if (estimateAccepted) {
         throw new BadRequestException("Un devis est déjà accepté pour cette mission");
       }
@@ -147,14 +176,6 @@ export class EstimatesService {
         }
       });
 
-      // Send stripe checkout page url to the client if estimate is accepted
-      if (estimateUpdated.currentStatus === EstimateStatus.ACCEPTED) {
-        const checkoutSession = await this.stripeService.createCheckoutSession(estimateUpdated.price);
-
-        // @ts-ignore
-        return { ...estimateUpdated, checkoutPageUrl: checkoutSession.url };
-      }
-
       return estimateUpdated;
     } catch (error) {
       return error;
@@ -177,7 +198,7 @@ export class EstimatesService {
         throw new BadRequestException("L'annonce est n'est plus valable");
       }
 
-      /*const estimateAccepted = await this.prismaService.estimate.findFirst({
+      const estimateAccepted = await this.prismaService.estimate.findFirst({
         where: {
           announcementId: payload.announcementId,
           currentStatus: EstimateStatus.ACCEPTED
@@ -186,7 +207,7 @@ export class EstimatesService {
 
       if (estimateAccepted) {
         throw new BadRequestException("Un devis est déjà accepté pour cette mission");
-      }*/
+      }
 
       const estimate = await this.prismaService.estimate.findUnique({
         where: {
@@ -202,32 +223,73 @@ export class EstimatesService {
         throw new BadRequestException("Le devis a déjà été validé");
       }
 
+
+      const estimatesUpdated = await this.prismaService.estimate.updateMany({
+        where: {
+          announcementId: payload.announcementId
+        },
+        data: {
+          currentStatus: EstimateStatus.REFUSED
+        }
+      })
+
+      const checkoutSession = await this.stripeService.createCheckoutSession(estimate.price);
+
       // TODO: If Accepted, map through all estimates and set status refused ?
       const estimateUpdated = await this.prismaService.estimate.update({
         where: {
           id: payload.estimateId
         },
         data: {
-          currentStatus: EstimateStatus.WAITING_PAYMENT
+          currentStatus: EstimateStatus.WAITING_PAYMENT,
+          checkoutSession: checkoutSession.id
         }
       });
 
-      // Send stripe checkout page url to the client if estimate is accepted
-      if (estimateUpdated.currentStatus === EstimateStatus.ACCEPTED) {
-        const checkoutSession = await this.stripeService.createCheckoutSession(estimateUpdated.price);
+
+      // Send stripe checkout page url to the client if estimate is waiting payment
+      //if (estimateUpdated.currentStatus === EstimateStatus.WAITING_PAYMENT) {
 
         // @ts-ignore
         return { ...estimateUpdated, checkoutPageUrl: checkoutSession.url };
-      }
+      //}
 
-      return estimateUpdated;
+      //return estimateUpdated;
     } catch (error) {
       return error;
     }
   }
 
-  checkEstimate(payload: { announcementId: string, estimateId: string }) {
+  async checkEstimate(payload: { announcementId: string, estimateId: string }) {
+    const estimate = await this.prismaService.estimate.findUnique({
+      where: {
+        id: payload.estimateId
+      }
+    });
 
+    if (!estimate) {
+      throw new NotFoundException('Devis introuvable')
+    }
+
+
+    const checkoutSession = await this.stripeService.retrieveCheckoutSession(estimate.checkoutSession)
+
+    if (!checkoutSession) {
+      throw new NotFoundException('Session de paiement introuvable')
+    }
+
+    if(checkoutSession.payment_status === 'paid') {
+      const estimateUpdated = await this.prismaService.estimate.update({
+        where: {
+          id: payload.estimateId
+        },
+        data: {
+          currentStatus: EstimateStatus.ACCEPTED
+        }
+      })
+
+      return estimateUpdated
+    }
   }
 
   remove(payload: { id: string, estimateId: string }) {
