@@ -19,6 +19,8 @@ import { AccessTokenGuard } from './guards/accessToken.guard';
 import { RefreshTokenGuard } from './guards/refreshToken.guard';
 import PermissionGuard from './guards/permissionGuard';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { AuthGuard } from './guards/auth.guard';
+
 @Controller('/')
 export class ApiGatewayController {
   constructor(
@@ -68,11 +70,12 @@ export class ApiGatewayController {
     return req.user;
   }
 
-  @UseGuards(AccessTokenGuard)
   @Patch('me/avatar')
+  @UseGuards(AuthGuard)
   @UseInterceptors(FileInterceptor('file'))
-  updateAvatar(@UploadedFile() file: Express.Multer.File, @Request() req, @Response() res) {
-    return this.authClient.send('update_avatar', { file, req: req.user, res })
+  updateAvatar(@UploadedFile() file: Express.Multer.File, @Request() request): Observable<any> {
+    const { user } = request;
+    return this.authClient.send({ cmd: 'update_avatar' }, { file, user })
   }
 
   @UseGuards(AccessTokenGuard)

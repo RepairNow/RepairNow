@@ -13,7 +13,6 @@ export class UsersController {
     @Body('firstname') firstname: CreateUserDto['firstname'],
     @Body('lastname') lastname: CreateUserDto['lastname'],
     @Body('phoneNumber') phoneNumber: CreateUserDto['phoneNumber'],
-    @Body('avatar') avatar: CreateUserDto['avatar'],
     @Body('birthdate') birthdate: CreateUserDto['birthdate'],
     @Body('isContractorRoleAsked')
     isContractorRoleAsked: CreateUserDto['isContractorRoleAsked'],
@@ -24,7 +23,6 @@ export class UsersController {
       firstname,
       lastname,
       phoneNumber,
-      avatar,
       birthdate,
       isContractorRoleAsked,
     });

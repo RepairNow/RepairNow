@@ -36,8 +36,7 @@ export class AuthController {
 
   @UseFilters(new RpcValidationFilter())
   @MessagePattern({ cmd: 'update_avatar' })
-  updateAvatar(@Payload() payload: { file: Express.Multer.File, user: CurrentUserDto }): any {
-    console.log('update_avatar')
+  updateAvatar(@Payload() payload: { file: Express.Multer.File, user: CurrentUserDto }) {
     return this.authService.updateAvatar(payload);
   }
 

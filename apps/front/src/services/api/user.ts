@@ -1,4 +1,4 @@
-import { client, clientWithoutAuth } from "..";
+import { client, clientWithoutAuth, clientFormData } from "..";
 import { Signin, Signup, TokenI, UserI, UpdateUser, ResetPassword } from "@/interfaces/user";
 
 class User {
@@ -87,6 +87,16 @@ class User {
             return res.data;
         } catch (error) {
             throw error;
+        }
+    }
+
+    async _uploadAvatar(formData: FormData): Promise<String> {
+        try {
+            const uri = `me/${formData.get('id')}/avatar`;
+            const res = await clientFormData.patch(uri, formData);
+            return res.data;
+        } catch (err) {
+            throw err;
         }
     }
 

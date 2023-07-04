@@ -132,8 +132,37 @@ export class AuthService {
   }
 
   async updateAvatar(payload: { file: Express.Multer.File, user: CurrentUserDto }) {
-    return payload;
-    console.log(payload)
+    const userAvatar = await this.prismaService.files.findUnique({
+      where: {
+        // @ts-ignore
+        userId: payload.user.sub
+      }
+    });
+    if (userAvatar) {
+      await this.prismaService.files.update({
+        where: {
+          // @ts-ignore
+          userId: payload.user.sub
+        },
+        include: {
+          user: true
+        },
+        data: {
+          ...payload.file
+        }
+      });
+    } else {
+      await this.prismaService.files.create({
+        include: {
+          user: true
+        },
+        data: {
+          userId: payload.user.sub,
+          ...payload.file
+        }
+      });
+    }
+    return 'file(s) created';
   }
   
   getUsers() {
@@ -145,6 +174,9 @@ export class AuthService {
       where: {
         id: userId,
       },
+      include: {
+        avatar: true
+      }
     });
   }
 
