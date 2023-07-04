@@ -3,6 +3,7 @@ import { resolve, join } from 'path';
 import { ClientProxy } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
 import { PrismaService } from '@repairnow/prisma';
+import { CurrentUserDto } from '@repairnow/dto';
 @Injectable()
 export class ApiGatewayService {
   constructor(@Inject('AUTH_SERVICE') private authClient: ClientProxy, private prismaService: PrismaService,) {}
