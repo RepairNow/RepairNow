@@ -7,7 +7,10 @@ import {
   UseGuards,
   Inject,
   Param,
-  Response
+  Response,
+  Patch,
+  UseInterceptors,
+  UploadedFile
 } from '@nestjs/common';
 import { ApiGatewayService } from './api-gateway.service';
 import { ClientProxy } from '@nestjs/microservices';
@@ -15,6 +18,8 @@ import { Observable } from 'rxjs';
 import { AccessTokenGuard } from './guards/accessToken.guard';
 import { RefreshTokenGuard } from './guards/refreshToken.guard';
 import PermissionGuard from './guards/permissionGuard';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { AuthGuard } from './guards/auth.guard';
 
 @Controller('/')
 export class ApiGatewayController {
@@ -22,6 +27,7 @@ export class ApiGatewayController {
     private readonly apiGatewayService: ApiGatewayService,
     @Inject('JOB_SERVICE') private jobClient: ClientProxy,
     @Inject('MISSION_SERVICE') private missionClient: ClientProxy,
+    @Inject('AUTH_SERVICE') private authClient: ClientProxy,
   ) {}
 
   // Needed for k8s - Don't touch !!!
@@ -62,6 +68,14 @@ export class ApiGatewayController {
   @Get('me')
   getMe(@Request() req) {
     return req.user;
+  }
+
+  @Patch('me/avatar')
+  @UseGuards(AuthGuard)
+  @UseInterceptors(FileInterceptor('file'))
+  updateAvatar(@UploadedFile() file: Express.Multer.File, @Request() request): Observable<any> {
+    const { user } = request;
+    return this.authClient.send({ cmd: 'update_avatar' }, { file, user })
   }
 
   @UseGuards(AccessTokenGuard)

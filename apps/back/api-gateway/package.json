@@ -32,7 +32,8 @@
     "rxjs": "^7.2.0",
     "@repairnow/dto": "^1.0.0",
     "passport": "^0.6.0",
-    "passport-jwt": "^4.0.1"
+    "passport-jwt": "^4.0.1",
+    "@repairnow/prisma": "*"
   },
   "devDependencies": {
     "@types/multer": "^1.4.7",
