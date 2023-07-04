@@ -96,12 +96,17 @@ export class AuthService {
     refresh_token: string;
     user: User;
   }> {
+    const changeFirstLetterToUpperCase = (str: string) =>
+      str.charAt(0).toUpperCase() + str.slice(1);
+    const firstnameCapitalized = changeFirstLetterToUpperCase(firstname);
+    const lastnameCapitalized = changeFirstLetterToUpperCase(lastname);
+
     const userCreated = await this.usersService.createUser({
       email,
       password,
       phoneNumber,
-      firstname,
-      lastname,
+      firstname: firstnameCapitalized,
+      lastname: lastnameCapitalized,
       isContractorRoleAsked,
     });
     const payload: IJwtPayload = {

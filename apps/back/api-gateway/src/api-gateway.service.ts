@@ -41,7 +41,7 @@ export class ApiGatewayService {
     firstname: string;
     lastname: string;
     phoneNumber: string;
-    isContractorRoleAsked: boolean;
+    isContractorRoleAsked?: boolean;
   }): Observable<string> {
     return this.authClient.send(
       { cmd: 'sign_up_email' },
@@ -51,7 +51,7 @@ export class ApiGatewayService {
         firstname: signUpDto.firstname,
         lastname: signUpDto.lastname,
         phoneNumber: signUpDto.phoneNumber,
-        isContractorRoleAsked: signUpDto.isContractorRoleAsked,
+        isContractorRoleAsked: signUpDto.isContractorRoleAsked || false,
       },
     );
   }
