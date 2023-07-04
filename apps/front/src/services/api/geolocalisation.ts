@@ -14,6 +14,16 @@ class Geolocalisation {
         }
     }
 
+    async _getAnnouncementGeoloc(announcementId: string): Promise<GeolocI> {
+        try {
+            const uri = `${namespace}/announcement/${announcementId}`;
+            const res = await client.get(uri);
+            return res.data;
+        } catch (error) {
+            throw error;
+        }
+    }
+
     async _updatePosition(payload: UpdateGeoloc): Promise<GeolocI> {
         try {
             const uri = `${namespace}`;

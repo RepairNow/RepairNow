@@ -163,6 +163,9 @@
                     </div>
                 </div>
             </div>
+            <router-link :to="{name: 'client-geo-location', params: { announcementId: announcement.id }}">
+                <v-btn>Voir Position du prestataire</v-btn>
+            </router-link>
         </div>
     </div>
 </template>

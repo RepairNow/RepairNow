@@ -4,7 +4,7 @@ import geolocService from "@/services/api/geolocalisation";
 import { GeolocI, UpdateGeoloc } from "@/interfaces/geolocalisation";
 
 export const useGeolocStore = defineStore("geoloc", () => {
-    const { _getPosition, _updatePosition } = geolocService;
+    const { _getPosition, _getAnnouncementGeoloc, _updatePosition } = geolocService;
 
     // @ts-ignore
     const geoloc: Ref<GeolocI> = ref({});
@@ -12,6 +12,15 @@ export const useGeolocStore = defineStore("geoloc", () => {
     async function getPosition() {
         try {
             const res = await _getPosition();
+            geoloc.value = res;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async function getAnnouncementGeoloc(announcementId: string) {
+        try {
+            const res = await _getAnnouncementGeoloc(announcementId);
             geoloc.value = res;
         } catch (error) {
             throw error;
@@ -27,5 +36,5 @@ export const useGeolocStore = defineStore("geoloc", () => {
         }
     }
 
-    return { geoloc, getPosition, updatePosition };
+    return { geoloc, getPosition, getAnnouncementGeoloc, updatePosition };
 });
