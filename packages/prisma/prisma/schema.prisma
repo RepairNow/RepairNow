@@ -100,7 +100,7 @@ model Announcement {
   images        Files[]    
   address       String
   startTime     DateTime   @default(now())
-  endTime       DateTime   @default(now())
+  estimatedTime Int
   mission       Mission?
   estimates     Estimate[]
   currentStatus String

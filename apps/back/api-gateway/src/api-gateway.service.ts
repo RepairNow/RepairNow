@@ -72,7 +72,7 @@ export class ApiGatewayService {
       }
     });
     const dirname = resolve();
-    const fullfilepath = join(dirname, file.path);
+    const fullfilepath = join(dirname, file?.path);
     return payload.res.type(file.mimetype).sendFile(fullfilepath)
   }
 

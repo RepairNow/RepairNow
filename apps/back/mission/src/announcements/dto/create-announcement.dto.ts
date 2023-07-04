@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsUUID, IsString, IsDate, IsBoolean } from 'class-validator';
+import { IsNotEmpty, IsString, IsBoolean, IsNumber } from 'class-validator';
 
 export class CreateAnnouncementDto {
   @IsNotEmpty()
@@ -7,17 +7,16 @@ export class CreateAnnouncementDto {
 
   @IsNotEmpty()
   @IsString()
-  description: string
+  description: string;
 
   @IsNotEmpty()
   @IsString()
   address: string;
 
-  // @IsDate()
   startTime: Date;
 
-  // @IsDate()
-  endTime: Date;
+  @IsNumber()
+  estimatedTime: number;
 
   @IsNotEmpty()
   @IsString()
