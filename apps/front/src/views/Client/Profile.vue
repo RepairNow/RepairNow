@@ -6,29 +6,40 @@
 			</div>
 			<div id="MyPP">
 				<img
-					src="https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50"
+					v-if="previewUrl"
+					:src="previewUrl"
 					alt="Avatar"
 					class="tw-rounded-full tw-w-full tw-h-full tw-object-cover" />
-				<v-icon
-					icon="mdi-pencil"
-					class="tw-absolute tw-right-0 tw-bottom-0 tw-rounded-full tw-bg-primary-darken-1 tw-text-white tw-p-4 tw-cursor-pointer"
-					size="26" />
-				<span class="tw-font-bold tw-whitespace-nowrap tw-absolute"
-					>{{ currentUserAllInfos?.firstname }}
-					{{ currentUserAllInfos?.lastname }}
+				<span
+					v-else
+					class="tw-font-bold tw-text-4xl tw-absolute tw-w-full tw-bottom-2/4 tw-translate-y-2/4 tw-text-center">
+					{{
+						getInitialsFromFirstnameAndLastname(
+							myUser?.firstname,
+							myUser?.lastname
+						)
+					}}
+				</span>
+				<file-input-custom
+					v-model="fileInput"
+					@input="(e: any) => handlePPChange(e)" />
+				<span
+					class="tw-font-bold tw-whitespace-nowrap tw-absolute -tw-bottom-8"
+					>{{ myUser?.firstname }}
+					{{ myUser?.lastname }}
 				</span>
 			</div>
 		</div>
 		<section class="tw-flex tw-flex-col">
 			<span class="tw-mt-5">
 				<span class="tw-font-bold">Email:</span>
-				{{ currentUserAllInfos?.email }}
-				<span v-if="currentUserAllInfos?.isEmailVerified"> ✅ </span>
+				{{ myUser?.email }}
+				<span v-if="myUser?.isEmailVerified"> ✅ </span>
 				<span v-if="isEmailSent" class="tw-font-bold">
 					email envoyé! 📨
 				</span>
 				<v-btn
-					v-if="!currentUserAllInfos?.isEmailVerified && !isEmailSent"
+					v-if="!myUser?.isEmailVerified && !isEmailSent"
 					size="small"
 					variant="outlined"
 					color="error"
@@ -38,10 +49,8 @@
 			</span>
 			<span class="tw-mt-5">
 				<span class="tw-font-bold">Numéro de téléphone:</span>
-				{{ currentUserAllInfos?.phoneNumber }}
-				<span
-					class="tw-font-bold"
-					v-if="currentUserAllInfos?.isPhoneVerified">
+				{{ myUser?.phoneNumber }}
+				<span class="tw-font-bold" v-if="myUser?.isPhoneVerified">
 					✅
 				</span>
 				<v-btn
@@ -55,10 +64,7 @@
 			</span>
 			<span
 				class="tw-text-center tw-mt-96"
-				v-if="
-					!currentUserAllInfos?.isPhoneVerified ||
-					!currentUserAllInfos?.isEmailVerified
-				"
+				v-if="!myUser?.isPhoneVerified || !myUser?.isEmailVerified"
 				>Envie de <span class="tw-font-bold">devenir prestataire</span>?
 				Faites
 				<span class="tw-text-red-800 tw-font-bold">vérifier</span> vos
@@ -84,7 +90,7 @@
 				<p v-else class="tw-text-center tw-font-bold">
 					Saisissez le code reçu par SMS
 				</p>
-				<!-- TODO: see why i can't have this v-model="currentUserAllInfos?.phoneNumber" -->
+				<!-- TODO: see why i can't have this v-model="myUser?.phoneNumber" -->
 				<v-text-field
 					v-if="!isSMSSent"
 					class="tw-mt-5 tw-w-48 tw-m-auto tw-inline-block"
@@ -100,9 +106,7 @@
 							'Veuillez renseigner votre numéro de téléphone',
 					]"
 					required
-					:disabled="
-						currentUserAllInfos?.isPhoneVerified || isSMSSent
-					" />
+					:disabled="myUser?.isPhoneVerified || isSMSSent" />
 
 				<v-text-field
 					v-else
@@ -149,10 +153,11 @@ import { onMounted } from "vue";
 import { createToast } from "mosha-vue-toastify";
 import { ref } from "vue";
 import { useScreenSize } from "@/stores/screen-size";
+import FileInputCustom from "@/components/FileInputCustom.vue";
 
-const userStore = useUserStore();
-const { getSelfAllInfos } = userStore;
-const { currentUserAllInfos } = storeToRefs(userStore);
+const myUser = ref();
+const fileInput = ref();
+const { getSelfAllInfos } = useUserStore();
 
 /** Email Verif */
 const isEmailSent = ref(false);
@@ -184,8 +189,30 @@ const handleVerifyCode = (code: string) => {
 	console.log("code");
 };
 
+/** Profile picture */
+const previewUrl = ref();
+const handlePPChange = (event: any) => {
+	const file = event.target.files[0];
+	if (file) {
+		const reader = new FileReader();
+		reader.onload = (e) => {
+			previewUrl.value = e.target?.result;
+		};
+		reader.readAsDataURL(file);
+		// TODO: handle file upload on profile
+		// myUser.profilePicture.value = file;
+	}
+};
+const getInitialsFromFirstnameAndLastname = (
+	firstname: string,
+	lastname: string
+) => {
+	if (!firstname || !lastname) return;
+	return `${firstname[0].toUpperCase()}${lastname[0].toUpperCase()}`;
+};
+
 onMounted(async () => {
-	await getSelfAllInfos();
+	myUser.value = await getSelfAllInfos();
 });
 </script>
 
