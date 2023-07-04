@@ -1,40 +1,49 @@
 <template>
-    <div class="tw-flex tw-flex-col md:tw-flex-row tw-p-10">
-        <div class="tw-w-full">
-            <div class="tw-w-full tw-bg-primary tw-h-32 md:tw-h-64">
-                Image
-            </div>
+    <div class="tw-flex tw-flex-col">
+        <div class="tw-w-full tw-bg-primary tw-h-32 md:tw-h-64">
+            Image
+        </div>
+        <div class="tw-w-full tw-p-10">
             <div class="tw-flex tw-flex-col xl:tw-flex-row">
-                <div class="xl:tw-w-8/12">
+                <div class="xl:tw-w-7/12 tw-flex tw-flex-col tw-gap-4">
                     <div class="tw-flex tw-items-center tw-w-full">
-                        <div class="tw-grow-1 tw-w-full tw-text-xl tw-font-bold xl:tw-text-2xl">
-                            {{announcement.title}}
-                        </div>
-                        <div class="tw-py-4">
-                            <span class="tw-p-4 tw-border tw-rounded-full tw-bg-primary tw-text-white tw-font-bold">{{announcement.currentStatus}}</span>
+                        <div class="tw-grow-1 tw-w-full tw-text-xl tw-font-bold xl:tw-text-4xl tw-flex tw-items-center">
+                            {{ announcement.title }} <span class="tw-text-white tw-text-2xl tw-bg-primary tw-py-1 tw-px-2 tw-mx-4 tw-rounded-md">{{ announcement.currentStatus }}</span>
                         </div>
                     </div>
-                    <div class="tw-flex">
-                        <div>
-                            Début : {{ startTime }}
+                    <div class="tw-flex tw-gap-4 tw-flex-wrap">
+                        <div class="tw-p-2 tw-bg-primary tw-rounded-lg tw-text-white tw-flex tw-gap-2">
+                            <v-icon icon="mdi-calendar-outline" /><span>{{ startTime }}</span>
                         </div>
-                        <v-spacer />
-                        <div>
-                            Fin : {{ endTime }}
+                        <div class="tw-p-2 tw-bg-primary tw-rounded-lg tw-text-white tw-flex tw-gap-2">
+                            <v-icon icon="mdi-clock-outline" /><span>4 heures</span>
+                        </div>
+                        <a
+                                class="tw-p-2 tw-bg-primary tw-rounded-lg tw-text-white tw-flex tw-gap-2 hover:tw-bg-primary/90"
+                                :href="`https://www.google.com/maps/search/${announcement.address}`"
+                        >
+                            <v-icon icon="mdi-map-outline"/><span>{{announcement.address}}</span><v-icon icon="mdi-link"/>
+                        </a>
+                        <div
+                            class="tw-p-2 tw-bg-primary tw-rounded-lg tw-text-white tw-flex tw-gap-2"
+                        >
+                            <v-icon icon="mdi-tools"/><span>{{announcement?.job?.title}}</span>
                         </div>
                     </div>
-                    <div class="tw-py-4">
+                    <div class="">
                         <p>
-                            {{announcement.address}}
+                           {{announcement.description}}
                         </p>
                     </div>
-                    <div class="tw-py-4">
-                        <p>
-                            {{announcement.description}}
-                        </p>
+                    <div class="tw-flex tw-gap-4 tw-flex-wrap">
+                        <div v-for="i in 5"
+                            class="tw-w-64 tw-h-64 tw-bg-primary tw-text-white tw-p-3"
+                        >
+                            Image {{i}}
+                        </div>
                     </div>
                 </div>
-                <div class="xl:tw-w-4/12">
+                <div class="xl:tw-w-5/12">
                     <div v-if="!filteredArray?.length"
                          class="tw-flex tw-flex-col tw-w-full xl:tw-p-4"
                     >
@@ -134,14 +143,16 @@ const {getAnnouncement} = announcementsStore
 const dialog = ref(false)
 const route = useRoute()
 
-const startTime = new Date(announcement.value.startTime).toLocaleDateString('fr-FR', { day: "2-digit", month: "long", hour: "2-digit", minute: "2-digit" })
-const endTime = new Date(announcement.value.endTime).toLocaleDateString('fr-FR', { day: "2-digit", month: "long", hour: "2-digit", minute: "2-digit" })
+const startTime = ref('')
+const endTime = ref('')
 
 const filteredArray = ref()
 onMounted(async () => {
     await getAnnouncement(route.params.id.toString())
     const estimates = announcement.value.estimates
     filteredArray.value = estimates.filter(estimate => estimate.currentStatus === 'ACCEPTED' || estimate.currentStatus === 'WAITING_PAYMENT');
+    startTime.value = new Date(announcement.value.startTime).toLocaleString('fr-FR', { day: "2-digit", month: "long", hour: "2-digit", minute: "2-digit" })
+    endTime.value = new Date(announcement.value.endTime).toLocaleString('fr-FR', { day: "2-digit", month: "long", hour: "2-digit", minute: "2-digit" })
 })
 </script>
 

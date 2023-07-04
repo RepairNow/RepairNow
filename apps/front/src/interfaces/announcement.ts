@@ -2,6 +2,7 @@ import { MissionI } from "./mission"
 import { ChatI } from "./chat"
 import { EstimateI } from "./estimate"
 import { UserI } from "./user"
+import { JobI } from "./job"
 
 export interface CreateAnnouncement {
     jobId: string
@@ -27,6 +28,8 @@ export interface UpdateAnnouncement extends Partial<AnnouncementI> {
 
 export interface AnnouncementI {
     jobId: string
+
+    job: JobI
     id: string
     userId: string
     user: UserI

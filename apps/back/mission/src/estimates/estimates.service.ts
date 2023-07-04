@@ -272,7 +272,6 @@ export class EstimatesService {
       throw new NotFoundException('Devis introuvable')
     }
 
-
     const checkoutSession = await this.stripeService.retrieveCheckoutSession(estimate.checkoutSession)
 
     if (!checkoutSession) {
@@ -294,6 +293,15 @@ export class EstimatesService {
           prestataireId: estimateUpdated.prestataireId,
           announcementId: estimateUpdated.announcementId,
           currentStatus: MissionStatus.IN_PROGRESS
+        }
+      })
+
+      this.prismaService.announcement.update({
+        where: {
+          id: payload.announcementId
+        },
+        data: {
+          currentStatus: AnnouncementStatus.ACTIVE
         }
       })
 

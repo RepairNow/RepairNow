@@ -54,6 +54,7 @@ export class AnnouncementsService {
               prestataire: true
             }
           },
+          job: true
         },
       });
       return announcement;
@@ -75,6 +76,7 @@ export class AnnouncementsService {
               prestataire: true
             }
           },
+          job: true
         },
       });
       return announcement;
@@ -97,6 +99,7 @@ export class AnnouncementsService {
             },
           },
           mission: true,
+          job: true
         },
       });
       if (!announcement) {
