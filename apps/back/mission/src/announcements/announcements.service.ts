@@ -9,7 +9,8 @@ import { CreateAnnouncementDto } from './dto/create-announcement.dto';
 import { UpdateAnnouncementDto } from './dto/update-announcement.dto';
 import { Prisma, PrismaService } from '@repairnow/prisma';
 import { RpcException } from '@nestjs/microservices';
-import { CurrentUserDto } from '@repairnow/dto';
+import { CurrentUserDto } from "@repairnow/dto";
+import { MulterField } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
 
 export enum AnnouncementStatus {
   PUBLISHED = 'PUBLISHED',
@@ -70,6 +71,7 @@ export class AnnouncementsService {
         },
         include: {
           user: true,
+          images: true,
           estimates: {
             include: {
               prestataire: true
@@ -77,6 +79,7 @@ export class AnnouncementsService {
           },
         },
       });
+        
       return announcement;
     } catch (error) {
       return new BadRequestException(error.message);
@@ -91,6 +94,7 @@ export class AnnouncementsService {
         },
         include: {
           user: true,
+          images: true,
           estimates: {
             include: {
               prestataire: true,
@@ -108,17 +112,31 @@ export class AnnouncementsService {
     }
   }
 
-  async update(payload: {
-    updateAnnouncementDto: UpdateAnnouncementDto;
-    user: CurrentUserDto;
-    id: string;
-  }): Promise<any> {
+  async upload(payload: { id: string, files: Array<Express.Multer.File> }) {
+    let announcement = await this.prismaService.announcement.findUnique({
+      where: {
+        id: payload.id
+      }
+    });
+    if (!announcement) {
+      throw new RpcException(new NotFoundException());
+    }
+
+    for (let file of payload.files) {
+      await this.prismaService.files.create({
+        data: {
+          announcementId: payload.id,
+          ...file
+        }
+      });
+    }
+
+    return 'file(s) created'
+  }
+
+  async update(payload: { updateAnnouncementDto: UpdateAnnouncementDto, user: CurrentUserDto, id: string }): Promise<any> {
     try {
-      console.log(payload);
-      let updatableAnnouncementStatus = [
-        AnnouncementStatus.DRAFT.toString(),
-        AnnouncementStatus.PUBLISHED.toString(),
-      ];
+      let updatableAnnouncementStatus = [AnnouncementStatus.DRAFT.toString(), AnnouncementStatus.PUBLISHED.toString()];
 
       let announcement = await this.prismaService.announcement.findUnique({
         where: {

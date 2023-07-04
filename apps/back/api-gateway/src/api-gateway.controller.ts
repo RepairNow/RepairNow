@@ -7,6 +7,7 @@ import {
   UseGuards,
   Inject,
   Param,
+  Response
 } from '@nestjs/common';
 import { ApiGatewayService } from './api-gateway.service';
 import { ClientProxy } from '@nestjs/microservices';
@@ -32,6 +33,11 @@ export class ApiGatewayController {
   @Get('greeting')
   getGreeting(): Observable<string> {
     return this.jobClient.send({ cmd: 'greeting' }, {});
+  }
+
+  @Get('uploads/:id')
+  getImage(@Response() res, @Param('id') params) {
+    return this.apiGatewayService.getImage({ res, id: params });
   }
 
   @Get('mission')

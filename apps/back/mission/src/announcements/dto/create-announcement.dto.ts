@@ -7,8 +7,7 @@ export class CreateAnnouncementDto {
 
   @IsNotEmpty()
   @IsString()
-  description: string;
-  images: File[];
+  description: string
 
   @IsNotEmpty()
   @IsString()

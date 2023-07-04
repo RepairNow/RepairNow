@@ -15,6 +15,9 @@ import { GeolocationController } from './geolocation/geolocation.controller';
 import { ValicationCodeController } from './valication.code/valication.code.controller';
 import { AccessTokenStrategy } from './strategies/accessToken.strategy';
 import { RefreshTokenStrategy } from './strategies/refreshToken.strategy';
+import { MulterModule } from '@nestjs/platform-express';
+import { PrismaService } from '@repairnow/prisma';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -63,9 +66,13 @@ import { RefreshTokenStrategy } from './strategies/refreshToken.strategy';
       }),
       inject: [ConfigService],
     }),
+    MulterModule.register({
+      dest: './uploads'
+    })
   ],
   controllers: [ApiGatewayController, JobController, EstimatesController, AnnouncementsController, MissionController, ReviewController, GeolocationController, ValicationCodeController],
   providers: [
+    PrismaService,
     ApiGatewayService,
     // 👇 Both tokens strategies replace our previous @useGuards(AuthGuard) in controllers
     // went from api-gateway/src/guards/auth.guard.ts
