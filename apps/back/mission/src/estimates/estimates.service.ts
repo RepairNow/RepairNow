@@ -12,6 +12,7 @@ import { PrismaService } from '@repairnow/prisma';
 import { StripeService } from 'src/stripe/stripe.service';
 import { AnnouncementStatus } from 'src/announcements/announcements.service';
 import {CurrentUserI} from "../mission/dto/current-user.dto";
+import {MissionStatus} from "../mission/enums/mission-status.enum";
 
 enum EstimateStatus {
   PENDING = "PENDING",
@@ -285,6 +286,14 @@ export class EstimatesService {
         },
         data: {
           currentStatus: EstimateStatus.ACCEPTED
+        }
+      })
+
+      this.prismaService.mission.create({
+        data: {
+          prestataireId: estimateUpdated.prestataireId,
+          announcementId: estimateUpdated.announcementId,
+          currentStatus: MissionStatus.IN_PROGRESS
         }
       })
 
