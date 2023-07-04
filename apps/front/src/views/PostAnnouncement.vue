@@ -253,8 +253,10 @@ const handleSendFormValues = async () => {
 	try {
 		const annoucementCreated = await createAnnouncement(formValues);
 		formData.append("id", annoucementCreated.id);
-		_uploadAnnouncementImages(formData);
-		await createAnnouncement(formValues);
+		await _uploadAnnouncementImages(formData);
+        if (annoucementCreated.id) {
+            router.push({ name: "client-announcements" });
+        }
 	} catch (e) {
 		console.log("error when creating announcement", e);
 	}
@@ -353,7 +355,7 @@ const handleFileChange = (event: any) => {
 const removeFile = () => {
 	previewUrl.value = null;
 	selectedFile.value = null;
-    formData.delete("files");
+	formData.delete("files");
 };
 </script>
 
