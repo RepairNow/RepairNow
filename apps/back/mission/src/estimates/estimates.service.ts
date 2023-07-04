@@ -292,6 +292,30 @@ export class EstimatesService {
     }
   }
 
+  async getCheckoutUrlEstimate(payload: { announcementId: string, estimateId: string }) {
+    const estimate = await this.prismaService.estimate.findUnique({
+      where: {
+        id: payload.estimateId
+      }
+    });
+
+    if (!estimate) {
+      throw new NotFoundException('Devis introuvable')
+    }
+
+    if (estimate.currentStatus === EstimateStatus.WAITING_PAYMENT) {
+      const session = await this.stripeService.retrieveCheckoutSession(estimate.checkoutSession)
+
+      if (!session) {
+        throw new NotFoundException('Session de paiement introuvable')
+      }
+
+      return session.url
+    } else {
+      throw new ForbiddenException('Devis déjà payé')
+    }
+  }
+
   remove(payload: { id: string, estimateId: string }) {
   }
 }
