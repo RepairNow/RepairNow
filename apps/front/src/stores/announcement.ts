@@ -60,6 +60,7 @@ export const useAnnouncementStore = defineStore("announcement", () => {
         try {
             const res = await _createAnnouncement(payload);
             announcements.value.push(res);
+            return res;
         } catch (error) {
             throw error;
         }

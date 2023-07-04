@@ -28,15 +28,15 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style scoped>
 .file-upload {
 	margin-top: 5px;
-	.drop-area {
-		width: 20px;
-		cursor: pointer;
-		border: 2px lightgray dashed;
-		display: block;
-		border-radius: 50%;
-	}
+}
+.drop-area {
+    width: 20px;
+    cursor: pointer;
+    border: 2px lightgray dashed;
+    display: block;
+    border-radius: 50%;
 }
 </style>

@@ -1,5 +1,5 @@
 import { AnnouncementI, CreateAnnouncement, UpdateAnnouncement } from "@/interfaces/announcement";
-import { client } from "..";
+import { client, clientFormData } from "..";
 import { CreateMission, DeleteMission, MissionI, UpdateMission } from "@/interfaces/mission";
 import { CreateReview, ReviewI, UpdateReview } from "@/interfaces/review";
 import { CreateEstimate, EstimateI, UpdateEstimate } from "@/interfaces/estimate";
@@ -57,10 +57,10 @@ class Announcement {
         }
     }
 
-    async _uploadAnnouncementImages(payload: { files: FormData[], id: string }): Promise<String> {
+    async _uploadAnnouncementImages(formData: FormData): Promise<String> {
         try {
-            const uri = `${namespace}/${payload.id}/uploads`;
-            const res = await client.patch(uri, payload);
+            const uri = `${namespace}/${formData.get('id')}/uploads`;
+            const res = await clientFormData.patch(uri, formData);
             return res.data;
         } catch (err) {
             throw err;
