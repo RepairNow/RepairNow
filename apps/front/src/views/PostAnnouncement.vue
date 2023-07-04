@@ -246,6 +246,7 @@ const formValues = reactive<CreateAnnouncement>({
 	address: "",
 	startTime: new Date(),
 	endTime: new Date(),
+    // TODO: add job from backend
 	jobId: "2f262377-9cfd-4abf-ae3a-246207f2cb8f",
 });
 
