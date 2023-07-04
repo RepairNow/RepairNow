@@ -180,8 +180,10 @@ import { reactive } from "vue";
 import { onMounted } from "vue";
 import { ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import annoucementService from "@/services/api/announcement";
 
 const MAX_DOC_STATE_VALUE = 3;
+const { _uploadAnnouncementImages } = annoucementService;
 const { createAnnouncement } = useAnnouncementStore();
 
 const { query } = useRoute();
@@ -244,12 +246,14 @@ const formValues = reactive<CreateAnnouncement>({
 	address: "",
 	startTime: new Date(),
 	endTime: new Date(),
-    jobId: 'change me with a real job id',
-	images: [],
+	jobId: "2f262377-9cfd-4abf-ae3a-246207f2cb8f",
 });
 
 const handleSendFormValues = async () => {
 	try {
+		const annoucementCreated = await createAnnouncement(formValues);
+		formData.append("id", annoucementCreated.id);
+		_uploadAnnouncementImages(formData);
 		await createAnnouncement(formValues);
 	} catch (e) {
 		console.log("error when creating announcement", e);
@@ -330,6 +334,8 @@ const rulesDescriptionInput = [
 const selectedFile = ref();
 const previewUrl = ref();
 
+let formData = new FormData();
+
 const handleFileChange = (event: any) => {
 	const file = event.target.files[0];
 	if (file) {
@@ -338,8 +344,7 @@ const handleFileChange = (event: any) => {
 			previewUrl.value = e.target?.result;
 		};
 		reader.readAsDataURL(file);
-		// @ts-ignore
-		formValues.images.push(file);
+		formData.append("files", file);
 	} else {
 		previewUrl.value = null;
 	}
@@ -348,7 +353,7 @@ const handleFileChange = (event: any) => {
 const removeFile = () => {
 	previewUrl.value = null;
 	selectedFile.value = null;
-	formValues.images = [];
+    formData.delete("files");
 };
 </script>
 

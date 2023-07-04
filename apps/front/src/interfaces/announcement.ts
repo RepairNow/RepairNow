@@ -7,7 +7,6 @@ export interface CreateAnnouncement {
     jobId: string
     title: string
     description: string
-    images: File[]
     address: string
     startTime: Date
     endTime: Date
