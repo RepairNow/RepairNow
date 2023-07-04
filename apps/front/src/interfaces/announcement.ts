@@ -10,6 +10,7 @@ export interface CreateAnnouncement {
     address: string
     startTime: Date
     estimatedTime: number
+    preferredHour?: string
     urgency?: boolean
 }
 

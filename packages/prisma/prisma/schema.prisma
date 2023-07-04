@@ -101,6 +101,7 @@ model Announcement {
   address       String
   startTime     DateTime   @default(now())
   estimatedTime Int
+  preferredHour String
   mission       Mission?
   estimates     Estimate[]
   currentStatus String

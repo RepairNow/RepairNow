@@ -17,6 +17,7 @@ export class UpdateAnnouncementDto extends PartialType(CreateAnnouncementDto) {
   acceptedAt: Date;
   startTime: Date;
   estimatedTime: number;
+  preferredHour: string;
   @IsBoolean()
   urgency: boolean;
   jobId: string;

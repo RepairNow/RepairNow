@@ -11,6 +11,10 @@ export class CreateAnnouncementDto {
 
   @IsNotEmpty()
   @IsString()
+  preferredHour: string;
+
+  @IsNotEmpty()
+  @IsString()
   address: string;
 
   startTime: Date;

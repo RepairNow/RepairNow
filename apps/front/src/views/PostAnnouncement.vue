@@ -18,7 +18,7 @@
 						variant="outlined"
 						@click="
 							formValues.urgency = true;
-							docState = 2;
+							docState = 3;
 							previousDocState = 'left';
 						"
 						class="tw-w-full tw-mt-8 tw-mb-4">
@@ -68,7 +68,45 @@
 						</Transition>
 					</div>
 				</div>
-				<div id="when" v-else-if="docState === 2" class="slidingCard">
+				<div
+					id="hour"
+					v-else-if="docState === 2 && !formValues.urgency"
+					class="slidingCard">
+					<h2 class="tw-font-bold tw-text-4xl">
+						Quelle heure convient le mieux?
+					</h2>
+					<div
+						class="tw-mt-12 tw-flex tw-justify-center tw-flex-wrap tw-gap-1">
+						<span
+							v-for="hour in HOURS"
+							@click="
+								formValues.preferredHour = hour;
+								docState++;
+								previousDocState = 'left';
+							"
+							:class="
+								formValues.preferredHour === hour &&
+								'tw-border-black'
+							"
+							class="tw-border-solid tw-border-2 tw-py-1 tw-px-2 tw-rounded-full tw-cursor-pointer hover:tw-bg-slate-200"
+							>{{ hour }}</span
+						>
+						<span
+							@click="
+								formValues.preferredHour = 'peu importe';
+								docState++;
+								previousDocState = 'left';
+							"
+							:class="
+								formValues.preferredHour === 'peu importe' &&
+								'tw-border-black'
+							"
+							class="tw-border-solid tw-border-2 tw-py-1 tw-px-2 tw-rounded-full tw-cursor-pointer hover:tw-bg-slate-200"
+							>Peu importe</span
+						>
+					</div>
+				</div>
+				<div id="when" v-else-if="docState === 3" class="slidingCard">
 					<h2 class="tw-font-bold tw-text-4xl tw-mb-6">
 						En combien d'heures estimez vous la prestation?
 					</h2>
@@ -107,8 +145,8 @@
 							</span>
 							<span
 								class="tw-absolute tw-bottom-1 tw-font-normal tw-text-sm tw-bg-yellow-500 tw-rounded-full tw-px-2 tw-py-1 tw-flex tw-items-center tw-gap-1">
-								<v-icon :size="18">mdi-star-circle</v-icon>Choix
-								populaire</span
+								<v-icon :size="18">mdi-star-circle</v-icon>
+								Populaire</span
 							>
 						</div>
 						<div
@@ -161,7 +199,7 @@
 						>
 					</div>
 				</div>
-				<div id="where" v-else-if="docState === 3" class="slidingCard">
+				<div id="where" v-else-if="docState === 4" class="slidingCard">
 					<h2 class="tw-font-bold tw-text-4xl">
 						Quelle est l'adresse de la prestation?
 					</h2>
@@ -176,7 +214,7 @@
 				</div>
 				<div
 					id="moreInfos"
-					v-else-if="docState === 4"
+					v-else-if="docState === 5"
 					class="slidingCard tw-pb-24">
 					<h2 class="tw-font-bold tw-text-4xl">
 						Décrivez nous en détail votre besoin
@@ -247,8 +285,8 @@
 						docState === 1 &&
 						!formValues.startTime) ||
 					(docState === 1 && isDatePickerError) ||
-					(docState === 3 && !(formValues.address.length > 5)) ||
-					(docState === 4 &&
+					(docState === 4 && !(formValues.address.length > 5)) ||
+					(docState === 5 &&
 						!(
 							formValues.title.length > 5 &&
 							formValues.title.length < 50 &&
@@ -275,7 +313,13 @@ import { ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import annoucementService from "@/services/api/announcement";
 
-const MAX_DOC_STATE_VALUE = 4;
+const MAX_DOC_STATE_VALUE = 5;
+// constant HOURS from 7H00 to 21H00 with 30 minutes interval
+const HOURS = Array.from(
+	{ length: 29 },
+	(_, i) => `${Math.floor(i / 2) + 7}H${i % 2 === 0 ? "00" : "30"}`
+);
+
 const { _uploadAnnouncementImages } = annoucementService;
 const { createAnnouncement } = useAnnouncementStore();
 
@@ -339,6 +383,7 @@ const formValues = reactive<CreateAnnouncement>({
 	address: "",
 	startTime: new Date(),
 	estimatedTime: 4,
+	preferredHour: "peu importe",
 	// TODO: add job from backend
 	jobId: "a70ceffe-351a-4b1b-aec0-fd1b9de5a2dc",
 });
@@ -370,6 +415,9 @@ const handleClickPrev = () => {
 	} else if (docState.value === 2 && formValues.urgency) {
 		docState.value -= 1;
 		previousDocState.value = "right";
+	} else if (docState.value === 3 && formValues.urgency) {
+		docState.value -= 2;
+		previousDocState.value = "right";
 	}
 	previousDocState.value = "right";
 	docState.value -= 1;
@@ -397,8 +445,10 @@ watch(docState, (val) => {
 	} else if (val === 2) {
 		progressBarValue.value = 50;
 	} else if (val === 3) {
-		progressBarValue.value = 75;
+		progressBarValue.value = 70;
 	} else if (val === 4) {
+		progressBarValue.value = 85;
+	} else if (val === 5) {
 		progressBarValue.value = 100;
 	}
 });
