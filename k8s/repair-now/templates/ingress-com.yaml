@@ -1,7 +1,7 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: repair-now-ing
+  name: repair-now-com-ing
 spec:
   rules:
     - http:
