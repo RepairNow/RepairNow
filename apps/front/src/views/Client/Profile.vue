@@ -4,27 +4,29 @@
 			<div class="tw-font-bold tw-text-2xl lg:tw-text-4xl">
 				Mon profil
 			</div>
-			<div id="MyPP">
-				<img
-					v-if="previewUrl"
-					:src="previewUrl"
-					alt="Avatar"
-					class="tw-rounded-full tw-w-full tw-h-full tw-object-cover" />
-				<span
-					v-else
-					class="tw-font-bold tw-text-4xl tw-absolute tw-w-full tw-bottom-2/4 tw-translate-y-2/4 tw-text-center">
-					{{
-						getInitialsFromFirstnameAndLastname(
-							myUser?.firstname,
-							myUser?.lastname
-						)
-					}}
-				</span>
-				<file-input-custom
-					v-model="fileInput"
-					@input="(e: any) => handlePPChange(e)" />
-				<span
-					class="tw-font-bold tw-whitespace-nowrap tw-absolute -tw-bottom-8"
+			<div
+				class="tw-flex tw-flex-col tw-justify-center tw-relative tw-items-center">
+				<div id="MyPP">
+					<img
+						v-if="previewUrl"
+						:src="previewUrl"
+						alt="Avatar"
+						class="tw-rounded-full tw-w-full tw-h-full tw-object-cover" />
+					<span
+						v-else
+						class="tw-font-bold tw-text-4xl tw-absolute tw-w-full tw-bottom-2/4 tw-translate-y-2/4 tw-text-center">
+						{{
+							getInitialsFromFirstnameAndLastname(
+								myUser?.firstname,
+								myUser?.lastname
+							)
+						}}
+					</span>
+					<file-input-custom
+						v-model="fileInput"
+						@input="(e: any) => handlePPChange(e)" />
+				</div>
+				<span class="tw-font-bold tw-whitespace-nowrap"
 					>{{ myUser?.firstname }}
 					{{ myUser?.lastname }}
 				</span>

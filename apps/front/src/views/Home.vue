@@ -92,7 +92,7 @@
             </div>
         </div>
 
-        <div class="tw-px-16 tw-py-12 tw-border tw-rounded-lg">
+        <div class="tw-px-16 tw-py-12 tw-border tw-rounded-lg tw-mb-8">
             <div class="lg:tw-w-1/2 ">
                 <h2 class="tw-font-bold tw-text-2xl">Spécialiste du service</h2>
                 <p class="tw-text-neutral-500">Tentez l’expérience et faites nous confiance comme plus de 645 000 clients qui aujourd’hui profitent de leur temps libre.</p>
