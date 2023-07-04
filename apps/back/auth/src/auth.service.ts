@@ -6,7 +6,7 @@ import { UsersService } from './users/users.service';
 import { verify, hash } from 'argon2';
 import { ForbiddenException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-
+import { CurrentUserDto } from '@repairnow/dto';
 interface IJwtPayload {
   email: string;
   firstname: string;
@@ -131,6 +131,11 @@ export class AuthService {
     return 'Hello World from auth service!';
   }
 
+  async updateAvatar(payload: { file: Express.Multer.File, user: CurrentUserDto }) {
+    return payload;
+    console.log(payload)
+  }
+  
   getUsers() {
     return this.prismaService.user.findMany();
   }

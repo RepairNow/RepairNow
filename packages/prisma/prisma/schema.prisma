@@ -24,7 +24,7 @@ model User {
   isEmailVerified       Boolean        @default(false)
   isPhoneVerified       Boolean        @default(false)
   refreshToken          String?
-  avatar                String?
+  avatar                UserFile?
   birthdate             DateTime?
   createdAt             DateTime       @default(now())
   updatedAt             DateTime       @default(now()) @updatedAt
@@ -97,7 +97,7 @@ model Announcement {
   userId        String     @db.Uuid
   title         String
   description   String
-  images        Files[]    
+  images        AnnouncementFiles[]    
   address       String
   startTime     DateTime   @default(now())
   endTime       DateTime   @default(now())
@@ -112,10 +112,24 @@ model Announcement {
   @@map(name: "m_announcement")
 }
 
-model Files {
-  id  String                @id @default(uuid()) @db.Uuid
+model AnnouncementFiles {
+  id                        String @id @default(uuid()) @db.Uuid
   announcementId            String @db.Uuid
-  announcement Announcement @relation(fields: [announcementId], references: [id])
+  announcement              Announcement @relation(fields: [announcementId], references: [id])
+  fieldname                 String
+  originalname              String
+  mimetype                  String            
+  filename                  String
+  destination               String
+  path                      String
+  encoding                  String
+  size                      Int
+}
+
+model UserFile {
+  id                        String @id @default(uuid()) @db.Uuid
+  userId                    String @db.Uuid @unique
+  user                      User   @relation(fields: [userId], references: [id])
   fieldname                 String
   originalname              String
   mimetype                  String            
