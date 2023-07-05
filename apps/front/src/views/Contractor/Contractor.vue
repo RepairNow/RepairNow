@@ -1,9 +1,9 @@
 <template>
-    <div class="tw-flex tw-h-screen tw-w-screen tw-py-16 sm:tw-pb-0">
+    <div class="tw-flex tw-h-screen tw-w-screen tw-py-16 lg:tw-pb-0">
         <mobile-navigation />
         <mobile-drawer />
         <header-navigation />
-        <div class="tw-bg-green-100 tw-h-full tw-w-80 tw-hidden sm:tw-flex">
+        <div class="tw-bg-green-100 tw-h-full tw-w-80 tw-hidden lg:tw-flex">
             <sidebar-navigation />
         </div>
         <div class="tw-bg-green-100 tw-h-full tw-w-full overflow-auto">

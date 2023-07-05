@@ -1,5 +1,5 @@
 <template>
-    <div class="tw-h-full tw-bg-white tw-border-r sm:tw-flex tw-hidden tw-w-full">
+    <div class="tw-h-full tw-bg-white tw-border-r lg:tw-flex tw-hidden tw-w-full">
         <slot name="content">
             <v-list
                 nav

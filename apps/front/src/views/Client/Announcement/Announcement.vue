@@ -1,40 +1,68 @@
 <template>
-    <div class="tw-flex tw-flex-col md:tw-flex-row tw-p-10">
-        <div class="tw-w-full">
-            <div class="tw-w-full tw-bg-primary tw-h-32 md:tw-h-64">
-                Image
+    <div class="tw-flex tw-flex-col tw-relative">
+        <div
+            class="tw-absolute tw-bg-white tw-w-full tw-h-full tw-z-[1] tw-justify-center"
+            :class="checkEstimate ? 'tw-flex' : 'tw-hidden'"
+        >
+            <div class="tw-flex tw-flex-col tw-items-center tw-mt-64">
+                <div class="tw-flex tw-flex-col tw-items-center">
+                    <v-icon
+                            size="120"
+                            :color="estimateStatus.color"
+                    >
+                        {{ estimateStatus.icon }}
+                    </v-icon>
+                    {{ estimateStatus.text }}
+                </div>
+                <div class="hover:tw-text-primary/80 tw-text-primary tw-underline tw-cursor-pointer" @click="checkEstimate = false">
+                    Revenir sur l'annonce
+                </div>
             </div>
+        </div>
+        <div class="tw-w-full tw-bg-primary tw-h-32 md:tw-h-64">
+            Image
+        </div>
+        <div class="tw-w-full tw-p-10">
             <div class="tw-flex tw-flex-col xl:tw-flex-row">
-                <div class="xl:tw-w-8/12">
+                <div class="xl:tw-w-7/12 tw-flex tw-flex-col tw-gap-4">
                     <div class="tw-flex tw-items-center tw-w-full">
-                        <div class="tw-grow-1 tw-w-full tw-text-xl tw-font-bold xl:tw-text-2xl">
-                            {{announcement.title}}
-                        </div>
-                        <div class="tw-py-4">
-                            <span class="tw-p-4 tw-border tw-rounded-full tw-bg-primary tw-text-white tw-font-bold">{{announcement.currentStatus}}</span>
+                        <div class="tw-grow-1 tw-w-full tw-text-xl tw-font-bold xl:tw-text-4xl tw-flex tw-items-center">
+                            {{ announcement.title }} <span class="tw-text-white tw-text-2xl tw-bg-primary tw-py-1 tw-px-2 tw-mx-4 tw-rounded-md">{{ announcement.currentStatus }}</span>
                         </div>
                     </div>
-                    <div class="tw-flex">
-                        <div>
-                            Début : {{ startTime }}
+                    <div class="tw-flex tw-gap-4 tw-flex-wrap">
+                        <div class="tw-p-2 tw-bg-primary tw-rounded-lg tw-text-white tw-flex tw-gap-2">
+                            <v-icon icon="mdi-calendar-outline" /><span>{{ startTime }}</span>
                         </div>
-                        <v-spacer />
-                        <div>
-                            Fin : endTime pas dispo
+                        <div class="tw-p-2 tw-bg-primary tw-rounded-lg tw-text-white tw-flex tw-gap-2">
+                            <v-icon icon="mdi-clock-outline" /><span>4 heures</span>
+                        </div>
+                        <a
+                                class="tw-p-2 tw-bg-primary tw-rounded-lg tw-text-white tw-flex tw-gap-2 hover:tw-bg-primary/90"
+                                :href="`https://www.google.com/maps/search/${announcement.address}`"
+                        >
+                            <v-icon icon="mdi-map-outline"/><span>{{announcement.address}}</span><v-icon icon="mdi-link"/>
+                        </a>
+                        <div
+                            class="tw-p-2 tw-bg-primary tw-rounded-lg tw-text-white tw-flex tw-gap-2"
+                        >
+                            <v-icon icon="mdi-tools"/><span>{{announcement?.job?.title}}</span>
                         </div>
                     </div>
-                    <div class="tw-py-4">
+                    <div class="">
                         <p>
-                            {{announcement.address}}
+                           {{announcement.description}}
                         </p>
                     </div>
-                    <div class="tw-py-4">
-                        <p>
-                            {{announcement.description}}
-                        </p>
+                    <div class="tw-flex tw-gap-4 tw-flex-wrap">
+                        <div v-for="i in 5"
+                            class="tw-w-64 tw-h-64 tw-bg-primary tw-text-white tw-p-3"
+                        >
+                            Image {{i}}
+                        </div>
                     </div>
                 </div>
-                <div class="xl:tw-w-4/12">
+                <div class="xl:tw-w-5/12 tw-border-l-2">
                     <div v-if="!filteredArray?.length"
                          class="tw-flex tw-flex-col tw-w-full xl:tw-p-4"
                     >
@@ -126,21 +154,65 @@ import {storeToRefs} from "pinia";
 import {onMounted, ref} from "vue";
 import {useRoute} from "vue-router";
 import EstimationConfirmation from "@/components/modal/confirm/estimation-confirmation.vue";
+import {useEstimateStore} from "@/stores/estimate";
 
 const announcementsStore = useAnnouncementStore()
 const {announcement} = storeToRefs(announcementsStore)
 const {getAnnouncement} = announcementsStore
 
-const dialog = ref(false)
+const estimateStore = useEstimateStore()
+const {checkAnnouncementEstimateStatus} = estimateStore
+const {estimate} = storeToRefs(estimateStore)
+
 const route = useRoute()
 
-const startTime = new Date(announcement.value.startTime).toLocaleDateString('fr-FR', { day: "2-digit", month: "long", hour: "2-digit", minute: "2-digit" })
-
+const dialog = ref(false)
+const startTime = ref('')
+const endTime = ref('')
 const filteredArray = ref()
+const checkEstimate = ref(false)
+const estimateStatus = ref({
+    icon: '',
+    text: '',
+    color: ''
+})
+
 onMounted(async () => {
     await getAnnouncement(route.params.id.toString())
     const estimates = announcement.value.estimates
     filteredArray.value = estimates.filter(estimate => estimate.currentStatus === 'ACCEPTED' || estimate.currentStatus === 'WAITING_PAYMENT');
+    startTime.value = new Date(announcement.value.startTime).toLocaleString('fr-FR', { day: "2-digit", month: "long", hour: "2-digit", minute: "2-digit" })
+    endTime.value = new Date(announcement.value.endTime).toLocaleString('fr-FR', { day: "2-digit", month: "long", hour: "2-digit", minute: "2-digit" })
+
+    if (route.query?.estimate_id) {
+        await checkAnnouncementEstimateStatus({announcementId: route.params.id.toString(), estimateId: route.query?.estimate_id.toString()});
+        checkEstimate.value = true
+        switch (estimate.value.currentStatus) {
+            case 'ACCEPTED':
+                estimateStatus.value = {
+                    icon: 'mdi-check-circle',
+                    text: 'Le paiement à été accepter.',
+                    color: 'success'
+                }
+                break;
+            case 'WAITING_PAYMENT':
+            case 'PENDING':
+                estimateStatus.value = {
+                    icon: 'mdi-clock',
+                    text: 'Le paiement est en attente.',
+                    color: 'warning'
+                }
+                break;
+            case 'REFUSED':
+                estimateStatus.value = {
+                    icon: 'mdi-close-circle',
+                    text: 'Le paiement à été refuser.',
+                    color: 'error'
+                }
+                break;
+        }
+
+    }
 })
 </script>
 

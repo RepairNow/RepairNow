@@ -13,7 +13,7 @@
                             color="primary"
                             class="tw-absolute tw-bottom-20 tw-right-10 lg:tw-relative lg:tw-bottom-0 "
                     >
-                        Proposer un devis
+                        Voir mon devis - {{estimate.currentStatus}}
                     </v-btn>
                 </slot>
             </div>
@@ -34,14 +34,14 @@
                 <p
                         class="tw-text-3xl tw-font-bold tw-flex tw-items-center tw-h-16"
                 >
-                    Proposer un devis
+                    Mon devis
                 </p>
             </div>
             <div>
                 <v-text-field variant="filled" label="Tarif" type="number" v-model="announcementEstimateForm.price"/>
                 <v-text-field variant="filled" label="Description" v-model="announcementEstimateForm.description"/>
                 <v-btn
-                        text="Confirmer le devis"
+                        text="Mettre à jour le devis"
                         block
                         class="tw-normal-case"
                         @click="handleAnnouncement()"
@@ -52,20 +52,31 @@
 </template>
 
 <script setup lang="ts">
-import {ref} from "vue";
+import {onMounted, PropType, ref} from "vue";
 import {useScreenSize} from "@/stores/screen-size";
 import {storeToRefs} from "pinia";
 import {useAnnouncementStore} from "@/stores/announcement"
-import {CreateEstimate} from "@/interfaces/estimate";
 import {useRoute} from "vue-router";
+import {AnnouncementI} from "@/interfaces/announcement";
+import {CreateEstimate, EstimateI} from "@/interfaces/estimate";
+import announcement from "@/services/api/announcement";
 
 const dialog = ref(false);
 const screenSizeStore = useScreenSize()
 const { isSizeMD } = storeToRefs(screenSizeStore)
 
 const announcementStore = useAnnouncementStore()
-const { createAnnouncementEstimate } = announcementStore
 
+const props = defineProps({
+    announcement: {
+        type: Object as PropType<AnnouncementI>,
+        required: true
+    },
+    estimate: {
+        type: Object as PropType<EstimateI>,
+        required: true
+    }
+})
 const route = useRoute()
 const announcementEstimateForm = ref<CreateEstimate>({
     description: '',
@@ -73,24 +84,10 @@ const announcementEstimateForm = ref<CreateEstimate>({
     images: [],
 })
 
-const handleAnnouncement = async () => {
-    try {
-        await createAnnouncementEstimate(route.params.id.toString(),
-            {
-                price: parseFloat(announcementEstimateForm.value.price.toString()),
-                description: announcementEstimateForm.value.description,
-                images: announcementEstimateForm.value.images
-            })
-    } catch (e) {
-
-    } finally {
-        announcementEstimateForm.value = {
-            description: '',
-            price: 0,
-            images: [],
-        }
-    }
-}
+onMounted(() => {
+    announcementEstimateForm.value.description = props.estimate?.description
+    announcementEstimateForm.value.price =  props.estimate?.price
+})
 
 </script>
 

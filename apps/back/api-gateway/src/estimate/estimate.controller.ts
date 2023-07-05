@@ -71,4 +71,11 @@ export class EstimatesController {
   checkEstimate(@Param() params: { announcementId: string, estimateId: string }): Observable<any> {
     return this.missionClient.send({ cmd: "checkEstimate"}, params)
   }
+
+  @Get('/:estimateId/get_checkout_url_estimate')
+  @UseFilters(new ExceptionFilter())
+  @UseGuards(AuthGuard)
+  getCheckoutUrlEstimate(@Param() params: { announcementId: string, estimateId: string }): Observable<any> {
+    return this.missionClient.send({ cmd: "getCheckoutUrlEstimate"}, params)
+  }
 }

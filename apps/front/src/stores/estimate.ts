@@ -5,7 +5,7 @@ import { CreateEstimate, EstimateI, UpdateEstimate } from "@/interfaces/estimate
 import {ca} from "vuetify/locale";
 
 export const useEstimateStore = defineStore("estimate", () => {
-    const { _getAnnouncementEstimates, _getAnnouncementEstimate, _createAnnouncementEstimate, _updateAnnouncementEstimate, _deleteAnnouncementEstimate, _acceptAnnouncementEstimate } = announcementService;
+    const { _getAnnouncementEstimates, _getAnnouncementEstimate, _createAnnouncementEstimate, _updateAnnouncementEstimate, _deleteAnnouncementEstimate, _acceptAnnouncementEstimate, _checkAnnouncementEstimateStatus } = announcementService;
 
     const estimates: Ref<EstimateI[]> = ref([]);
     // @ts-ignore
@@ -68,5 +68,14 @@ export const useEstimateStore = defineStore("estimate", () => {
         }
     }
 
-    return { estimates, estimate, getAnnouncementEstimates, getAnnouncementEstimate, createAnnouncementEstimate, updateAnnouncementEstimate, deleteAnnouncementEstimate, acceptAnnouncementEstimate };
+    async function checkAnnouncementEstimateStatus(payload: {estimateId: string, announcementId: string}) {
+        try {
+            const res = await _checkAnnouncementEstimateStatus(payload);
+            estimate.value = res
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    return { estimates, estimate, getAnnouncementEstimates, getAnnouncementEstimate, createAnnouncementEstimate, updateAnnouncementEstimate, deleteAnnouncementEstimate, acceptAnnouncementEstimate, checkAnnouncementEstimateStatus };
 });
