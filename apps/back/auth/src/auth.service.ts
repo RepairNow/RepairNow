@@ -80,6 +80,9 @@ export class AuthService {
     if (!user) {
       throw new UnauthorizedException();
     }
+    if (user.isUserDeleted) {
+      throw new ForbiddenException('User is deleted');
+    }
     const payload: IJwtPayload = {
       email: user.email,
       firstname: user.firstname,
