@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@sentry/vue": "^7.57.0",
     "@capacitor/android": "^5.0.5",
     "@capacitor/ios": "^5.0.5",
     "@capacitor/core": "^5.0.5",
