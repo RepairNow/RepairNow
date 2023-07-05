@@ -11,9 +11,13 @@ const router = createRouter({
 // registerRouteGuard(router)
 
 router.beforeEach(async (to, from, next) => {
-  const {isAdmin, isContractor, isClient, isConnected} = useUserStore()
+  const {isAdmin, isContractor, isClient, isConnected, getSelf} = useUserStore()
   const router = useRouter()
   const { admin, contractor, connected } = to?.meta;
+
+  if(isConnected()) {
+    await getSelf()
+  }
 
   if (connected) {
     if(!isConnected()) {

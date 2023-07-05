@@ -134,7 +134,7 @@ const handleDisconnect = () => {
 
 onMounted(async () => {
 	if (token) {
-		await getSelf();
+		//await getSelf();
 
         if(isAdmin()) {
             items.value = [
