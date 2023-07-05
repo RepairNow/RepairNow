@@ -21,7 +21,7 @@ export class MissionController {
   }
 
   @MessagePattern({ cmd: 'findUserMissions' })
-  findUserAll(@Payload() payload: { user: CurrentUserI }) {
+  findUserAll(@Payload() payload: { user: CurrentUserI, status: string }) {
     return this.missionService.findUserAll(payload);
   }
 

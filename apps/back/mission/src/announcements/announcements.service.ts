@@ -43,46 +43,86 @@ export class AnnouncementsService {
     }
   }
 
-  async findAll() {
+  async findAll(query: { status: string }) {
     try {
-      const announcement = await this.prismaService.announcement.findMany({
-        where: {
-          currentStatus: AnnouncementStatus.PUBLISHED,
-        },
-        include: {
-          estimates: {
-            include: {
-              prestataire: true
-            }
+      if (query && AnnouncementStatus[query.status]) {
+        const announcement = await this.prismaService.announcement.findMany({
+          where: {
+            currentStatus: AnnouncementStatus[query.status],
           },
-          job: true
-        },
-      });
-      return announcement;
+          include: {
+            estimates: {
+              include: {
+                prestataire: true
+              }
+            },
+            job: true
+          },
+        });
+        return announcement;
+      } else {
+        const announcement = await this.prismaService.announcement.findMany({
+          where: {
+            currentStatus: AnnouncementStatus.PUBLISHED,
+          },
+          include: {
+            estimates: {
+              include: {
+                prestataire: true
+              }
+            },
+            job: true
+          },
+        });
+        return announcement;
+      }
     } catch (error) {
       return new BadRequestException(error.message);
     }
   }
 
-  async findUserAll(user: any) {
+  async findUserAll(payload: { user: CurrentUserDto, status: string }) {
     try {
-      const announcement = await this.prismaService.announcement.findMany({
-        where: {
-          currentStatus: AnnouncementStatus.PUBLISHED,
-        },
-        include: {
-          user: true,
-          images: true,
-          estimates: {
-            include: {
-              prestataire: true
-            }
+      if (payload.status && AnnouncementStatus[payload.status]) {
+
+        const announcement = await this.prismaService.announcement.findMany({
+          where: {
+            currentStatus: AnnouncementStatus[payload.status],
+            userId: payload.user.sub
           },
-          job: true
-        },
-      });
-        
-      return announcement;
+          include: {
+            user: true,
+            images: true,
+            estimates: {
+              include: {
+                prestataire: true
+              }
+            },
+            job: true
+          },
+        });
+          
+        return announcement;
+      } else {
+        const announcement = await this.prismaService.announcement.findMany({
+          where: {
+            currentStatus: AnnouncementStatus.PUBLISHED,
+            userId: payload.user.sub
+          },
+          include: {
+            user: true,
+            images: true,
+            estimates: {
+              include: {
+                prestataire: true
+              }
+            },
+            job: true
+          },
+        });
+          
+        return announcement;
+      }
     } catch (error) {
       throw new BadRequestException(error.message);
     }

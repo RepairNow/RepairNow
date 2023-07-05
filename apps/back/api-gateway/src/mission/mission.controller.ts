@@ -1,4 +1,4 @@
-import {Body, Controller, Delete, Get, Inject, Param, Patch, Post, Request, UseGuards} from '@nestjs/common';
+import {Body, Controller, Delete, Get, Query, Inject, Param, Patch, Post, Request, UseGuards} from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { AuthGuard } from 'src/guards/auth.guard';
 import {Observable} from "rxjs";
@@ -19,9 +19,10 @@ export class MissionController {
     // }
 
     @Get('/my-missions')
-    findUserMissions(@Request() request) {
+    findUserMissions(@Request() request, @Query() query) {
         const { user } = request;
-        return this.missionClient.send({ cmd: 'findUserMissions' }, {user: user});
+        const { status } = query;
+        return this.missionClient.send({ cmd: 'findUserMissions' }, { user: user, status: status ? status : null });
     }
 
     @Get('/:id')
