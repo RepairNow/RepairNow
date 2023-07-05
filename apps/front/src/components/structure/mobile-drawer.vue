@@ -150,7 +150,7 @@ onMounted(async () => {
 
 watch(myUser, async (newVal) => {
 	if (newVal) {
-		myPP.value = await getImage(newVal.avatar[0].id);
+		myPP.value = await getImage(newVal.avatar?.[0]?.id);
 	}
 });
 

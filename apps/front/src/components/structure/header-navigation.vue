@@ -139,7 +139,9 @@ const myPP = ref();
 
 watch(currentUserAllInfos, async (newVal) => {
 	if (newVal) {
-		myPP.value = await getImage(currentUserAllInfos?.value?.avatar[0].id);
+		myPP.value = await getImage(
+			currentUserAllInfos?.value?.avatar?.[0]?.id
+		);
 	}
 });
 
