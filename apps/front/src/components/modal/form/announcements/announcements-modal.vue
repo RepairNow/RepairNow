@@ -123,23 +123,21 @@ const handleClickItem = (job: string) => {
 	cursor: pointer;
 	transition-property: background-color;
 	transition-duration: 0.5s; /* Définir la durée souhaitée */
-
-	& img {
-		background-color: rgb(226, 226, 226);
-		border-radius: 4px;
-		width: 60px;
-		height: 60px;
-		object-fit: cover;
-		transition: transform 0.5s;
-	}
+}
+.grid-item img {
+    background-color: rgb(226, 226, 226);
+    border-radius: 4px;
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    transition: transform 0.5s;
 }
 
 .grid-item:hover {
 	background-color: rgb(226, 226, 226);
-
-	& img {
-		transform: scale(1.1);
-		transition: transform 0.5s;
-	}
+}
+.grid-item:hover img {
+    transform: scale(1.1);
+    transition: transform 0.5s;
 }
 </style>

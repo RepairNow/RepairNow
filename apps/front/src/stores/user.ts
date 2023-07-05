@@ -65,8 +65,8 @@ export const useUserStore = defineStore("user", () => {
         try {
             const res = await _getSelfAllInfos();
             currentUserAllInfos.value = res;
+            return res;
         } catch (error) {
-            //await _signinWithToken()
             throw error;
         }
     }

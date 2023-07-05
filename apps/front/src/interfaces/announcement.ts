@@ -8,10 +8,10 @@ export interface CreateAnnouncement {
     jobId: string
     title: string
     description: string
-    images: File[]
     address: string
     startTime: Date
-    endTime: Date
+    estimatedTime: number
+    preferredHour?: string
     urgency?: boolean
 }
 
@@ -21,7 +21,7 @@ export interface UpdateAnnouncement extends Partial<AnnouncementI> {
     images?: File[]
     address?: string
     startTime?: Date
-    endTime?: Date
+    estimatedTime?: number
     acceptedAt?: Date
     status?: string
 }
@@ -38,7 +38,7 @@ export interface AnnouncementI {
     images: File[]
     address: string
     startTime: Date
-    endTime: Date
+    estimatedTime: number
     acceptedAt: Date
     status: string
     mission: MissionI

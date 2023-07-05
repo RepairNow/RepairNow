@@ -35,7 +35,6 @@ export class CreateUserDto {
   @IsString()
   lastname: string;
 
-  avatar?: string;
   birthdate?: Date;
 
   @IsBoolean()
@@ -43,7 +42,6 @@ export class CreateUserDto {
 }
 
 export class UpdateUserDto {
-  avatar?: string;
   phoneNumber?: string;
   firstname?: string;
   lastname?: string;

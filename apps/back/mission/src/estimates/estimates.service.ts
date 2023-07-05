@@ -56,6 +56,7 @@ export class EstimatesService {
       }
 
       const estimate = await this.prismaService.estimate.create({
+        // @ts-ignore
         data: {
           images: payload.createEstimateDto.images,
           description: payload.createEstimateDto.description,

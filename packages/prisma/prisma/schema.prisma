@@ -24,7 +24,7 @@ model User {
   isEmailVerified       Boolean        @default(false)
   isPhoneVerified       Boolean        @default(false)
   refreshToken          String?
-  avatar                String?
+  avatar                Files[]
   birthdate             DateTime?
   createdAt             DateTime       @default(now())
   updatedAt             DateTime       @default(now()) @updatedAt
@@ -97,10 +97,11 @@ model Announcement {
   userId        String     @db.Uuid
   title         String
   description   String
-  images        String[]
+  images        Files[]    
   address       String
   startTime     DateTime   @default(now())
-  endTime       DateTime   @default(now())
+  estimatedTime Int
+  preferredHour String
   mission       Mission?
   estimates     Estimate[]
   currentStatus String
@@ -110,6 +111,22 @@ model Announcement {
   urgency       Boolean    @default(false)
 
   @@map(name: "m_announcement")
+}
+
+model Files {
+  id                        String @id @default(uuid()) @db.Uuid
+  announcementId            String? @db.Uuid
+  announcement              Announcement? @relation(fields: [announcementId], references: [id])
+  userId                    String? @db.Uuid @unique
+  user                      User?   @relation(fields: [userId], references: [id])
+  fieldname                 String
+  originalname              String
+  mimetype                  String            
+  filename                  String
+  destination               String
+  path                      String
+  encoding                  String
+  size                      Int
 }
 
 model Estimate {

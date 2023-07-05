@@ -1,5 +1,7 @@
 <template>
     <div class="tw-px-8 md:tw-px-32 lg:tw-px-64 tw-mt-6">
+        <v-img :src="getImage('0188ee5f-ec4a-4fcb-9fff-4774b6047ed3')" />
+
         <div class="lg:tw-h-[800px] tw-bg-[url('/undraw_friendship_mni7.svg')] tw-bg-right tw-bg-contain tw-flex tw-flex-col tw-py-48">
             <div class="2xl:tw-w-1/2 xl:tw-w-2/3 tw-w-full">
                 <h1 class="tw-text-3xl lg:tw-text-5xl tw-font-bold">
@@ -92,7 +94,7 @@
             </div>
         </div>
 
-        <div class="tw-px-16 tw-py-12 tw-border tw-rounded-lg">
+        <div class="tw-px-16 tw-py-12 tw-border tw-rounded-lg tw-mb-8">
             <div class="lg:tw-w-1/2 ">
                 <h2 class="tw-font-bold tw-text-2xl">Spécialiste du service</h2>
                 <p class="tw-text-neutral-500">Tentez l’expérience et faites nous confiance comme plus de 645 000 clients qui aujourd’hui profitent de leur temps libre.</p>
@@ -147,8 +149,10 @@
 </template>
 
 <script setup lang="ts">
-    import {ref} from "vue";
+    import imageService from "@/services/api/image";
+    import {ref, onMounted} from "vue";
     import AnnouncementsModal from "@/components/modal/form/announcements/announcements-modal.vue";
+    const { getImage } = imageService;
 
     const items = ref([
         {

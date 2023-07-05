@@ -9,20 +9,6 @@ spec:
   rules:
     - http:
         paths:
-          - path: /conversations
-            pathType: Prefix
-            backend:
-              service:
-                name: com-gateway-svc
-                port:
-                  number: 3005
-          - path: /messages
-            pathType: Prefix
-            backend:
-              service:
-                name: com-gateway-svc
-                port:
-                  number: 3005
           - path: /
             pathType: Prefix
             backend:

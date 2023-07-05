@@ -12,7 +12,7 @@ import { AuthService } from './auth.service';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { RpcValidationFilter } from './filters/rpc-validation.filter';
 import { SignInDto, SignUpDto } from './dto/sign-with-email.dto';
-
+import { CurrentUserDto } from '@repairnow/dto';
 @Controller()
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -32,6 +32,12 @@ export class AuthController {
   @MessagePattern({ cmd: 'get_user' })
   getUser(@Payload() payload: { userId: string }): any {
     return this.authService.getUser(payload.userId);
+  }
+
+  @UseFilters(new RpcValidationFilter())
+  @MessagePattern({ cmd: 'update_avatar' })
+  updateAvatar(@Payload() payload: { file: Express.Multer.File, user: CurrentUserDto }) {
+    return this.authService.updateAvatar(payload);
   }
 
   @UseFilters(new RpcValidationFilter())

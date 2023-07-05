@@ -22,7 +22,7 @@
                         </div>
                         <v-spacer />
                         <div>
-                            Fin : {{ endTime }}
+                            Fin : endTime pas dispo
                         </div>
                     </div>
                     <div class="tw-py-4">
@@ -75,7 +75,6 @@ const {currentUser} = storeToRefs(useUserStore())
 const route = useRoute()
 
 const startTime = new Date(announcement.value.startTime).toLocaleDateString('fr-FR', { day: "2-digit", month: "long", hour: "2-digit", minute: "2-digit" })
-const endTime = new Date(announcement.value.endTime).toLocaleDateString('fr-FR', { day: "2-digit", month: "long", hour: "2-digit", minute: "2-digit" })
 
 const filteredArray = ref()
 onMounted(async () => {
