@@ -78,14 +78,23 @@ export class MissionService {
     }
   }
 
-  async findUserAll(payload: { user: CurrentUserI }) {
+  async findUserAll(payload: { user: CurrentUserI, status: string }) {
     try {
-      console.log(payload)
-      return await this.prismaService.mission.findMany({
-        where: {
-          prestataireId: payload.user.id
-        }
-      })
+      if (payload.status && MissionStatus[payload.status]) {
+
+        return await this.prismaService.mission.findMany({
+          where: {
+            prestataireId: payload.user.id,
+            currentStatus: MissionStatus[payload.status]
+          }
+        })
+      } else {
+        return await this.prismaService.mission.findMany({
+          where: {
+            prestataireId: payload.user.id,
+          }
+        })
+      }
     } catch (error) {
       return new BadRequestException(error.message);
     }
