@@ -1,13 +1,15 @@
 <template>
-	<div class="tw-p-5 tw-flex tw-flex-col">
+	<div v-if="user" class="tw-p-5 tw-flex tw-flex-col">
 		<h1 class="tw-my tw-font-bold tw-text-2xl lg:tw-text-4xl">
 			Fiche utilisateur : {{ user?.lastname }} {{ user?.firstname }}
 		</h1>
-		<span class="tw-mt-5">
+		<span class="tw-mt-5 tw-flex tw-items-center">
 			<span class="tw-font-bold">Role:</span>
-			{{ parseRole(user?.role as string) }}
-			<!-- TODO: See why this fucking ref "newUserData" isnt set onMounted -->
-			<v-radio-group inline color="primary" v-model="newUserData.role">
+			<v-radio-group
+				hide-details
+				inline
+				color="primary"
+				v-model="user.role">
 				<v-radio label="Client" value="CLIENT" />
 				<v-radio label="Prestataire" value="CONTRACTOR" />
 				<v-radio label="Admin" value="ADMIN" />
@@ -26,13 +28,11 @@
 				{{ user?.isPhoneVerified ? "(vérifié)" : "(non vérifié)" }}
 			</span>
 		</span>
-		<span class="tw-mt-5">
-			<span class="tw-font-bold">Actif:</span>
-			{{ !user?.isUserDeleted }}
+		<span class="tw-mt-5 tw-flex tw-items-center">
+			<span class="tw-font-bold tw-mr-2">Utilisateur désactivé:</span>
 			<v-switch
-				v-model="test"
+				v-model="user.isUserDeleted"
 				color="primary"
-				value="isUserDeleted"
 				hide-details />
 		</span>
 
@@ -45,28 +45,32 @@
 
 <script setup lang="ts">
 import { useUserStore } from "@/stores/user";
-import { storeToRefs } from "pinia";
 import { ref } from "vue";
-import { onMounted } from "vue";
+import { onMounted, watch } from "vue";
 import { useRoute } from "vue-router";
+import userService from "@/services/api/user";
 
-const test = ref(false);
-
-const userStore = useUserStore();
-const { getUserById } = userStore;
-const { user } = storeToRefs(userStore);
+const { _updateUser } = userService;
+const { getUserById } = useUserStore();
 const route = useRoute();
 
-const newUserData = ref({
-	role: user?.value?.role,
-	email: user?.value?.email,
-	firstname: user?.value?.firstname,
-	lastname: user?.value?.lastname,
-});
+const user = ref();
+
+watch(
+	user,
+	(newVal: any) => {
+		if (newVal) {
+			const { avatar, ...rest } = newVal;
+			_updateUser(rest);
+		}
+	},
+	{ deep: true }
+);
 
 onMounted(async () => {
 	try {
-		await getUserById(route?.params?.id as string);
+		user.value = await getUserById(route?.params?.id as string);
+		console.log(user.value);
 	} catch {}
 });
 

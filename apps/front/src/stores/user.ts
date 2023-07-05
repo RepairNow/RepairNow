@@ -93,7 +93,8 @@ export const useUserStore = defineStore("user", () => {
     async function getUserById(userId: string) {
         try {
             const res = await _getUserById(userId);
-            user.value = res;
+            // user.value = res;
+            return res;
         } catch (error) {
             throw error;
         }

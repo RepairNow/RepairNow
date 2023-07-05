@@ -10,7 +10,7 @@ import {
   Response,
   Patch,
   UseInterceptors,
-  UploadedFile
+  UploadedFile,
 } from '@nestjs/common';
 import { ApiGatewayService } from './api-gateway.service';
 import { ClientProxy } from '@nestjs/microservices';
@@ -58,6 +58,12 @@ export class ApiGatewayController {
   }
 
   @UseGuards(PermissionGuard('ADMIN'))
+  @Patch('user/:userId')
+  patchUser(@Param('userId') userId: string, @Body() updateUserDto: any): any {
+    return this.apiGatewayService.patchUser(userId, updateUserDto);
+  }
+
+  @UseGuards(PermissionGuard('ADMIN'))
   @Get('users')
   getUsers(): any {
     return this.apiGatewayService.getUsers();
@@ -73,21 +79,30 @@ export class ApiGatewayController {
   @Patch('me/avatar')
   @UseGuards(AuthGuard)
   @UseInterceptors(FileInterceptor('file'))
-  updateAvatar(@UploadedFile() file: Express.Multer.File, @Request() request): Observable<any> {
+  updateAvatar(
+    @UploadedFile() file: Express.Multer.File,
+    @Request() request,
+  ): Observable<any> {
     const { user } = request;
-    return this.authClient.send({ cmd: 'update_avatar' }, { file, user })
+    return this.authClient.send({ cmd: 'update_avatar' }, { file, user });
   }
 
   @Post('reset_password')
   @UseGuards(AuthGuard)
-  resetPassword(@Request() request, @Body() payload: { oldPassword: string, newPassword }): Observable<any> {
+  resetPassword(
+    @Request() request,
+    @Body() payload: { oldPassword: string; newPassword },
+  ): Observable<any> {
     const { user } = request;
-    return this.authClient.send({ cmd: 'reset_password' }, { user, ...payload })
+    return this.authClient.send(
+      { cmd: 'reset_password' },
+      { user, ...payload },
+    );
   }
 
   @Post('password_forgotten')
   passwordForgotten(@Body() payload: { email: string }): Observable<any> {
-    return this.authClient.send({ cmd: 'password_forgotten' }, payload)
+    return this.authClient.send({ cmd: 'password_forgotten' }, payload);
   }
 
   @UseGuards(AccessTokenGuard)
