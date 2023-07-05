@@ -1,4 +1,4 @@
-import { Controller, Request, Inject, Body, UseGuards, Post, Get, Param, Patch, UseFilters, Delete, UseInterceptors, UploadedFiles } from "@nestjs/common";
+import { Controller, Request, Inject, Body, UseGuards, Post, Query, Get, Param, Patch, UseFilters, Delete, UseInterceptors, UploadedFiles } from "@nestjs/common";
 import { FilesInterceptor } from "@nestjs/platform-express";
 import { ClientProxy } from "@nestjs/microservices";
 import { AuthGuard } from "../guards/auth.guard";
@@ -19,19 +19,17 @@ export class AnnouncementsController {
   }
 
   @Get()
-  findAll(): Observable<any> {
-    return this.missionClient.send({ cmd: "findAllAnnouncements" }, '');
+  findAll(@Query() query): Observable<any> {
+    const { status } = query;
+    return this.missionClient.send({ cmd: "findAllAnnouncements" }, { status: status ? status : null });
   }
 
   @Get('/my-announcements')
   @UseGuards(AuthGuard)
-  async findUserAnnouncements(@Request() request): Promise<any> {
-    try {
-      const { user }: { user: CurrentUserDto } = request;
-      return await firstValueFrom(this.missionClient.send({ cmd: "findUserAnnouncements" }, user));
-    } catch (error) {
-      console.log('error controller', error)
-    }
+  findUserAnnouncements(@Request() request, @Query() query): Observable<any> {
+    const { user }: { user: CurrentUserDto } = request;
+    const { status } = query;
+    return this.missionClient.send({ cmd: "findUserAnnouncements" }, { user, status: status ? status : null });
   }
 
   @Get('/:id')
