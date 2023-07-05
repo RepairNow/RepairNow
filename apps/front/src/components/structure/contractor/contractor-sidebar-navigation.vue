@@ -12,13 +12,13 @@
                 value: 'mes-devis',
                 icon: 'mdi-bookmark-outline',
                 to: 'contractor-estimates',
-            },
+            },*/
             {
                 title: 'Mes missions',
                 value: 'mes-missions',
                 icon: 'mdi-bookmark-outline',
                 to: 'contractor-missions',
-            },*/
+            },
             {
                 title: 'Notifications',
                 value: 'notifications',
@@ -38,7 +38,11 @@
                 to: 'contractor-profile',
             },
         ]"
-    />
+    >
+        <template #title>
+            Prestataire
+        </template>
+    </sidebar-navigation>
 </template>
 
 <script setup lang="ts">

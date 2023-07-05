@@ -1,6 +1,6 @@
 <template>
-	<mobile-drawer :items="items">
-		<template #drawer-content v-if="true">
+	<mobile-drawer>
+		<template #drawer-content v-if="!isConnected()">
 			<div class="tw-bg-white tw-h-full">
 				<router-link
 					class="tw-text-md tw-py-2 tw-px-4 tw-font-medium tw-truncate tw-flex tw-flex-col hover:tw-bg-primary/20 tw-justify-center"
@@ -33,17 +33,8 @@
 import MobileDrawer from "@/components/structure/mobile-drawer.vue";
 import { ref } from "vue";
 import LoginForm from "@/components/modal/form/session/login-form.vue";
+import {useUserStore} from "@/stores/user";
 
-const items = ref([
-	{
-		title: "Devenir prestataire",
-		value: "devenir-prestataire",
-		to: "home-page",
-	},
-	{
-		title: "Inscription",
-		value: "inscription",
-		to: "register",
-	},
-]);
+const userStore = useUserStore()
+const {isAdmin, isContractor, isConnected} = userStore
 </script>

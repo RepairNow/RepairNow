@@ -69,7 +69,7 @@
 					<slot name="drawer-content">
 						<div class="tw-flex tw-items-center tw-p-6">
 							<div class="tw-font-bold tw-text-3xl tw-grow">
-								Bonjour X
+								Bonjour {{ currentUser.firstname }}
 							</div>
 							<div>
 								<v-avatar color="surface-variant" size="70" />
@@ -97,7 +97,9 @@
 							class="tw-w-full justify-start text-none tw-font-medium"
 							height="60"
 							size="large"
-							color="unset">
+							color="unset"
+                            @click="signout()"
+                        >
 							Se déconnecter
 						</v-btn>
 					</slot>
@@ -108,14 +110,129 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import {onMounted, ref} from "vue";
 import AnnouncementsModal from "@/components/modal/form/announcements/announcements-modal.vue";
-
-const props = defineProps({
-	items: { type: Array },
-});
+import {useUserStore} from "@/stores/user";
+import {storeToRefs} from "pinia";
+import {token} from "@/services";
+const userStore = useUserStore();
+const { getSelf, signout, isAdmin, isContractor, isConnected } = userStore;
+const { currentUser } = storeToRefs(userStore);
 
 const drawer = ref(false);
+const items = ref([{}])
+onMounted(async () => {
+    if (token) {
+        await getSelf();
+
+        if(isAdmin()) {
+            items.value = [
+                {
+                    title: 'Demandes',
+                    value: 'demandes',
+                    icon: 'mdi-bookmark-outline',
+                    to: 'admin-announcements',
+                },
+                {
+                    title: 'Utilisateurs',
+                    value: 'utilisateurs',
+                    icon: 'mdi-account-outline',
+                    to: 'admin-users',
+                },
+                {
+                    title: 'Geolocalisation',
+                    value: 'geolocalisation',
+                    icon: 'mdi-map-outline',
+                    to: 'admin-geo-locations',
+                },
+                {
+                    title: 'Partenariat',
+                    value: 'partenariat',
+                    icon: 'mdi-handshake-outline',
+                    to: 'admin-partnerships',
+                },
+                {
+                    title: 'Avis',
+                    value: 'avis',
+                    icon: 'mdi-star-outline',
+                    to: 'admin-reviews',
+                },
+                {
+                    title: 'Notifications',
+                    value: 'notifications',
+                    icon: 'mdi-bell-outline',
+                    to: 'admin-notifications',
+                },
+                {
+                    title: 'Messagerie',
+                    value: 'messagerie',
+                    icon: 'mdi-message-outline',
+                    to: 'admin-chat',
+                },
+                {
+                    title: 'Compte',
+                    value: 'compte',
+                    icon: 'mdi-account-outline',
+                    to: 'admin-profile',
+                },
+            ]
+        } else if (isContractor()) {
+            items.value = [
+                {
+                    title: 'Mes demandes',
+                    value: 'mes-demandes',
+                    icon: 'mdi-bookmark-outline',
+                    to: 'contractor-announcements',
+                },
+                {
+                    title: 'Notifications',
+                    value: 'notifications',
+                    icon: 'mdi-bell-outline',
+                    to: 'contractor-notifications',
+                },
+                {
+                    title: 'Messagerie',
+                    value: 'messagerie',
+                    icon: 'mdi-message-outline',
+                    to: 'contractor-chat',
+                },
+                {
+                    title: 'Compte',
+                    value: 'compte',
+                    icon: 'mdi-account-outline',
+                    to: 'contractor-profile',
+                },
+            ]
+        } else if (isConnected()) {
+            items.value = [
+                {
+                    title: 'Mes demandes',
+                    value: 'mes-demandes',
+                    icon: 'mdi-bookmark-outline',
+                    to: 'client-announcements',
+                },
+                {
+                    title: 'Notifications',
+                    value: 'notifications',
+                    icon: 'mdi-bell-outline',
+                    to: 'client-notifications',
+                },
+                {
+                    title: 'Messagerie',
+                    value: 'messagerie',
+                    icon: 'mdi-message-outline',
+                    to: 'client-chats',
+                },
+                {
+                    title: 'Compte',
+                    value: 'compte',
+                    icon: 'mdi-account-outline',
+                    to: 'client-profile',
+                },
+            ]
+        }
+    }
+})
 </script>
 
 <style scoped></style>
