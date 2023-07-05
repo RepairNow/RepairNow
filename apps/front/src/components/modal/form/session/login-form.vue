@@ -90,7 +90,7 @@ import { useRouter } from "vue-router";
 
 const screenSize = useScreenSize();
 const { isSizeLG } = storeToRefs(screenSize);
-const { signin } = useUserStore();
+const { signin, getSelf } = useUserStore();
 const router = useRouter();
 
 const loginForm = ref<Signin>({
@@ -110,6 +110,7 @@ const handleLogin = async () => {
 			await signin(loginForm.value);
 			formError.value = "";
 			dialog.value = false;
+            await getSelf()
 			await router.push({ name: "home-page" });
 		} catch (error) {
 			isSent.value = false;

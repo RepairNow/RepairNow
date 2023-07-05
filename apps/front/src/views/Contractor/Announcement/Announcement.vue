@@ -16,9 +16,12 @@
                                         v-if="!filteredArray?.length"
                                 />
                                 <announcement-estimate-modal
-                                        v-else
+                                        v-else-if="filteredArray[0].currentStatus !== 'ACCEPTED'"
                                         :announcement="announcement"
                                         :estimate="filteredArray[0]"
+                                />
+                                <mission-modal
+                                        v-else
                                 />
                             </span>
                         </div>
@@ -70,6 +73,7 @@ import EstimationConfirmation from "@/components/modal/confirm/estimation-confir
 import AnnouncementEstimateForm from "@/components/modal/form/announcements/announcement-estimate-form.vue";
 import {useUserStore} from "@/stores/user";
 import AnnouncementEstimateModal from "@/components/modal/form/announcements/announcement-estimate-modal.vue";
+import MissionModal from "@/components/modal/form/missions/mission-modal.vue";
 
 const announcementsStore = useAnnouncementStore()
 const {announcement} = storeToRefs(announcementsStore)
@@ -88,7 +92,6 @@ onMounted(async () => {
     const estimates = announcement.value.estimates
     filteredArray.value = estimates.filter(estimate => estimate.prestataire.sub === currentUser.value?.id || estimate.currentStatus === 'WAITING_PAYMENT');
     startTime.value = new Date(announcement.value.startTime).toLocaleString('fr-FR', { day: "2-digit", month: "long", hour: "2-digit", minute: "2-digit" })
-    endTime.value = new Date(announcement.value.endTime).toLocaleString('fr-FR', { day: "2-digit", month: "long", hour: "2-digit", minute: "2-digit" })
 })
 
 </script>

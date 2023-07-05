@@ -1,6 +1,6 @@
 <template>
 	<mobile-drawer>
-		<template #drawer-content v-if="!isConnected()">
+		<template #drawer-content v-if="!isClient">
 			<div class="tw-bg-white tw-h-full">
 				<router-link
 					class="tw-text-md tw-py-2 tw-px-4 tw-font-medium tw-truncate tw-flex tw-flex-col hover:tw-bg-primary/20 tw-justify-center"
@@ -34,7 +34,8 @@ import MobileDrawer from "@/components/structure/mobile-drawer.vue";
 import { ref } from "vue";
 import LoginForm from "@/components/modal/form/session/login-form.vue";
 import {useUserStore} from "@/stores/user";
+import {storeToRefs} from "pinia";
 
 const userStore = useUserStore()
-const {isAdmin, isContractor, isConnected} = userStore
+const {isAdmin, isContractor, isClient, isConnected} = storeToRefs(userStore)
 </script>
