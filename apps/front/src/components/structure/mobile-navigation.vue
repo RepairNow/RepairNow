@@ -1,5 +1,5 @@
 <template>
-    <div class="tw-absolute tw-w-full tw-bottom-0 tw-left-0 tw-h-14 tw-bg-white tw-items-center px-2 tw-flex lg:tw-hidden">
+    <div class="tw-absolute tw-w-full tw-bottom-0 tw-left-0 tw-h-14 tw-bg-white tw-items-center px-2 tw-flex lg:tw-hidden tw-z-[1000]">
         <slot name="content">
             <router-link
                     v-for="item in (items as any[])"

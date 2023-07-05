@@ -105,19 +105,10 @@
                     >
                         <div>
                             <div v-for="estimate in filteredArray"
-                                 class="tw-border tw-my-2 tw-rounded-lg tw-p-4"
+                                 class="tw-my-2 tw-rounded-lg tw-px-4"
                             >
-                                <div v-if="estimate.currentStatus === 'ACCEPTED'" class="tw-flex">
-                                    {{estimate.currentStatus}}
-                                </div>
-                                <div v-if="estimate.currentStatus === 'WAITING_PAYMENT'">
-                                    <div>
-                                        {{estimate.currentStatus}}
-                                    </div>
-                                    <div>
-                                        Pay
-                                    </div>
-                                </div>
+                                <div class="tw-w-full tw-text-xl tw-font-bold xl:tw-text-2xl tw-mb-4">Devis</div>
+
                                 <div class="tw-flex tw-items-center">
                                     <div>
                                         <v-avatar color="surface-variant" size="45" class="tw-mr-3"/>
@@ -126,18 +117,47 @@
                                         {{estimate.prestataire.firstname}}
                                         {{estimate.prestataire.lastname}}
                                     </div>
+                                    <v-spacer />
+                                    <div class="tw-flex">
+                                        <div v-if="estimate.currentStatus === 'ACCEPTED'" class="tw-p-2 tw-text-white tw-border-0 tw-rounded-lg tw-bg-primary ">
+                                            Accepté
+                                        </div>
+                                        <div v-if="estimate.currentStatus === 'WAITING_PAYMENT'">
+                                            <div>
+                                                {{estimate.currentStatus}}
+                                            </div>
+                                            <div>
+                                                Pay
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tw-my-8">
+                                    <p><span class="tw-underline">Tarif :</span> {{estimate.price}} €</p>
+                                    <p>
+                                        <span class="tw-underline">Description :</span> {{estimate.description}}
+                                    </p>
                                 </div>
                                 <div>
-                                    {{estimate.price}} €
+                                    Valider la mission
                                 </div>
-                                <div>
-                                    {{estimate.description}}
+                                <!--<div class="tw-h-10 tw-bg-white tw-relative tw-border-2 tw-border-primary tw-rounded-lg tw-cursor-pointer"
+                                     @click="showValidationCode = !showValidationCode"
+                                >
+                                    <div v-if="!showValidationCode"
+                                         class="tw-absolute tw-w-full tw-h-full tw-flex tw-items-center tw-bg-primary hover:tw-bg-primary"
+                                    >
+                                        <p class="tw-text-center tw-text-white tw-font-semibold tw-w-full">Montrer le code de validation</p>
+                                    </div>
+                                    <div class="tw-font-bold tw-w-full tw-h-full tw-flex tw-items-center tw-text-center tw-jutify-center">
+                                        <p class="tw-text-center tw-font-semibold tw-w-full">0 - 1 - 3 - 4</p>
+                                    </div>
                                 </div>
                                 <div v-if="estimate.currentStatus === 'WAITING_PAYMENT'">
                                     <v-btn>
                                         Annuler
                                     </v-btn>
-                                </div>
+                                </div>-->
                             </div>
                         </div>
                     </div>
@@ -176,7 +196,7 @@ const estimateStatus = ref({
     text: '',
     color: ''
 })
-
+const showValidationCode = ref(false)
 onMounted(async () => {
     await getAnnouncement(route.params.id.toString())
     const estimates = announcement.value.estimates
