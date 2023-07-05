@@ -50,7 +50,11 @@
                 to: 'admin-profile',
             },
         ]"
-    />
+    >
+        <template #title>
+            Admin
+        </template>
+    </sidebar-navigation>
 
 </template>
 

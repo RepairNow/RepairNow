@@ -26,7 +26,11 @@
                 to: 'client-profile',
             },
         ]"
-    />
+    >
+        <template #title>
+            Client
+        </template>
+    </sidebar-navigation>
 </template>
 
 <script setup lang="ts">

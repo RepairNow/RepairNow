@@ -1,5 +1,10 @@
 <template>
-    <div class="tw-h-full tw-bg-white tw-border-r lg:tw-flex tw-hidden tw-w-full">
+    <div class="tw-h-full tw-flex-col tw-bg-white tw-border-r lg:tw-flex tw-hidden tw-w-full">
+        <div class="tw-font-semibold tw-p-4 tw-text-xl">
+            <slot name="title">
+                Sidebar titre
+            </slot>
+        </div>
         <slot name="content">
             <v-list
                 nav
