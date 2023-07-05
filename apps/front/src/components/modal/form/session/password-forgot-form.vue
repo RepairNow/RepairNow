@@ -48,14 +48,15 @@ import { useScreenSize } from "@/stores/screen-size";
 import { storeToRefs } from "pinia";
 import { useUserStore } from "@/stores/user";
 import { ResetPassword } from "@/interfaces/user";
+import userService from "@/services/api/user";
 import forgotPassword from "@/assets/svg/forgot-password.svg";
 
 const screenSize = useScreenSize();
 const { isSizeLG } = storeToRefs(screenSize);
 const { resetPassword } = useUserStore();
-
+const { passwordForgotten } = userService;
 const dialog = ref(false);
-const resetPasswordForm = ref<ResetPassword>({
+const resetPasswordForm = ref<{ email: string }>({
     email: ""
 });
 const formError = ref("");
@@ -67,7 +68,7 @@ const handleForgotPassword = async () => {
         formError.value = ''
 
         isForgotPasswordSent.value = true;
-        await resetPassword(resetPasswordForm)
+        await passwordForgotten(resetPasswordForm.value)
         isForgotPasswordSent.value = false;
         isDialogOpened.value = false;
 
@@ -86,8 +87,8 @@ const checkIsEmail = () => {
 }
 
 const rules = ref({
-    required: value => !!value || 'Ce champs est requis.',
-    email: value => {
+    required: (value: any) => !!value || 'Ce champs est requis.',
+    email: (value: any) => {
         const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
         return pattern.test(value) || 'Email invalide.'
     },

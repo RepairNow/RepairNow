@@ -64,7 +64,8 @@ export interface Signup {
 }
 
 export interface ResetPassword {
-    email: string
+    oldPassword: string
+    newPassword: string
 }
 
 export interface TokenI {

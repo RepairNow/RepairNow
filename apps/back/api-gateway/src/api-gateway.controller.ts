@@ -78,14 +78,14 @@ export class ApiGatewayController {
     return this.authClient.send({ cmd: 'update_avatar' }, { file, user })
   }
 
-  @Post('reset-password')
+  @Post('reset_password')
   @UseGuards(AuthGuard)
   resetPassword(@Request() request, @Body() payload: { oldPassword: string, newPassword }): Observable<any> {
     const { user } = request;
     return this.authClient.send({ cmd: 'reset_password' }, { user, ...payload })
   }
 
-  @Post('password-forgotten')
+  @Post('password_forgotten')
   passwordForgotten(@Body() payload: { email: string }): Observable<any> {
     return this.authClient.send({ cmd: 'password_forgotten' }, payload)
   }
