@@ -3,7 +3,7 @@ kind: Ingress
 metadata:
   name: repair-now-com-ing
   annotations:
-    cloud.google.com/backend-config: "com-backendconfig"
+    # cloud.google.com/backend-config: "com-backendconfig"
     kubernetes.io/ingress.global-static-ip-name: repair-now-com-ip
     networking.gke.io/managed-certificates: managed-cert
 spec:
