@@ -39,23 +39,23 @@
 					</slot>
 				</div>
 
-                <div v-if="isContractor()" class="tw-mx-2">
-                    <router-link :to="{name: 'contractor-announcements'}">
-                        Prestatations
-                    </router-link>
-                </div>
+				<div v-if="isContractor()" class="tw-mx-2">
+					<router-link :to="{ name: 'contractor-announcements' }">
+						Prestatations
+					</router-link>
+				</div>
 
-                <div v-if="isAdmin()" class="tw-mx-2">
-                    <router-link :to="{name: 'admin-announcements'}">
-                        Admin
-                    </router-link>
-                </div>
+				<div v-if="isAdmin()" class="tw-mx-2">
+					<router-link :to="{ name: 'admin-announcements' }">
+						Admin
+					</router-link>
+				</div>
 
-                <div v-if="isClient()" class="tw-mx-2">
-                    <router-link :to="{name: 'client-announcements'}">
-                        Mon espace
-                    </router-link>
-                </div>
+				<div v-if="isClient()" class="tw-mx-2">
+					<router-link :to="{ name: 'client-announcements' }">
+						Mon espace
+					</router-link>
+				</div>
 
 				<slot name="after">
 					<v-menu :location="'bottom'">
@@ -66,11 +66,16 @@
 								v-bind="props"
 								class="tw-normal-case tw-text-medium border tw-rounded-full tw-px-2"
 								height="50">
-								<v-avatar
-									color="surface-variant"
-									size="35"></v-avatar>
+								<v-avatar color="surface-variant" size="35">
+									<v-img
+										:src="myPP"
+										alt="avatar"
+										width="35"
+										height="35"
+										class="tw-rounded-full" />
+								</v-avatar>
 								<span class="tw-mx-2">{{
-									currentUser?.email
+									currentUserAllInfos?.email
 								}}</span>
 								<v-icon>mdi-menu</v-icon>
 							</v-btn>
@@ -115,17 +120,28 @@
 import { onMounted, ref } from "vue";
 import AnnouncementsModal from "@/components/modal/form/announcements/announcements-modal.vue";
 import { useUserStore } from "@/stores/user";
+import imageService from "@/services/api/image";
 import { storeToRefs } from "pinia";
 import { token } from "@/services";
 import { useRouter } from "vue-router";
+import { watch } from "vue";
 const props = defineProps({
 	items: { type: Array },
 });
 
 const drawer = ref<boolean>(false);
 const userStore = useUserStore();
-const { getSelf, signout, isAdmin, isContractor, isClient } = userStore;
-const { currentUser } = storeToRefs(userStore);
+const { getSelfAllInfos, signout, isAdmin, isContractor, isClient } = userStore;
+const { currentUserAllInfos } = storeToRefs(userStore);
+const { getImage } = imageService;
+
+const myPP = ref();
+
+watch(currentUserAllInfos, async (newVal) => {
+	if (newVal) {
+		myPP.value = await getImage(currentUserAllInfos?.value?.avatar[0].id);
+	}
+});
 
 const router = useRouter();
 
@@ -136,7 +152,7 @@ const handleDisconnect = () => {
 
 onMounted(async () => {
 	if (token) {
-		await getSelf();
+		await getSelfAllInfos();
 	}
 });
 </script>

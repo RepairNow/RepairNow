@@ -36,6 +36,7 @@ export interface UserI {
     role: string
     phoneNumber: string | number
     email: string
+    avatar: any[]
     firstname: string
     lastname: string
     address: string

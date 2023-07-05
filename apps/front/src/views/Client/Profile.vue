@@ -156,10 +156,13 @@ import { createToast } from "mosha-vue-toastify";
 import { ref } from "vue";
 import { useScreenSize } from "@/stores/screen-size";
 import FileInputCustom from "@/components/FileInputCustom.vue";
+import { watch } from "vue";
+import imageService from "@/services/api/image";
 
 const myUser = ref();
 const fileInput = ref();
 const { getSelfAllInfos } = useUserStore();
+const { getImage } = imageService;
 
 /** Email Verif */
 const isEmailSent = ref(false);
@@ -212,6 +215,14 @@ const getInitialsFromFirstnameAndLastname = (
 	if (!firstname || !lastname) return;
 	return `${firstname[0].toUpperCase()}${lastname[0].toUpperCase()}`;
 };
+watch(
+	() => myUser.value,
+	async () => {
+		if (myUser.value) {
+			previewUrl.value = await getImage(myUser.value.avatar[0].id);
+		}
+	}
+);
 
 onMounted(async () => {
 	myUser.value = await getSelfAllInfos();
