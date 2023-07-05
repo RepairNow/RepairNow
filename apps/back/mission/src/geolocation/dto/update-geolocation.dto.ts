@@ -16,9 +16,6 @@ export class UpdateGeolocationDto {
   y: number;
 
   @IsNotEmpty()
-  z: number;
-
-  @IsNotEmpty()
   @IsUUID()
   missionId: string;
 

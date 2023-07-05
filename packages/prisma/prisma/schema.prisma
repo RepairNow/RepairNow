@@ -97,7 +97,7 @@ model Announcement {
   userId        String     @db.Uuid
   title         String
   description   String
-  images        Files[]    
+  images        Files[]
   address       String
   startTime     DateTime   @default(now())
   estimatedTime Int
@@ -114,19 +114,19 @@ model Announcement {
 }
 
 model Files {
-  id                        String @id @default(uuid()) @db.Uuid
-  announcementId            String? @db.Uuid
-  announcement              Announcement? @relation(fields: [announcementId], references: [id])
-  userId                    String? @db.Uuid @unique
-  user                      User?   @relation(fields: [userId], references: [id])
-  fieldname                 String
-  originalname              String
-  mimetype                  String            
-  filename                  String
-  destination               String
-  path                      String
-  encoding                  String
-  size                      Int
+  id             String        @id @default(uuid()) @db.Uuid
+  announcementId String?       @db.Uuid
+  announcement   Announcement? @relation(fields: [announcementId], references: [id])
+  userId         String?       @unique @db.Uuid
+  user           User?         @relation(fields: [userId], references: [id])
+  fieldname      String
+  originalname   String
+  mimetype       String
+  filename       String
+  destination    String
+  path           String
+  encoding       String
+  size           Int
 }
 
 model Estimate {
@@ -193,7 +193,6 @@ model Geolocation {
   id        String  @id @default(uuid()) @db.Uuid
   x         Float
   y         Float
-  z         Float
   mission   Mission @relation(fields: [missionId], references: [id])
   missionId String  @unique @db.Uuid
   user      User    @relation(fields: [userId], references: [id])

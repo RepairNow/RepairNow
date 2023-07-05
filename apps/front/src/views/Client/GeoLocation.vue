@@ -4,7 +4,7 @@
       Position du prestataire
     </div>
     <div class="map-wrapper">
-      <l-map v-if="clientCoord !== null && contractorCoord !== null" ref="map" v-model:zoom="zoom" :center="[clientCoord.x, clientCoord.y]">
+      <l-map :use-global-leaflet="false" ref="map" v-model:zoom="zoom" :center="[clientCoord.x, clientCoord.y]">
         <l-tile-layer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           layer-type="base"
@@ -14,26 +14,18 @@
           <l-icon :icon-size="[21, 21]">★</l-icon>
         </l-marker>
         <l-marker :lat-lng="[clientCoord.x, clientCoord.y]"></l-marker>
-        <l-marker :lat-lng="[clientCoord.x, clientCoord.y]"></l-marker>
+        <l-marker :lat-lng="[contractorCoord.x, contractorCoord.y]"></l-marker>
       </l-map>
     </div>
     <div class="tw-flex tw-flex-col">
         <!-- <p class="tw-text-center tw-text-red-500 tw-pb-2">{{formError}}</p> -->
         <p class="tw-text-xl tw-mb-3">Entrez vos coordonnées</p>
-        <p>Votre latitude (x)</p>
+        <!-- <p>Votre latitude (x)</p> -->
         <v-text-field
-          v-model="clientCoord.x"
+          v-model="clientCoordOneLine"
           prepend-inner-icon="mdi-map-marker"
           variant="filled"
-          label="Latitude (x)*"
-          class="rounded-lg"
-        />
-        <p>Votre longitude (y)</p>
-        <v-text-field
-          v-model="clientCoord.y"
-          prepend-inner-icon="mdi-map-marker"
-          variant="filled"
-          label="Longitude (y)*"
+          label="Latitude, Longitude"
           class="rounded-lg"
         />
     </div>
@@ -43,7 +35,7 @@
 import "leaflet/dist/leaflet.css";
 import { LMap, LTileLayer, LMarker, LIcon } from "@vue-leaflet/vue-leaflet";
 import { useGeolocStore } from "@/stores/geoloc";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 
@@ -52,6 +44,7 @@ const clientCoord = ref({
   x: 0,
   y: 0,
 });
+const clientCoordOneLine = ref("");
 const contractorCoord = ref({
   x: 0,
   y: 0,
@@ -64,13 +57,22 @@ const { getAnnouncementGeoloc } = useGeolocStore();
 onMounted(async () => {
   // get geolocation from url path variable
   const { params } = useRoute();
-  const { announcementId } = params;
-  console.log(announcementId);
+  const { id } = params;
 
-  await getAnnouncementGeoloc(announcementId);
+  await getAnnouncementGeoloc(id);
   const {geoloc} = storeToRefs(geolocStore);
+  console.log(geoloc.value);
+
   contractorCoord.value.x = geoloc.value.x;
   contractorCoord.value.y = geoloc.value.y;
+});
+
+watch(clientCoordOneLine, (newValue) => {
+  const coord = newValue.split(",");
+  clientCoord.value.x = Number(coord[0]);
+  clientCoord.value.y = Number(coord[1]);
+  console.log(clientCoord.value);
+  
 });
 
 </script>
@@ -95,5 +97,7 @@ onMounted(async () => {
   font-size: large;
   text-align: center;
   line-height: 21px;
+  height: 50px;
+  width: 50px;
 }
 </style>

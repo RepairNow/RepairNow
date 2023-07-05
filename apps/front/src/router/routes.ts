@@ -111,7 +111,7 @@ const routes = [
 			},
 			{
 				name: "client-geo-location",
-				path: "geo-location/announcement/:announcementId",
+				path: "geo-location/announcement/:id",
 				component: () => import("@/views/Client/GeoLocation.vue"),
 			},
 			{
