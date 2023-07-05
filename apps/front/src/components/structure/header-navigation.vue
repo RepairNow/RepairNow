@@ -66,12 +66,21 @@
 								v-bind="props"
 								class="tw-normal-case tw-text-medium border tw-rounded-full tw-px-2"
 								height="50">
-								<v-avatar
-									color="surface-variant"
-									size="35"></v-avatar>
-								<span class="tw-mx-2">{{
-									currentUser?.email
-								}}</span>
+								<v-avatar color="surface-variant" size="35">
+									<v-img
+										v-if="myPP"
+										:src="myPP"
+										alt="avatar"
+										width="35"
+										height="35"
+										class="tw-rounded-full" />
+									<span
+										v-else
+										class="tw-text-lg tw-font-bold tw-text-primary"
+										>?</span
+									>
+								</v-avatar>
+								<span class="tw-mx-2">{{ myUser?.email }}</span>
 								<v-icon>mdi-menu</v-icon>
 							</v-btn>
 						</template>
@@ -115,14 +124,27 @@
 import {onMounted, ref, watch} from "vue";
 import AnnouncementsModal from "@/components/modal/form/announcements/announcements-modal.vue";
 import { useUserStore } from "@/stores/user";
+import imageService from "@/services/api/image";
 import { storeToRefs } from "pinia";
 import { token } from "@/services";
 import { useRouter } from "vue-router";
 
 const drawer = ref<boolean>(false);
 const userStore = useUserStore();
-const { getSelf, signout } = userStore;
+const { getSelfAllInfos, getSelf, signout } = userStore;
 const { currentUser, isAdmin, isContractor, isClient, isConnected } = storeToRefs(userStore);
+const { getImage } = imageService;
+
+const myPP = ref();
+const myUser = ref();
+
+watch(myUser, async (newVal) => {
+    if (newVal) {
+        if (myUser?.value?.avatar?.[0]?.id) {
+            myPP.value = await getImage(myUser?.value?.avatar?.[0]?.id);
+        }
+    }
+});
 
 const router = useRouter();
 const items = ref([{}]);
@@ -247,7 +269,7 @@ watch(isClient, () => {
 
 onMounted(async () => {
 	if (token) {
-		//await getSelf();
+        myUser.value = await getSelfAllInfos();
         setMenu()
 	}
 });

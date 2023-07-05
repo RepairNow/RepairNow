@@ -2,9 +2,10 @@ import { Controller, Request, Inject, Body, UseGuards, Post, Get, Param, Patch, 
 import { FilesInterceptor } from "@nestjs/platform-express";
 import { ClientProxy } from "@nestjs/microservices";
 import { AuthGuard } from "../guards/auth.guard";
-import { Observable } from "rxjs";
+import { Observable, firstValueFrom } from "rxjs";
 import { ExceptionFilter } from "../filters/rpc-exception.filter";
 import { CurrentUserDto } from "@repairnow/dto"
+
 @Controller('/announcements')
 //@UseGuards(AuthGuard)
 export class AnnouncementsController {
@@ -24,9 +25,13 @@ export class AnnouncementsController {
 
   @Get('/my-announcements')
   @UseGuards(AuthGuard)
-  findUserAnnouncements(@Request() request): Observable<any> {
-    const { user }: { user: CurrentUserDto } = request;
-    return this.missionClient.send({ cmd: "findUserAnnouncements" }, user);
+  async findUserAnnouncements(@Request() request): Promise<any> {
+    try {
+      const { user }: { user: CurrentUserDto } = request;
+      return await firstValueFrom(this.missionClient.send({ cmd: "findUserAnnouncements" }, user));
+    } catch (error) {
+      console.log('error controller', error)
+    }
   }
 
   @Get('/:id')

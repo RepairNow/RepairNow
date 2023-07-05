@@ -12,6 +12,7 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   app.connectMicroservice({
     transport: Transport.TCP,
+    inheritAppConfig: true,
     options: {
       host: '0.0.0.0',
       port: configService.get('AUTH_PORT'),

@@ -13,6 +13,11 @@ export class GeolocationController {
     return this.geolocationService.findOne(id);
   }
 
+  @MessagePattern({ cmd: 'findAnnouncementGeoloc' })
+  findAnnouncementGeoloc(@Payload() announcementId: string) {
+    return this.geolocationService.findAnnouncementGeoloc(announcementId);
+  }
+
   @MessagePattern({ cmd: 'updateGeolocation' })
   @UseFilters(RpcValidationFilter)
   update(@Payload(ValidationPipe) updateGeolocationDto: UpdateGeolocationDto) {

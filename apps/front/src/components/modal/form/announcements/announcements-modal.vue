@@ -48,55 +48,65 @@ import carImg from "@/assets/svg/jobs/car-repair.svg";
 import locksmithImg from "@/assets/svg/jobs/locksmith.svg";
 import houseApplianceImg from "@/assets/svg/jobs/house-appliance.png";
 import { useRouter } from "vue-router";
+import { onMounted } from "vue";
+import jobService from "@/services/api/job";
 
-const items = [
-	{
-		text: "Bricolage",
-		job: "bricolage",
-		image: repairImg,
-	},
-	{
-		text: "Electricité",
-		job: "electricite",
-		image: electricityImg,
-	},
-	{
-		text: "Plomberie",
-		job: "plomberie",
-		image: plumbingImg,
-	},
-	{
-		text: "Serrurier",
-		job: "serrurier",
-		image: locksmithImg,
-	},
-	{
-		text: "Electroménager",
-		job: "electromenager",
-		image: houseApplianceImg,
-	},
-	{
-		text: "Jardinage",
-		job: "jardinage",
-		image: gardenImg,
-	},
-	{
-		text: "Réparation 2 roues (vélo, moto, scooter)",
-		job: "reparation-2-roues",
-		image: bikeImg,
-	},
-	{
-		text: "Réparation voiture",
-		job: "reparation-auto",
-		image: carImg,
-	},
-];
+const { _getJobs } = jobService;
+const jobsFromBack = ref();
+
+const items = ref();
 
 const dialog = ref(false);
 const screenSizeStore = useScreenSize();
 const { isSizeMD } = storeToRefs(screenSizeStore);
 
 const router = useRouter();
+
+onMounted(async () => {
+	jobsFromBack.value = await _getJobs();
+	items.value = [
+		{
+			text: jobsFromBack.value?.[0]?.title,
+			job: jobsFromBack.value?.[0]?.id,
+			image: repairImg,
+		},
+		{
+			text: jobsFromBack.value?.[1]?.title,
+			job: jobsFromBack.value?.[1]?.id,
+			image: electricityImg,
+		},
+		{
+			text: jobsFromBack.value?.[2]?.title,
+			job: jobsFromBack.value?.[2]?.id,
+			image: plumbingImg,
+		},
+		{
+			text: jobsFromBack.value?.[3]?.title,
+			job: jobsFromBack.value?.[3]?.id,
+			image: locksmithImg,
+		},
+		{
+			text: jobsFromBack.value?.[4]?.title,
+			job: jobsFromBack.value?.[4]?.id,
+			image: houseApplianceImg,
+		},
+		{
+			text: jobsFromBack.value?.[5]?.title,
+			job: jobsFromBack.value?.[5]?.id,
+			image: gardenImg,
+		},
+		{
+			text: jobsFromBack.value?.[6]?.title,
+			job: jobsFromBack.value?.[6]?.id,
+			image: bikeImg,
+		},
+		{
+			text: jobsFromBack.value?.[7]?.title,
+			job: jobsFromBack.value?.[7]?.id,
+			image: carImg,
+		},
+	];
+});
 
 const handleClickItem = (job: string) => {
 	router.push({ name: "post-announcement", query: { job } });
@@ -125,19 +135,19 @@ const handleClickItem = (job: string) => {
 	transition-duration: 0.5s; /* Définir la durée souhaitée */
 }
 .grid-item img {
-    background-color: rgb(226, 226, 226);
-    border-radius: 4px;
-    width: 60px;
-    height: 60px;
-    object-fit: cover;
-    transition: transform 0.5s;
+	background-color: rgb(226, 226, 226);
+	border-radius: 4px;
+	width: 60px;
+	height: 60px;
+	object-fit: cover;
+	transition: transform 0.5s;
 }
 
 .grid-item:hover {
 	background-color: rgb(226, 226, 226);
 }
 .grid-item:hover img {
-    transform: scale(1.1);
-    transition: transform 0.5s;
+	transform: scale(1.1);
+	transition: transform 0.5s;
 }
 </style>

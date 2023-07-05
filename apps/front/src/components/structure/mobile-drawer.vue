@@ -67,45 +67,61 @@
 
 					<!-- Displayed only if user is connected -->
 					<slot name="drawer-content">
-						<div class="tw-flex tw-items-center tw-p-6">
-							<div class="tw-font-bold tw-text-3xl tw-grow">
-								Bonjour {{ currentUser?.firstname }}
+						<div class="tw-bg-white tw-h-full">
+							<div class="tw-flex tw-items-center tw-p-6">
+								<div class="tw-font-bold tw-text-3xl tw-grow">
+									Bonjour {{ myUser?.firstname }}
+								</div>
+								<div>
+									<v-avatar color="surface-variant" size="70">
+										<v-img
+											v-if="myPP"
+											:src="myPP"
+											alt="Profile picture"
+											width="70"
+											height="70"
+											class="tw-object-cover" />
+										<span v-else>{{
+											getInitialsFromFirstnameAndLastname(
+												myUser?.firstname,
+												myUser?.lastname
+											)
+										}}</span>
+									</v-avatar>
+								</div>
 							</div>
-							<div>
-								<v-avatar color="surface-variant" size="70" />
-							</div>
-						</div>
-						<router-link
-							v-for="item in (items as any[])"
-							:to="{ name: item.to }">
+							<router-link
+								v-for="item in (items as any[])"
+								:to="{ name: item.to }">
+								<v-btn
+									variant="text"
+									class="tw-w-full justify-start text-none tw-font-medium"
+									size="large"
+									color="unset">
+									<v-icon
+										slot="prependIcon"
+										color="primary"
+										:icon="item.icon"
+										class="tw-mr-2" />
+									{{ item.title }}
+								</v-btn>
+							</router-link>
+							<v-divider class="tw-border-black" />
 							<v-btn
 								variant="text"
 								class="tw-w-full justify-start text-none tw-font-medium"
+								height="60"
 								size="large"
-								color="unset">
-								<v-icon
-									slot="prependIcon"
-									color="primary"
-									:icon="item.icon"
-									class="tw-mr-2" />
-								{{ item.title }}
+								color="unset"
+                                @click="() => {
+                                    signout()
+                                    drawer = false
+                                    setMenu()
+                                }"
+                            >
+								Se déconnecter
 							</v-btn>
-						</router-link>
-						<v-divider class="tw-border-black" />
-						<v-btn
-							variant="text"
-							class="tw-w-full justify-start text-none tw-font-medium"
-							height="60"
-							size="large"
-							color="unset"
-                            @click="() => {
-                                signout()
-                                drawer = false
-                                setMenu()
-                            }"
-                        >
-							Se déconnecter
-						</v-btn>
+						</div>
 					</slot>
 				</v-dialog>
 			</slot>
@@ -116,12 +132,40 @@
 <script setup lang="ts">
 import {onMounted, ref, watch} from "vue";
 import AnnouncementsModal from "@/components/modal/form/announcements/announcements-modal.vue";
-import {useUserStore} from "@/stores/user";
+import { useUserStore } from "@/stores/user";
+import imageService from "@/services/api/image";
+import { token } from "@/services";
 import {storeToRefs} from "pinia";
-import {token} from "@/services";
 const userStore = useUserStore();
-const { getSelf, signout } = userStore;
+
+const { getSelfAllInfos, getSelf, signout } = userStore;
 const { currentUser, isAdmin, isContractor, isClient, isConnected } = storeToRefs(userStore);
+const { getImage } = imageService;
+
+const myUser = ref();
+const myPP = ref();
+
+onMounted(async () => {
+	if (token) {
+		myUser.value = await getSelfAllInfos();
+	}
+});
+
+watch(myUser, async (newVal) => {
+	if (newVal) {
+		if (newVal.avatar?.[0]?.id) {
+			myPP.value = await getImage(newVal.avatar?.[0]?.id);
+		}
+	}
+});
+
+const getInitialsFromFirstnameAndLastname = (
+	firstname: string,
+	lastname: string
+) => {
+	if (!firstname || !lastname) return;
+	return `${firstname[0].toUpperCase()}${lastname[0].toUpperCase()}`;
+};
 
 const drawer = ref(false);
 const items = ref([{}])

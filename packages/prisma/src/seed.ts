@@ -1,8 +1,21 @@
 import { PrismaClient } from '@prisma/client';
 import { hash } from 'bcrypt';
+import { createJobs } from './jobsSeeds';
 
 const prisma = new PrismaClient();
 async function main() {
+  const {
+    bricolageJOB,
+    plomberieJOB,
+    electromenagerJOB,
+    reparation2rouesJOB,
+    electriciteJOB,
+    serrurierJOB,
+    jardinageJOB,
+    reparationVoitureJOB,
+  } = await createJobs();
+
+  /** USERS */
   const client = await prisma.user.upsert({
     where: { email: 'client@gmail.com' },
     update: {},
@@ -12,16 +25,6 @@ async function main() {
       firstname: 'Client',
       lastname: 'Crocky',
       phoneNumber: '0606060606',
-      jobs: {
-        create: [
-          {
-            title: 'Follow Prisma on Facebook',
-          },
-          {
-            title: 'Follow Nexus on Twitter',
-          },
-        ],
-      },
     },
   });
   const admin = await prisma.user.upsert({
@@ -46,6 +49,18 @@ async function main() {
       firstname: 'Contractor',
       lastname: 'Chouffeglotte',
       phoneNumber: '0712345678',
+      jobs: {
+        connect: [
+          { id: bricolageJOB.id },
+          { id: plomberieJOB.id },
+          { id: electromenagerJOB.id },
+          { id: reparation2rouesJOB.id },
+          { id: electriciteJOB.id },
+          { id: serrurierJOB.id },
+          { id: jardinageJOB.id },
+          { id: reparationVoitureJOB.id },
+        ],
+      },
     },
   });
   console.log({ client, admin, contractor });

@@ -155,7 +155,6 @@ onMounted(() => {
 onUnmounted(() => {
     removeScreenSizeUpdate()
 })
-
 const drawerMain = ref(false);
 const drawerRight = ref(false);
 

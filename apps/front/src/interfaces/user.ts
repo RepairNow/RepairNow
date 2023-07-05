@@ -36,6 +36,7 @@ export interface UserI {
     role: string
     phoneNumber: string | number
     email: string
+    avatar: any[]
     firstname: string
     lastname: string
     address: string
@@ -63,7 +64,8 @@ export interface Signup {
 }
 
 export interface ResetPassword {
-    email: string
+    oldPassword: string
+    newPassword: string
 }
 
 export interface TokenI {

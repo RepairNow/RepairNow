@@ -84,7 +84,7 @@ export class AnnouncementsService {
         
       return announcement;
     } catch (error) {
-      return new BadRequestException(error.message);
+      throw new BadRequestException(error.message);
     }
   }
 
