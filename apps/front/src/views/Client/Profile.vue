@@ -219,7 +219,9 @@ watch(
 	() => myUser.value,
 	async () => {
 		if (myUser.value) {
-			previewUrl.value = await getImage(myUser.value.avatar[0].id);
+			if (myUser.value.avatar?.[0]?.id) {
+				previewUrl.value = await getImage(myUser.value.avatar[0].id);
+			}
 		}
 	}
 );

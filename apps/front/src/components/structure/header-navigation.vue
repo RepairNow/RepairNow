@@ -68,15 +68,19 @@
 								height="50">
 								<v-avatar color="surface-variant" size="35">
 									<v-img
+										v-if="myPP"
 										:src="myPP"
 										alt="avatar"
 										width="35"
 										height="35"
 										class="tw-rounded-full" />
+									<span
+										v-else
+										class="tw-text-lg tw-font-bold tw-text-primary"
+										>?</span
+									>
 								</v-avatar>
-								<span class="tw-mx-2">{{
-									currentUserAllInfos?.email
-								}}</span>
+								<span class="tw-mx-2">{{ myUser?.email }}</span>
 								<v-icon>mdi-menu</v-icon>
 							</v-btn>
 						</template>
@@ -132,16 +136,16 @@ const props = defineProps({
 const drawer = ref<boolean>(false);
 const userStore = useUserStore();
 const { getSelfAllInfos, signout, isAdmin, isContractor, isClient } = userStore;
-const { currentUserAllInfos } = storeToRefs(userStore);
 const { getImage } = imageService;
 
 const myPP = ref();
+const myUser = ref();
 
-watch(currentUserAllInfos, async (newVal) => {
+watch(myUser, async (newVal) => {
 	if (newVal) {
-		myPP.value = await getImage(
-			currentUserAllInfos?.value?.avatar?.[0]?.id
-		);
+		if (myUser?.value?.avatar?.[0]?.id) {
+			myPP.value = await getImage(myUser?.value?.avatar?.[0]?.id);
+		}
 	}
 });
 
@@ -154,7 +158,7 @@ const handleDisconnect = () => {
 
 onMounted(async () => {
 	if (token) {
-		await getSelfAllInfos();
+		myUser.value = await getSelfAllInfos();
 	}
 });
 </script>
