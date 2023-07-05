@@ -3,7 +3,7 @@
 	<div class="tw-flex tw-justify-center">
 		<div class="tw-w-full tw-max-w-xl tw-mt-14 tw-relative">
 			<h1 class="tw-font-semibold tw-text-lg tw-mb-5 tw-px-2">
-				{{ getCurrentJob($route.query.job as string)?.name }}
+				{{ getCurrentJob($route.query.job as string)?.title }}
 			</h1>
 			<Transition
 				:name="
@@ -312,6 +312,7 @@ import { onMounted } from "vue";
 import { ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import annoucementService from "@/services/api/announcement";
+import jobService from "@/services/api/job";
 
 const MAX_DOC_STATE_VALUE = 5;
 // constant HOURS from 7H00 to 21H00 with 30 minutes interval
@@ -363,7 +364,7 @@ const jobs = [
 ];
 
 const getCurrentJob = (job: string) => {
-	const currentJob = jobs.find((j) => j.link === job);
+	const currentJob = jobsFromBackend?.value?.find((j: any) => j.id === job);
 	return currentJob;
 };
 
@@ -385,7 +386,7 @@ const formValues = reactive<CreateAnnouncement>({
 	estimatedTime: 4,
 	preferredHour: "peu importe",
 	// TODO: add job from backend
-	jobId: "a70ceffe-351a-4b1b-aec0-fd1b9de5a2dc",
+	jobId: query.job as string,
 });
 
 const handleSendFormValues = async () => {
@@ -456,13 +457,22 @@ watch(docState, (val) => {
 const userStore = useUserStore();
 const { currentUser } = storeToRefs(userStore);
 
-onMounted(() => {
+const { _getJobs } = jobService;
+const jobsFromBackend = ref();
+
+onMounted(async () => {
 	if (!currentUser.value) {
 		router.push({ name: "register" });
 	}
 
+	jobsFromBackend.value = await _getJobs();
+
 	// if query.job is not in jobs, redirect to home
-	if (!jobs.map((job) => job.link).includes(query.job as string)) {
+	if (
+		!jobsFromBackend.value
+			.map((job: any) => job.id)
+			.includes(query.job as string)
+	) {
 		router.push({ name: "home-page" });
 	}
 });

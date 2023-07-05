@@ -21,6 +21,7 @@ export const useJobStore = defineStore("job", () => {
 		try {
 			const res = await _getJobs();
 			jobs.value = res;
+			return res;
 		} catch (error) {
 			throw error;
 		}

@@ -10,32 +10,18 @@ export async function createJobs() {
       title: 'Bricolage',
     },
   });
-  const plomberieJOB = await prisma.job.upsert({
-    where: { title: 'Plomberie' },
-    update: {},
-    create: {
-      title: 'Plomberie',
-    },
-  });
-  const electromenagerJOB = await prisma.job.upsert({
-    where: { title: 'Electroménager' },
-    update: {},
-    create: {
-      title: 'Electroménager',
-    },
-  });
-  const reparation2rouesJOB = await prisma.job.upsert({
-    where: { title: 'Réparation 2 roues (vélo, moto, scooter)' },
-    update: {},
-    create: {
-      title: 'Réparation 2 roues (vélo, moto, scooter)',
-    },
-  });
   const electriciteJOB = await prisma.job.upsert({
     where: { title: 'Electricité' },
     update: {},
     create: {
       title: 'Electricité',
+    },
+  });
+  const plomberieJOB = await prisma.job.upsert({
+    where: { title: 'Plomberie' },
+    update: {},
+    create: {
+      title: 'Plomberie',
     },
   });
   const serrurierJOB = await prisma.job.upsert({
@@ -45,11 +31,25 @@ export async function createJobs() {
       title: 'Serrurier',
     },
   });
+  const electromenagerJOB = await prisma.job.upsert({
+    where: { title: 'Electroménager' },
+    update: {},
+    create: {
+      title: 'Electroménager',
+    },
+  });
   const jardinageJOB = await prisma.job.upsert({
     where: { title: 'Jardinage' },
     update: {},
     create: {
       title: 'Jardinage',
+    },
+  });
+  const reparation2rouesJOB = await prisma.job.upsert({
+    where: { title: 'Réparation 2 roues (vélo, moto, scooter)' },
+    update: {},
+    create: {
+      title: 'Réparation 2 roues (vélo, moto, scooter)',
     },
   });
   const reparationVoitureJOB = await prisma.job.upsert({
