@@ -36,15 +36,15 @@ class User {
     async _resetPassword(payload: ResetPassword): Promise<void> {
         try {
             const uri = '/reset_password';
-            await clientWithoutAuth.post(uri, payload);
+            await client.post(uri, payload);
         } catch (error) {
             throw error;
         }
     }
 
-    async _validateResetPassword(payload: { token: string, password: string }) {
+    async passwordForgotten(payload: { email: string }) {
         try {
-            const uri = '/validate_reset_password';
+            const uri = '/password_forgotten';
             await clientWithoutAuth.post(uri, payload);
         } catch (error) {
             throw error;

@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, BadRequestException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { SignInDto } from './dto/sign-with-email.dto';
 import { PrismaService, User } from '@repairnow/prisma';
@@ -7,6 +7,10 @@ import { verify, hash } from 'argon2';
 import { ForbiddenException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { CurrentUserDto } from '@repairnow/dto';
+import { compare, hash as bHash } from 'bcrypt';
+import { RpcException } from '@nestjs/microservices';
+import { MailerService } from '@nestjs-modules/mailer';
+
 interface IJwtPayload {
   email: string;
   firstname: string;
@@ -17,6 +21,16 @@ interface IJwtPayload {
   sub: string;
 }
 
+function genererMdpRobuste(longueur) {
+  const caracteres = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+[]{}|;:,.<>?!!@@##$$%%^^&&';
+  let mdp = '';
+  while (mdp.length < longueur) {
+    const index = Math.floor(Math.random() * caracteres.length);
+    mdp += caracteres.charAt(index);
+  }
+  return mdp;
+}
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -24,6 +38,7 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
     private configService: ConfigService,
+    private mailerService: MailerService
   ) {}
 
   async isUserExist(email: SignInDto['email']): Promise<boolean> {
@@ -256,5 +271,78 @@ export class AuthService {
     const tokens = await this.getTokens(payload);
     await this.updateRefreshToken(user.id, tokens.refreshToken);
     return tokens;
+  }
+
+  async resetPassword(payload: { user: CurrentUserDto, oldPassword: string, newPassword: string }) {
+    const user = await this.prismaService.user.findUnique({
+      where: {
+        id: payload.user.sub
+      }
+    });
+
+    const areEqual = await compare(payload.oldPassword, user.password);
+
+    if(!areEqual) {
+      throw new RpcException(new BadRequestException());
+    }
+
+    await this.prismaService.user.update({
+      where: {
+        id: payload.user.sub
+      },
+      data: {
+        password: await bHash(payload.newPassword, 10)
+      }
+    });
+
+    return 'password updated';
+  }
+
+  async passwordForgotten(payload: { email: string }) {
+
+    const user = await this.prismaService.user.findUnique({
+      where: {
+        email: payload.email
+      }
+    });
+
+    if(!user) {
+      throw new BadRequestException();
+    }
+
+    const password = genererMdpRobuste(20);
+    await this.prismaService.user.update({
+      where: {
+        email: payload.email
+      },
+      data: {
+        password: await bHash(password, 10)
+      }
+    });
+
+    const emailBody = `
+      <p>Bonjour,</p>
+      <p>Nous avons reçu une demande de réinitialisation de votre mot de passe. Votre nouveau mot de passe est :</p>
+      <p><strong>${password}</strong></p>
+      <p>Veuillez utiliser ce mot de passe pour vous connecter à votre compte et n'oubliez pas de le changer après vous être connecté(e).</p>
+      <p>Si vous n'avez pas demandé de réinitialisation de mot de passe, veuillez ignorer cet email.</p>
+      <p>Cordialement,</p>
+      <p>Nom de votre entreprise</p>
+    `;
+
+    this.mailerService.sendMail({
+      to: payload.email, // list of receivers
+      from: this.configService.get('MAILER_FROM'), // sender address
+      subject: 'Réinitialisation de votre mot de passe', // Subject line
+      html: emailBody, // HTML body content
+    })
+    .then(async () => {
+      console.log('email sent')   
+    }) 
+    .catch(err => {
+      throw new BadRequestException(err)
+    });
+
+    return 'email sent'
   }
 }

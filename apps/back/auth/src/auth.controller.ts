@@ -70,4 +70,16 @@ export class AuthController {
     }
     return this.authService.signUpEmail(params);
   }
+
+  @UseFilters(new RpcValidationFilter())
+  @MessagePattern({ cmd: 'reset_password' })
+  resetPassword(@Payload() payload: { user: CurrentUserDto, oldPassword: string, newPassword: string }) {
+    return this.authService.resetPassword(payload);
+  }
+
+  @UseFilters(new RpcValidationFilter())
+  @MessagePattern({ cmd: 'password_forgotten' })
+  passwordForgotten(@Payload() payload: { email: string }) {
+    return this.authService.passwordForgotten(payload);
+  }
 }

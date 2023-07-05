@@ -12,6 +12,11 @@ export class GeolocationController {
         return this.missionClient.send({ cmd: 'findOneGeolocation' }, id);
     }
 
+    @Get('announcement/:announcementId')
+    findAnnouncementGeoloc(@Param('announcementId') announcementId: string) {
+        return this.missionClient.send({ cmd: 'findAnnouncementGeoloc' }, announcementId);
+    }
+
     @Patch()
     update(@Body() updateGeolocationDto: any) {
         return this.missionClient.send({ cmd: 'updateGeolocation' }, updateGeolocationDto);
