@@ -52,7 +52,7 @@
 			<slot name="drawer">
 				<v-dialog
 					v-model="drawer"
-					class="h-screen tw-z-[2000]"
+					class="h-screen tw-z-[2000] tw-bg-white"
 					fullscreen
 					transition="dialog-bottom-transition"
 					:scrim="false">

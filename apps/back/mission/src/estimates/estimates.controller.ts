@@ -46,4 +46,9 @@ export class EstimatesController {
   checkEstimate(@Payload(ValidationPipe) payload: { announcementId: string, estimateId: string }) {
     return this.estimatesService.checkEstimate(payload);
   }
+
+  @MessagePattern({ cmd: 'getCheckoutUrlEstimate' })
+  getCheckoutUrlEstimate(@Payload(ValidationPipe) payload: { announcementId: string, estimateId: string }) {
+    return this.estimatesService.getCheckoutUrlEstimate(payload)
+  }
 }
