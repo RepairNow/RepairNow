@@ -20,6 +20,11 @@ enum EstimateStatus {
   REFUSED = "REFUSED",
   WAITING_PAYMENT = "WAITING_PAYMENT"
 }
+
+function generateRandomNumber() {
+  return Math.floor(Math.random() * 9000) + 1000;
+}
+
 @Injectable()
 export class EstimatesService {
   constructor(private prismaService: PrismaService, private stripeService: StripeService) { }
@@ -289,7 +294,7 @@ export class EstimatesService {
         }
       })
 
-      this.prismaService.mission.create({
+      const createdMission = await this.prismaService.mission.create({
         data: {
           prestataireId: estimateUpdated.prestataireId,
           announcementId: estimateUpdated.announcementId,
@@ -305,6 +310,14 @@ export class EstimatesService {
           currentStatus: AnnouncementStatus.ACTIVE
         }
       })
+
+      await this.prismaService.validationCode.create({
+        // @ts-ignore
+        data: {
+          missionId: createdMission.id,
+          code: generateRandomNumber()
+        }
+      });
 
       return estimateUpdated
     }
