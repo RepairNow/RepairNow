@@ -141,6 +141,16 @@ class Announcement {
         }
     }
 
+    async _checkAnnouncementEstimateStatus(payload: { estimateId: string, announcementId: string}): Promise<EstimateI> {
+        try {
+            const uri = `${namespace}/${payload.announcementId}/estimates/${payload.estimateId}/check_estimate`;
+            const res = await client.get(uri);
+            return res.data;
+        } catch (err) {
+            throw err;
+        }
+    }
+
     /**
      * Mission
      */

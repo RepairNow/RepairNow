@@ -235,7 +235,7 @@ export class EstimatesService {
         }
       })
 
-      const checkoutSession = await this.stripeService.createCheckoutSession(estimate.price);
+      const checkoutSession = await this.stripeService.createCheckoutSession(estimate.price, payload.announcementId, payload.estimateId);
 
       // TODO: If Accepted, map through all estimates and set status refused ?
       const estimateUpdated = await this.prismaService.estimate.update({

@@ -13,7 +13,7 @@ export class StripeService {
         });
     }
 
-    async createCheckoutSession(price: number): Promise<any> {
+    async createCheckoutSession(price: number, announcementId: string, estimateId: string): Promise<any> {
         return await this.stripe.checkout.sessions.create({
             payment_method_types: ['card'],
             line_items: [
@@ -29,8 +29,8 @@ export class StripeService {
                 },
             ],
             mode: 'payment',
-            success_url: this.configService.get('STRIPE_CHECKOUT_SUCCESS_URL'),
-            cancel_url: this.configService.get('STRIPE_CHECKOUT_CANCEL_URL')
+            success_url: `${this.configService.get('STRIPE_CHECKOUT_SUCCESS_URL')}/client/announcement/${announcementId}?estimate_id=${estimateId}`,
+            cancel_url: `${this.configService.get('STRIPE_CHECKOUT_CANCEL_URL')}/client/announcement/${announcementId}?estimate_id=${estimateId}`
         });
     }
 

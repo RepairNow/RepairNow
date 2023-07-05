@@ -1,5 +1,24 @@
 <template>
-    <div class="tw-flex tw-flex-col">
+    <div class="tw-flex tw-flex-col tw-relative">
+        <div
+            class="tw-absolute tw-bg-white tw-w-full tw-h-full tw-z-[1] tw-justify-center"
+            :class="checkEstimate ? 'tw-flex' : 'tw-hidden'"
+        >
+            <div class="tw-flex tw-flex-col tw-items-center tw-mt-64">
+                <div class="tw-flex tw-flex-col tw-items-center">
+                    <v-icon
+                            size="120"
+                            :color="estimateStatus.color"
+                    >
+                        {{ estimateStatus.icon }}
+                    </v-icon>
+                    {{ estimateStatus.text }}
+                </div>
+                <div class="hover:tw-text-primary/80 tw-text-primary tw-underline tw-cursor-pointer" @click="checkEstimate = false">
+                    Revenir sur l'annonce
+                </div>
+            </div>
+        </div>
         <div class="tw-w-full tw-bg-primary tw-h-32 md:tw-h-64">
             Image
         </div>
@@ -43,7 +62,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="xl:tw-w-5/12">
+                <div class="xl:tw-w-5/12 tw-border-l-2">
                     <div v-if="!filteredArray?.length"
                          class="tw-flex tw-flex-col tw-w-full xl:tw-p-4"
                     >
@@ -135,24 +154,65 @@ import {storeToRefs} from "pinia";
 import {onMounted, ref} from "vue";
 import {useRoute} from "vue-router";
 import EstimationConfirmation from "@/components/modal/confirm/estimation-confirmation.vue";
+import {useEstimateStore} from "@/stores/estimate";
 
 const announcementsStore = useAnnouncementStore()
 const {announcement} = storeToRefs(announcementsStore)
 const {getAnnouncement} = announcementsStore
 
-const dialog = ref(false)
+const estimateStore = useEstimateStore()
+const {checkAnnouncementEstimateStatus} = estimateStore
+const {estimate} = storeToRefs(estimateStore)
+
 const route = useRoute()
 
+const dialog = ref(false)
 const startTime = ref('')
 const endTime = ref('')
-
 const filteredArray = ref()
+const checkEstimate = ref(false)
+const estimateStatus = ref({
+    icon: '',
+    text: '',
+    color: ''
+})
+
 onMounted(async () => {
     await getAnnouncement(route.params.id.toString())
     const estimates = announcement.value.estimates
     filteredArray.value = estimates.filter(estimate => estimate.currentStatus === 'ACCEPTED' || estimate.currentStatus === 'WAITING_PAYMENT');
     startTime.value = new Date(announcement.value.startTime).toLocaleString('fr-FR', { day: "2-digit", month: "long", hour: "2-digit", minute: "2-digit" })
     endTime.value = new Date(announcement.value.endTime).toLocaleString('fr-FR', { day: "2-digit", month: "long", hour: "2-digit", minute: "2-digit" })
+
+    if (route.query?.estimate_id) {
+        await checkAnnouncementEstimateStatus({announcementId: route.params.id.toString(), estimateId: route.query?.estimate_id.toString()});
+        checkEstimate.value = true
+        switch (estimate.value.currentStatus) {
+            case 'ACCEPTED':
+                estimateStatus.value = {
+                    icon: 'mdi-check-circle',
+                    text: 'Le paiement à été accepter.',
+                    color: 'success'
+                }
+                break;
+            case 'WAITING_PAYMENT':
+            case 'PENDING':
+                estimateStatus.value = {
+                    icon: 'mdi-clock',
+                    text: 'Le paiement est en attente.',
+                    color: 'warning'
+                }
+                break;
+            case 'REFUSED':
+                estimateStatus.value = {
+                    icon: 'mdi-close-circle',
+                    text: 'Le paiement à été refuser.',
+                    color: 'error'
+                }
+                break;
+        }
+
+    }
 })
 </script>
 

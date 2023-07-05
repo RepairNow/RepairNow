@@ -11,6 +11,7 @@
                 <slot name="button">
                     <v-btn
                             color="primary"
+                            class="tw-absolute tw-bottom-20 tw-right-10 lg:tw-relative lg:tw-bottom-0 "
                     >
                         Proposer un devis
                     </v-btn>
@@ -52,7 +53,6 @@
 
 <script setup lang="ts">
 import {ref} from "vue";
-import {CreateAnnouncement} from "@/interfaces/announcement";
 import {useScreenSize} from "@/stores/screen-size";
 import {storeToRefs} from "pinia";
 import {useAnnouncementStore} from "@/stores/announcement"
