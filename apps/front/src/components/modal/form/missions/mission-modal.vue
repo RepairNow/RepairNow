@@ -6,7 +6,7 @@
 		<template v-slot:activator="{ props }">
 			<div v-bind="props">
 				<slot name="button">
-					<v-btn class="tw-absolute tw-bottom-20 tw-right-10 lg:tw-relative lg:tw-bottom-0 " Suivre ma mission - En cours </v-btn>
+					<v-btn class="tw-absolute tw-bottom-20 tw-right-10 lg:tw-relative lg:tw-bottom-0"> Suivre ma mission - En cours </v-btn>
 				</slot>
 			</div>
 		</template>
