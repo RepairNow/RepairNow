@@ -28,9 +28,9 @@ class Announcement {
         }
     }
 
-    async _getSelfAnnouncement(): Promise<AnnouncementI[]> {
+    async _getSelfAnnouncement(status: string): Promise<AnnouncementI[]> {
         try {
-            const uri = `${namespace}/my-announcements?status=ACTIVE`;
+            const uri = `${namespace}/my-announcements?status=${status}`;
             const res = await client.get(uri);
             return res.data;
         } catch (err) {

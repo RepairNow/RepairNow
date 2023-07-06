@@ -1,9 +1,9 @@
 <template>
-    <div class="tw-flex tw-flex-col tw-p-8 tw-rounded-xl tw-gap-4">
+    <div v-if="announcement" class="tw-flex tw-flex-col tw-p-8 tw-rounded-xl tw-gap-4">
         <div class="tw-flex tw-flex-col lg:tw-flex-row tw-gap-4 tw-w-full">
             <div class="tw-flex tw-flex-col tw-w-1/2">
                 <div class="tw-h-56 tw-bg-red-100 tw-rounded-xl">
-                    image
+                    <v-img v-if="announcement.images.length > 0" :src="getImage(announcement.images[0].id)" />
                 </div>
                 <div class="tw-my-4">
                     <p class="tw-text-xl tw-font-bold">{{announcement.title}}</p>
@@ -70,7 +70,9 @@
 <script setup lang="ts">
 import {onMounted, PropType, ref} from "vue";
 import {AnnouncementI} from "@/interfaces/announcement";
+import imageService from "@/services/api/image";
 
+const { getImage } = imageService;
 const props = defineProps({
     announcement: {
         type: Object as PropType<AnnouncementI>,

@@ -47,9 +47,9 @@ export const useAnnouncementStore = defineStore("announcement", () => {
         }
     }
 
-    async function getSelfAnnouncement(){
+    async function getSelfAnnouncement(status: string){
         try {
-            const res = await _getSelfAnnouncement();
+            const res = await _getSelfAnnouncement(status)
             announcements.value = res;
         } catch (error) {
             throw error;

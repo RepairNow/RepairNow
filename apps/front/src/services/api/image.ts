@@ -1,5 +1,5 @@
 class Images {
-	async getImage(id: string) {
+	getImage(id: string) {
 		try {
 			return `${import.meta.env.VITE_BACKEND_URL}/uploads/${id}`;
 		} catch (err) {

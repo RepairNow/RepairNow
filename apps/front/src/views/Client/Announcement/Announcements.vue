@@ -1,7 +1,12 @@
 <template>
     <div class="tw-m-5 xl:tw-mx-64">
-        <div class="tw-font-bold tw-text-2xl lg:tw-text-4xl">
-            Mes demandes
+        <div class="tw-font-bold tw-text-2xl lg:tw-text-3xl">
+            Mes demandes {{ currentStatus }}
+        </div>
+        <div class="tw-flex tw-gap-x-3 pt-4">
+            <v-btn @click="fetchAnnouncements('PUBLISHED')">Publiée(s)</v-btn>
+            <v-btn @click="fetchAnnouncements('ACTIVE')">Active(s)</v-btn>
+            <v-btn @click="fetchAnnouncements('DONE')">Terminée(s)</v-btn>
         </div>
         <div
             v-if="announcements?.length"
@@ -40,10 +45,27 @@ import {storeToRefs} from "pinia";
 const annoucementsStore = useAnnouncementStore()
 const {announcements} = storeToRefs(annoucementsStore)
 const {getSelfAnnouncement} = annoucementsStore
+const currentStatus = ref('Publiée(s)');
 
 onMounted(async () => {
-    await getSelfAnnouncement();
+    await getSelfAnnouncement('PUBLISHED');
 });
+
+const fetchAnnouncements = async (status: string) => {
+    switch (status) {
+        case 'PUBLISHED': 
+            currentStatus.value = 'Publiée(s)';
+            break;
+        case 'DONE':
+            currentStatus.value = 'Terminée(s)';
+            break;
+        case 'ACTIVE':
+            currentStatus.value = 'Active(s)';
+            break;
+    }
+    await getSelfAnnouncement(status);
+}
+
 </script>
 
 <style scoped>

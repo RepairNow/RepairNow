@@ -1,5 +1,5 @@
 <template>
-    <div class="tw-flex tw-flex-col tw-relative">
+    <div v-if="announcement" class="tw-flex tw-flex-col tw-relative">
         <div
             class="tw-absolute tw-bg-white tw-w-full tw-h-full tw-z-[1] tw-justify-center"
             :class="checkEstimate ? 'tw-flex' : 'tw-hidden'"
@@ -20,7 +20,8 @@
             </div>
         </div>
         <div class="tw-w-full tw-bg-primary tw-h-32 md:tw-h-64">
-            Image
+            <v-img v-if="announcement.images" :src="getImage(announcement.images[0]?.id)" />
+            <div v-else></div>
         </div>
         <div class="tw-w-full tw-p-10">
             <div class="tw-flex tw-flex-col xl:tw-flex-row">
@@ -55,10 +56,10 @@
                         </p>
                     </div>
                     <div class="tw-flex tw-gap-4 tw-flex-wrap">
-                        <div v-for="i in 5"
+                        <div v-for="image in announcement.images"
                             class="tw-w-64 tw-h-64 tw-bg-primary tw-text-white tw-p-3"
                         >
-                            Image {{i}}
+                            <v-img :src="getImage(image.id)" />
                         </div>
                     </div>
                 </div>
@@ -180,7 +181,9 @@ import {useRoute} from "vue-router";
 import EstimationConfirmation from "@/components/modal/confirm/estimation-confirmation.vue";
 import {useEstimateStore} from "@/stores/estimate";
 import MissionValidationModal from "@/components/modal/form/missions/mission-validation-modal.vue";
+import imageService from "@/services/api/image";
 
+const { getImage } = imageService;
 const announcementsStore = useAnnouncementStore()
 const {announcement} = storeToRefs(announcementsStore)
 const {getAnnouncement} = announcementsStore
@@ -233,9 +236,7 @@ onMounted(async () => {
 
     }
 
-    await getAnnouncement(route.params.id.toString())
-    console.log(announcement.value);
-    
+    await getAnnouncement(route.params.id.toString())    
     const estimates = announcement.value.estimates
     filteredArray.value = estimates.filter(estimate => estimate.currentStatus === 'ACCEPTED' || estimate.currentStatus === 'WAITING_PAYMENT');
     startTime.value = new Date(announcement.value.startTime).toLocaleString('fr-FR', { day: "2-digit", month: "long", hour: "2-digit", minute: "2-digit" })

@@ -18,7 +18,7 @@ export interface CreateAnnouncement {
 export interface UpdateAnnouncement extends Partial<AnnouncementI> {
     title?: string
     description?: string
-    images?: File[]
+    images?: Image[]
     address?: string
     startTime?: Date
     estimatedTime?: number
@@ -35,7 +35,7 @@ export interface AnnouncementI {
     user: UserI
     title: string
     description: string
-    images: File[]
+    images: Image[]
     address: string
     startTime: Date
     estimatedTime: number
@@ -46,4 +46,13 @@ export interface AnnouncementI {
     estimates: EstimateI[]
     currentStatus: string
     urgency: boolean
+}
+
+export interface Image {
+    id: string
+    filename: string
+    originalname: string
+    encoding: string
+    mimetype: string
+    size: number
 }

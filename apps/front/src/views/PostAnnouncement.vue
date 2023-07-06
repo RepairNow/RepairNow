@@ -3,7 +3,7 @@
 	<div class="tw-flex tw-justify-center">
 		<div class="tw-w-full tw-max-w-xl tw-mt-14 tw-relative">
 			<h1 class="tw-font-semibold tw-text-lg tw-mb-5 tw-px-2">
-				{{ getCurrentJob($route.query.job as string)?.title }}
+				{{ getCurrentJob(query.job as string)?.title }}
 			</h1>
 			<Transition
 				:name="
@@ -248,6 +248,7 @@
 						accept="image/png, image/jpeg, image/jpg"
 						show-size
 						counter
+						multiple
 						class="tw-mt-2"
 						v-model="selectedFile"
 						label="Dépose ici une photo (optionnel)"
@@ -494,14 +495,16 @@ const selectedFile = ref();
 const previewUrl = ref();
 let formData = new FormData();
 const handleFileChange = (event: any) => {
-	const file = event.target.files[0];
-	if (file) {
-		const reader = new FileReader();
-		reader.onload = (e) => {
-			previewUrl.value = e.target?.result;
-		};
-		reader.readAsDataURL(file);
-		formData.append("files", file);
+	const files = event.target.files;
+	if (files) {
+		for (const file of files) {
+			const reader = new FileReader();
+			reader.onload = (e) => {
+				previewUrl.value = e.target?.result;
+			};
+			reader.readAsDataURL(file);
+			formData.append("files", file);
+		}
 	} else {
 		previewUrl.value = null;
 	}
