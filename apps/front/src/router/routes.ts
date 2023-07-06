@@ -20,11 +20,6 @@ const routes = [
 				component: () => import("@/views/Cesu.vue"),
 			},
 			{
-				name: "announcement",
-				path: "announcement/:id",
-				component: () => import("@/views/Announcement.vue"),
-			},
-			{
 				name: "post-announcement",
 				path: "/poster-une-annonce",
 				component: () => import("@/views/PostAnnouncement.vue"),

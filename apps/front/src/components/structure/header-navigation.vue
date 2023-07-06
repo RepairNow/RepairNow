@@ -176,12 +176,6 @@ const setMenu = () => {
                 to: 'admin-partnerships',
             },
             {
-                title: 'Avis',
-                value: 'avis',
-                icon: 'mdi-star-outline',
-                to: 'admin-reviews',
-            },
-            {
                 title: 'Notifications',
                 value: 'notifications',
                 icon: 'mdi-bell-outline',
