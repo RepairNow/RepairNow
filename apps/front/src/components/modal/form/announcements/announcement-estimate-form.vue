@@ -23,6 +23,7 @@
 
         <v-card class="tw-w-2/3 tw-mx-auto tw-p-4 rounded-lg">
             <div class="tw-flex">
+                <v-spacer />
                 <v-btn
                         icon="mdi-close"
                         color="none"
@@ -80,7 +81,8 @@ const handleAnnouncement = async () => {
                 price: parseFloat(announcementEstimateForm.value.price.toString()),
                 description: announcementEstimateForm.value.description,
                 images: announcementEstimateForm.value.images
-            })
+            });
+        dialog.value = false;
     } catch (e) {
 
     } finally {

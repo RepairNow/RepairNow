@@ -23,6 +23,7 @@
 
         <v-card class="tw-w-2/3 tw-mx-auto tw-p-4 rounded-lg">
             <div class="tw-flex">
+                <v-spacer />
                 <v-btn
                         icon="mdi-close"
                         color="none"

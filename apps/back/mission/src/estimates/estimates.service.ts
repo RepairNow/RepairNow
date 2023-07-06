@@ -307,71 +307,84 @@ export class EstimatesService {
           id: announcementClient.userId
         }
       });
-      const emailBody = `
-        <h2>Récapitulatif du devis</h2>
-        
-        <table>
-            <tr>
-                <th>Description</th>
-                <th>Prix</th>
-            </tr>
-            <tr>
-                <td>${estimateUpdated.description}</td>
-                <td>${estimateUpdated.price}€</td>
-            </tr>
-            <tr>
-                <td><strong>Total</strong></td>
-                <td><strong>${estimateUpdated.price}€</strong></td>
-            </tr>
-        </table>
-        
-        <p>Paiement effectué par Stripe</p>
-        
-        <p>Merci de votre confiance. Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter.</p>
-        
-        <p>Cordialement,</p>
-        <p>Nom du prestataire : ${estimateUpdated.prestataire.firstname} ${estimateUpdated.prestataire.lastname}</p>
-      `;
-      
-      this.mailerService.sendMail({
-        to: client.email, // list of receivers
-        from: this.configService.get('MAILER_FROM'), // sender address
-        subject: 'Réinitialisation de votre mot de passe', // Subject line
-        html: emailBody, // HTML body content
-      })
-      .then(async () => {
-        console.log('email sent')   
-      }) 
-      .catch(err => {
-        throw new BadRequestException(err)
-      });
 
-      const createdMission = await this.prismaService.mission.create({
-        data: {
-          prestataireId: estimateUpdated.prestataireId,
-          announcementId: estimateUpdated.announcementId,
-          currentStatus: MissionStatus.IN_PROGRESS
-        }
-      })
-
-      const updatedAnnouncement = await this.prismaService.announcement.update({
+      const missionAlreadyExist = await this.prismaService.mission.findUnique({
         where: {
-          id: payload.announcementId
-        },
-        data: {
-          currentStatus: AnnouncementStatus.ACTIVE
-        }
-      })
-
-      await this.prismaService.validationCode.create({
-        // @ts-ignore
-        data: {
-          missionId: createdMission.id,
-          code: generateRandomNumber()
+          announcementId: estimateUpdated.announcementId
         }
       });
 
-      return estimateUpdated
+      if (missionAlreadyExist) {
+        throw new BadRequestException();
+      } else {
+
+        const createdMission = await this.prismaService.mission.create({
+          data: {
+            prestataireId: estimateUpdated.prestataireId,
+            announcementId: estimateUpdated.announcementId,
+            currentStatus: MissionStatus.IN_PROGRESS
+          }
+        })
+  
+        const emailBody = `
+          <h2>Récapitulatif de la facture</h2>
+        
+          <table>
+              <tr>
+                  <th>Description</th>
+                  <th>Prix</th>
+              </tr>
+              <tr>
+                  <td>${estimateUpdated.description}</td>
+                  <td>${estimateUpdated.price}€</td>
+              </tr>
+              <tr>
+                  <td><strong>Total</strong></td>
+                  <td><strong>${estimateUpdated.price}€</strong></td>
+              </tr>
+          </table>
+          
+          <p>Paiement effectué par Stripe</p>
+          
+          <p>Merci de votre confiance. Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter.</p>
+          
+          <p>Cordialement,</p>
+          <p>Nom du prestataire : ${estimateUpdated.prestataire.firstname} ${estimateUpdated.prestataire.lastname}</p>
+        `;
+      
+        this.mailerService.sendMail({
+          to: client.email, // list of receivers
+          from: this.configService.get('MAILER_FROM'), // sender address
+          subject: 'Récapitulatif facture RepairNow', // Subject line
+          html: emailBody, // HTML body content
+        })
+        .then(async () => {
+          console.log('email sent')   
+        }) 
+        .catch(err => {
+          throw new BadRequestException(err)
+        });
+
+        const updatedAnnouncement = await this.prismaService.announcement.update({
+          where: {
+            id: payload.announcementId
+          },
+          data: {
+            currentStatus: AnnouncementStatus.ACTIVE
+          }
+        })
+  
+        await this.prismaService.validationCode.create({
+          // @ts-ignore
+          data: {
+            missionId: createdMission.id,
+            code: generateRandomNumber()
+          }
+        });
+  
+        return estimateUpdated;
+      }
+
     }
   }
 

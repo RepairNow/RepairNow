@@ -73,7 +73,7 @@ export const useEstimateStore = defineStore("estimate", () => {
             const res = await _checkAnnouncementEstimateStatus(payload);
             estimate.value = res
         } catch (error) {
-            throw error;
+            console.error(error);
         }
     }
 
