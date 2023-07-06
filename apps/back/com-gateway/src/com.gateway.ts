@@ -15,6 +15,8 @@ import { MessagesService } from './messages/messages.service';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { ConversationsService } from './conversations/conversations.service';
+import { CreateNotificationDto } from './notifications/dto/notification.dto';
+import { NotificationsService } from './notifications/notifications.service';
 
 @WebSocketGateway({
   cors: {
@@ -22,14 +24,14 @@ import { ConversationsService } from './conversations/conversations.service';
   },
 })
 export class ComGateway
-  implements OnGatewayConnection, OnGatewayInit, OnGatewayDisconnect
-{
+  implements OnGatewayConnection, OnGatewayInit, OnGatewayDisconnect {
   constructor(
     private readonly messagesService: MessagesService,
     private readonly conversationsService: ConversationsService,
+    private readonly notificationsService: NotificationsService,
     private jwtService: JwtService,
     private configService: ConfigService,
-  ) {}
+  ) { }
 
   @WebSocketServer()
   server: Server;
@@ -63,6 +65,15 @@ export class ComGateway
     this.server
       .to(payload.conversation_id)
       .emit('response_get_messages', messages);
+  }
+
+  @SubscribeMessage('create_notification')
+  async handleSendNotification(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() payload: CreateNotificationDto,
+  ): Promise<void> {
+    await this.notificationsService.createNotification(payload);
+    this.server.emit('response_notification', payload);
   }
 
   afterInit(server: Server) {
@@ -101,6 +112,14 @@ export class ComGateway
         conversation._id.toString(),
       );
       client.join(conversationsIds);
+
+      const role = client['user'].role;
+
+      if (role === 'ADMIN') {
+        const notifications = await this.notificationsService.findAllNotifications();
+        client.emit('send_all_notifs', notifications);
+      }
+
     } catch (e) {
       console.log('dans le catch du handleConnection', e);
       return client.disconnect(true);

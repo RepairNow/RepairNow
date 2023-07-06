@@ -38,6 +38,10 @@ jobs:
             JOB_PORT=3002
             MISSION_HOST=mission-svc
             MISSION_PORT=3003
+      
+      - name: create uploads folder
+        run: |
+          mkdir -p ./apps/back/api-gateway/uploads
 
   push-auth-image:
     name: Push Auth Image to Docker Hub

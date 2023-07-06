@@ -141,6 +141,7 @@
                                 </div>
                                 <div>
                                     <mission-validation-modal
+                                        v-if="announcement.currentStatus !== 'DONE'"
                                         :mission="announcement.mission"
                                     />
                                 </div>
