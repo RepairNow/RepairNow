@@ -2,7 +2,7 @@
 	<v-dialog
 		v-model="dialog"
 		transition="dialog-bottom-transition"
-		:fullscreen="isSizeMD">
+		:fullscreen="isSizeLG">
 		<template v-slot:activator="{ props }">
 			<div v-bind="props">
 				<slot name="button">
@@ -84,7 +84,7 @@ const items = [
 
 const dialog = ref(false);
 const screenSizeStore = useScreenSize();
-const { isSizeMD } = storeToRefs(screenSizeStore);
+const { isSizeLG } = storeToRefs(screenSizeStore);
 
 const router = useRouter();
 

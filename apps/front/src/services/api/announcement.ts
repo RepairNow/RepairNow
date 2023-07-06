@@ -30,7 +30,7 @@ class Announcement {
 
     async _getSelfAnnouncement(): Promise<AnnouncementI[]> {
         try {
-            const uri = `${namespace}/my-announcements`;
+            const uri = `${namespace}/my-announcements?status=ACTIVE`;
             const res = await client.get(uri);
             return res.data;
         } catch (err) {

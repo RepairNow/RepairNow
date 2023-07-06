@@ -3,18 +3,6 @@
         <div class="tw-font-bold tw-text-2xl lg:tw-text-4xl">
             Mes demandes
         </div>
-        <div class="tw-flex tw-gap-2 tw-my-6">
-            <v-btn
-                class="tw-rounded-full"
-            >
-                En cours
-            </v-btn>
-            <v-btn
-                class="tw-rounded-full"
-            >
-                Terminées
-            </v-btn>
-        </div>
         <div
             v-if="announcements?.length"
             class="tw-flex tw-flex-col tw-gap-4 tw-my-4"
