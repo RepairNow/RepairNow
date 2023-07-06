@@ -5,6 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
+  console.log('mission service is starting...');
   const app = await NestFactory.create(AppModule);
   // when using dto validation, all the request body will be validated
   // see https://docs.nestjs.com/techniques/validation#auto-validation

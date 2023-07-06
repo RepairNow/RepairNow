@@ -1,19 +1,18 @@
-import { MessageI } from "./message"
+import { MessageI } from "./message";
 
-export interface CreateChat {
-    id: string
-    providerId: string
-    announcerId: string
+interface IMember {
+	userId: string;
+	userFirstname: string;
 }
-
-export interface UpdateChat {
-    blocked: boolean
+export interface CreateChat {
+	members: IMember[];
+	announcementId: string;
 }
 
 export interface ChatI {
-    id: string
-    providerId: string
-    announcerId: string
-    blocked: boolean
-    messages: MessageI[]
+	_id: string;
+	members: IMember[];
+	announcementId: string;
+	createdAt: string;
+	updatedAt: string;
 }
