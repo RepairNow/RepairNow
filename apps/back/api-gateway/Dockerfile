@@ -45,4 +45,7 @@ RUN adduser --system --uid 1001 nestjs
 USER nestjs
 COPY --from=installer /app .
 
+RUN mkdir -p /app/back/api-gateway/uploads
+RUN chown -R nestjs:nestjs /app/back/api-gateway/uploads
+
 CMD ["yarn", "workspace", "api-gateway", "start:prod"]
