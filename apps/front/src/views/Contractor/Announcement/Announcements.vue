@@ -9,7 +9,6 @@
         >
             <announcement
                     v-for="announcement in announcements"
-                    class="tw-p-3 border"
                     :announcement="announcement"
                     :contractor-view="true"
             />

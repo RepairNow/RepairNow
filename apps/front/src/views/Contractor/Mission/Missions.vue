@@ -21,7 +21,6 @@
         >
             <mission
                     v-for="mission in missions"
-                    class="tw-p-3 border"
                     :mission="mission"
             />
         </div>

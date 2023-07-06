@@ -39,19 +39,19 @@
 					</slot>
 				</div>
 
-                <div v-if="isContractor" class="tw-mx-2">
+                <div v-if="isContractor" class="tw-mx-2 router">
                     <router-link :to="{name: 'contractor-announcements'}">
                         Prestatations
                     </router-link>
                 </div>
 
-                <div v-if="isAdmin" class="tw-mx-2">
+                <div v-if="isAdmin" class="tw-mx-2 router">
                     <router-link :to="{name: 'admin-announcements'}">
                         Admin
                     </router-link>
                 </div>
 
-                <div v-if="isClient" class="tw-mx-2">
+                <div v-if="isClient" class="tw-mx-2 router">
                     <router-link :to="{name: 'client-announcements'}">
                         Mon espace
                     </router-link>
@@ -275,4 +275,12 @@ onMounted(async () => {
 });
 </script>
 
-<style scoped></style>
+<style scoped>
+div.router .router-link-active {
+    background-color: #4D908E;
+    padding: 1rem 0.75rem;
+    font-weight: bold;
+    color: white;
+    border-radius: 1rem;
+}
+</style>
