@@ -42,7 +42,7 @@ jobs:
       - name: create uploads folder
         run: |
           mkdir -p ./apps/back/api-gateway/uploads
-          chown -R nestjs:nestjs ./apps/back/api-gateway/uploads
+          chmod 777 ./apps/back/api-gateway/uploads
 
   push-auth-image:
     name: Push Auth Image to Docker Hub
