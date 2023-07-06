@@ -12,13 +12,13 @@
             class="tw-border-b tw-h-24 tw-flex tw-items-center tw-p-5"
             :to="{name: 'client-chat', params: {id: chat._id}}"
         >
-            <v-avatar color="surface-variant" size="60"/>
-            <div class="tw-px-4 tw-h-full tw-w-5/6">
-                <div class="tw-flex">
-                    <p>
-                        <span v-for="member in chat.members">
-                            {{ member }}
-                        </span>
+        <div class="tw-px-4 tw-w-5/6">
+            <div class="tw-flex">
+                <p>
+                    <span v-for="member in chat.members" class="tw-font-bold">
+                        <v-avatar color="surface-variant" size="60"> {{ member.userFirstname?.[0] }}</v-avatar>
+                            {{ member.userFirstname }}
+                    </span>
                     </p>
                     <v-spacer />
                     <!-- <div class="tw-text-sm tw-self-end tw-text-neutral-500">
