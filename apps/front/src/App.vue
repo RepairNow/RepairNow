@@ -1,4 +1,5 @@
 <template>
+	<notification />
     <router-view />
 	<!--<v-card>
 		<v-layout>-->
@@ -144,6 +145,7 @@
 <script lang="ts" setup>
 import {onMounted, onUnmounted, ref} from "vue";
 import { useScreenSize } from "@/stores/screen-size";
+import Notification from "@/components/notification/notification.vue";
 
 const screenSize = useScreenSize();
 const { onScreenSizeUpdate, removeScreenSizeUpdate } = screenSize;
