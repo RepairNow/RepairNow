@@ -27,7 +27,10 @@
                 <v-btn
                         icon="mdi-close"
                         color="none"
-                        @click="dialog = false"
+                        @click="() => {
+                            dialog = false
+                            error = ''
+                        }"
 
                 />
             </div>
@@ -39,7 +42,13 @@
                 </p>
             </div>
             <div>
-                <v-text-field variant="filled" label="Tarif" type="number" v-model="announcementEstimateForm.price"/>
+                <p>{{error}}</p>
+                <v-text-field
+                        variant="filled"
+                        label="Tarif"
+                        type="number"
+                        v-model="announcementEstimateForm.price"
+                />
                 <v-text-field variant="filled" label="Description" v-model="announcementEstimateForm.description"/>
                 <v-btn
                         text="Confirmer le devis"
@@ -66,6 +75,7 @@ const { isSizeMD } = storeToRefs(screenSizeStore)
 
 const announcementStore = useAnnouncementStore()
 const { createAnnouncementEstimate } = announcementStore
+const { announcement, announcementEstimate } = storeToRefs(announcementStore)
 
 const route = useRoute()
 const announcementEstimateForm = ref<CreateEstimate>({
@@ -73,6 +83,8 @@ const announcementEstimateForm = ref<CreateEstimate>({
     price: 0,
     images: [],
 })
+
+const error = ref<string>()
 
 const handleAnnouncement = async () => {
     try {
@@ -83,8 +95,10 @@ const handleAnnouncement = async () => {
                 images: announcementEstimateForm.value.images
             });
         dialog.value = false;
-    } catch (e) {
+        announcement.value.estimates.push(announcementEstimate.value)
 
+    } catch (e: any) {
+        error.value = e.response.data.message
     } finally {
         announcementEstimateForm.value = {
             description: '',

@@ -18,7 +18,6 @@ router.beforeEach(async (to, from, next) => {
   const router = useRouter()
   const { admin, contractor, connected } = to?.meta;
 
-  console.log(isConnected.value);
   if(isConnected.value) {
     await getSelf()
   }
