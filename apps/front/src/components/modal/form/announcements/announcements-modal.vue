@@ -39,7 +39,7 @@
 import { ref } from "vue";
 import { useScreenSize } from "@/stores/screen-size";
 import { storeToRefs } from "pinia";
-import repairImg from "@/assets/svg/jobs/repair.png";
+import repairImg from "@/assets/svg/jobs/repair.svg";
 import electricityImg from "@/assets/svg/jobs/electricity.svg";
 import gardenImg from "@/assets/svg/jobs/garden.svg";
 import bikeImg from "@/assets/svg/jobs/bike-repair.svg";

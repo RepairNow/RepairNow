@@ -188,7 +188,7 @@
 import { ref, onMounted } from "vue";
 import AnnouncementsModal from "@/components/modal/form/announcements/announcements-modal.vue";
 import jobService from "@/services/api/job";
-import repairImg from "@/assets/svg/jobs/repair.png";
+import repairImg from "@/assets/svg/jobs/repair.svg";
 import electricityImg from "@/assets/svg/jobs/electricity.svg";
 import gardenImg from "@/assets/svg/jobs/garden.svg";
 import bikeImg from "@/assets/svg/jobs/bike-repair.svg";
