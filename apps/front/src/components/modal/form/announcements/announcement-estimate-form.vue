@@ -40,7 +40,7 @@
             </div>
             <div>
                 <v-text-field variant="filled" label="Tarif" type="number" v-model="announcementEstimateForm.price"/>
-                <v-text-field variant="filled" label="Description" v-model="announcementEstimateForm.description"/>
+                <v-textarea variant="filled" label="Description" v-model="announcementEstimateForm.description"/>
                 <v-btn
                         text="Confirmer le devis"
                         block
