@@ -256,11 +256,6 @@ const routes = [
 				path: "profile",
 				component: () => import("@/views/Profile.vue"),
 			},
-			{
-				name: "admin-reviews",
-				path: "reviews",
-				component: () => import("@/views/Admin/Reviews.vue"),
-			},
 		],
 		meta: {
 			admin: true,

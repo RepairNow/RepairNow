@@ -356,7 +356,7 @@ const formValues = reactive<CreateAnnouncement>({
 
 const handleSendFormValues = async () => {
 	try {
-		const annoucementCreated = await createAnnounPostAnnouncementcement(formValues);
+		const annoucementCreated = await createAnnouncement(formValues);
 
 		formData.append("id", annoucementCreated.id);
 
