@@ -4,7 +4,7 @@
         <div class="tw-h-full tw-w-80 tw-hidden sm:tw-flex">
             <sidebar-navigation/>
         </div>
-        <div class="tw-bg-[#F2F2F2] tw-h-full tw-w-full">
+        <div class="tw-bg-[#F2F2F2] tw-h-full tw-w-full tw-overflow-auto">
             <router-view />
         </div>
     </div>
