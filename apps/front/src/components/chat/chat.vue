@@ -10,8 +10,8 @@
                     {{ member.userFirstname  }}
                 </span>
                 <!-- TODO: Add link to redirect to the current Annoucement -->
-                <v-btn class="tw-ml-4"> Putn </v-btn> 
             </p>
+            <v-btn class="tw-ml-4" @click="handleClickShowAnnounce()"> Voir l'annonce </v-btn> 
         </div>
         <div class="tw-h-full tw-p-4 tw-pb-16 overflow-auto tw-flex tw-flex-col tw-gap-4">
             <div
@@ -46,7 +46,7 @@
 </template>
 
 <script setup lang="ts">
-import {useRoute} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import { ref, watch } from "vue";
 const props = defineProps({
     handleSendMessage: {
@@ -68,14 +68,22 @@ const props = defineProps({
 });
 
 const route = useRoute();
+const router = useRouter();
+
+const handleClickShowAnnounce = () => {
+    router.push({name: 'client-announcement', params: {id: currentChat.value.announcementId}});
+}
 
 const currentChatMembersWithoutMe = ref(props.chats.find((chat) => chat._id === route.params.id)?.members?.filter((member) => member !== props.currentUser.sub));
+
+const currentChat = ref(props.chats.find((chat) => chat._id === route.params.id));
 
 // each time we open/switch to a conversation, we need to update the currentChatMembersWithoutMe
 watch(
 	() => route.params.id,
 	(newId) => {
         currentChatMembersWithoutMe.value = props.chats.find((chat) => chat._id === newId)?.members?.filter((member) => member !== props.currentUser.sub);
+        currentChat.value = props.chats.find((chat) => chat._id === newId);
 	}
 );
 

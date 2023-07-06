@@ -26,7 +26,10 @@ export class ConversationsController {
         { userId: req.user.sub, userFirstname: req.user.firstname },
       ],
     };
-    return await this.conversationsService.createConversation(membersWithMe);
+    return await this.conversationsService.createConversation({
+      ...membersWithMe,
+      announcementId: createConversationDto.announcementId,
+    });
   }
 
   @Get(':id')
