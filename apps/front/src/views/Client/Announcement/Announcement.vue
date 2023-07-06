@@ -1,5 +1,5 @@
 <template>
-    <div v-if="announcement" class="tw-flex tw-flex-col tw-relative">
+    <div v-if="announcement" class="tw-flex tw-flex-col tw-relative tw-h-full">
         <div
             class="tw-absolute tw-bg-white tw-w-full tw-h-full tw-z-[1] tw-justify-center"
             :class="checkEstimate ? 'tw-flex' : 'tw-hidden'"

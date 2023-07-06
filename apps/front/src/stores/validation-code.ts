@@ -28,10 +28,12 @@ export const useValidationCodeStore = defineStore("validation-code", () => {
         }
     }
 
-    async function contractorConfirmation(missionId: string) {
+    async function contractorConfirmation(missionId: string): Promise<ValidationCodeI>
+    {
         try {
             const res = await _contractorConfirmation(missionId);
             validationCode.value = res;
+            return res
         } catch (error) {
             throw error;
         }

@@ -24,11 +24,11 @@
                 <div
                         class="tw-p-2 tw-bg-primary/20 tw-rounded-lg tw-text-black tw-flex tw-gap-2"
                 >
-                    <v-icon icon="mdi-tools"/><span>{{mission.announcement.job.title}}</span>
+                    <v-icon icon="mdi-tools"/><span>{{mission.announcement.job?.title}}</span>
                 </div>
             </div>
-            <v-btn v-if="mission.currentStatus === 'IN PROGRESS'" :to="{name: 'contractor-mission', params: {id: mission.id}}" class="tw-p-2 tw-text-center">
-                Valider la mission
+            <v-btn :to="{name: 'contractor-mission', params: {id: mission.id}}" class="tw-p-2 tw-text-center">
+                Voir la mission
             </v-btn>
         </div>
     </div>
@@ -39,7 +39,10 @@ import {PropType} from "vue";
 import {MissionI} from "@/interfaces/mission";
 
 const props = defineProps({
-    mission: Object as PropType<MissionI>
+    mission: {
+        type: Object as PropType<MissionI>,
+        required: true
+    }
 })
 </script>
 

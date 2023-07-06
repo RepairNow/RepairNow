@@ -10,13 +10,13 @@
                         <div class="tw-flex">
                             <v-btn
                                 v-if="mission.validationCode?.currentStatus === 'PENDING'"
-                                @click="contractorConfirmation(mission.id)"
+                                @click="handleMissionConfirmation()"
                             >
                                 Valider la mission
                             </v-btn>
                             <div v-else-if="mission.validationCode?.currentStatus === 'WAITING FOR APPROVAL'">
                                 Code de validation
-                                <v-btn>
+                                <v-btn @click="copyCode">
                                     {{ validationCode.code }}
                                 </v-btn>
                             </div>
@@ -104,6 +104,14 @@ onMounted(async () => {
     }
 })
 
+const handleMissionConfirmation = async () => {
+    const res = await contractorConfirmation(mission.value.id);
+    mission.value.validationCode = res
+}
+
+const copyCode = () => {
+    navigator.clipboard.writeText(validationCode.value.code.toString());
+}
 </script>
 
 <style scoped>
