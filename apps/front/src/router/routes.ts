@@ -257,11 +257,6 @@ const routes = [
 				component: () => import("@/views/Client/Chat.vue"),
 			},
 			{
-				name: "admin-geo-locations",
-				path: "geo-locations",
-				component: () => import("@/views/Admin/GeoLocations.vue"),
-			},
-			{
 				name: "admin-notifications",
 				path: "notifications",
 				component: () => import("@/views/Admin/Notifications.vue"),

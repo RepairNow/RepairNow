@@ -90,8 +90,9 @@ export class MissionService {
           include: {
             announcement: {
               include: {
-                images: true
-              }
+                images: true,
+                job: true
+              },
             }
           }
         })
@@ -103,6 +104,7 @@ export class MissionService {
           include: {
             announcement: {
               include: {
+                images: true,
                 job: true
               }
             }

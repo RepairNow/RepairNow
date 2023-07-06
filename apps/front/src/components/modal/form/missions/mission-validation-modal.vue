@@ -37,19 +37,23 @@
 import {PropType, ref} from "vue";
 import { useScreenSize } from "@/stores/screen-size";
 import { storeToRefs } from "pinia";
-import { useRouter } from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import {useValidationCodeStore} from "@/stores/validation-code";
 import {MissionI} from "@/interfaces/mission";
+import {useAnnouncementStore} from "@/stores/announcement";
 
 const props = defineProps({
     mission: {
-        type: Object as PropType<MissionI>
+        type: Object as PropType<MissionI>,
+        required: true
     }
 })
 
 const validationCodeStore = useValidationCodeStore()
 const {validateCode} = validationCodeStore
 const {validationCode} = storeToRefs(validationCodeStore)
+const {getAnnouncement} = useAnnouncementStore()
+const route = useRoute()
 
 const dialog = ref(false);
 const code = ref('')
@@ -63,7 +67,8 @@ const validateFourDigitCode = async () => {
 	try {
 		await validateCode(props.mission.id, parseInt(code.value))
 		dialog.value = false;
-	} catch (error) {
+        await getAnnouncement(route.params.id.toString())
+    } catch (error) {
 		console.error(error);
 	}
 }

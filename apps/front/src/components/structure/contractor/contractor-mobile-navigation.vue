@@ -2,28 +2,28 @@
     <mobile-navigation
         :items="[
             {
-                title: 'Mes demandes',
-                value: 'mes-demandes',
+                title: 'Les demandes',
+                value: 'les-demandes',
                 icon: 'mdi-bookmark-outline',
-                to: 'contractor-announcements',
+                to: 'contractor-announcements'
             },
             {
                 title: 'Notifications',
                 value: 'notifications',
                 icon: 'mdi-bell-outline',
-                to: 'contractor-notifications',
+                to: 'contractor-notifications'
             },
             {
                 title: 'Messagerie',
                 value: 'messagerie',
                 icon: 'mdi-message-outline',
-                to: 'contractor-chat',
+                to: 'contractor-chat'
             },
             {
                 title: 'Compte',
                 value: 'compte',
                 icon: 'mdi-account-outline',
-                to: 'contractor-profile',
+                to: 'contractor-profile'
             },
         ]"
     />

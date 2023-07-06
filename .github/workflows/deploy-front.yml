@@ -4,6 +4,7 @@ env:
   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
   BASE_URL_FRONT: ${{ secrets.BASE_URL_FRONT }}
   VITE_BACKEND_URL: ${{ secrets.VITE_BACKEND_URL }}
+  VITE_BACKENDCOM_URL: ${{ secrets.VITE_BACKENDCOM_URL }}
 on:
   push:
     branches: [dev, main]
@@ -25,6 +26,7 @@ jobs:
         run: |
           cd apps/front/
           echo "VITE_BACKEND_URL=$VITE_BACKEND_URL" >> .env.production
+          echo "VITE_BACKENDCOM_URL=VITE_BACKENDCOM_URL" >> .env.production
           echo "BASE_URL_FRONT=$BASE_URL_FRONT" >> .env.production
           echo "NODE_ENV=${{ secrets.NODE_ENV }}" >> .env.production
 
