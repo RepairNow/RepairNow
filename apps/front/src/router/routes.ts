@@ -10,21 +10,6 @@ const routes = [
 				component: () => import("@/views/Home.vue"),
 			},
 			{
-				name: "about",
-				path: "about",
-				component: () => import("@/views/About.vue"),
-			},
-			{
-				name: "cesu",
-				path: "cesu",
-				component: () => import("@/views/Cesu.vue"),
-			},
-			{
-				name: "announcement",
-				path: "announcement/:id",
-				component: () => import("@/views/Announcement.vue"),
-			},
-			{
 				name: "post-announcement",
 				path: "/poster-une-annonce",
 				component: () => import("@/views/PostAnnouncement.vue"),
@@ -199,7 +184,7 @@ const routes = [
 			{
 				name: "contractor-profile",
 				path: "profile",
-				component: () => import("@/views/Profile.vue"),
+				component: () => import("@/views/contractor/Profile.vue"),
 			},
 			{
 				name: "contractor-reviews",
@@ -270,11 +255,6 @@ const routes = [
 				name: "admin-profile",
 				path: "profile",
 				component: () => import("@/views/Profile.vue"),
-			},
-			{
-				name: "admin-reviews",
-				path: "reviews",
-				component: () => import("@/views/Admin/Reviews.vue"),
 			},
 		],
 		meta: {

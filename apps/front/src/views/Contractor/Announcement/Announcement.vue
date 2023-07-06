@@ -8,9 +8,9 @@
                             {{ announcement.title }} <span class="tw-text-white tw-text-sm tw-bg-primary tw-py-1 tw-px-2 tw-mx-4 tw-rounded-md">{{ announcement.currentStatus }}</span>
                         </div>
                         <div class="tw-flex">
-                            <span class="tw-p-2 tw-w-full tw-text-center tw-rounded-md tw-text-white tw-font-bold">
+                            <div class="tw-flex tw-p-2 tw-w-full tw-text-center tw-rounded-md tw-text-white tw-font-bold">
+                                <v-btn class="lg:tw-mr-16" @click="handleDiscuss()">Discuter</v-btn>
                                 <div v-if="!filteredArray?.id" class="tw-flex">
-                                    <v-btn class="lg:tw-mr-16" @click="handleDiscuss()">Discuter</v-btn>
                                     <announcement-estimate-form
                                             v-if="!filteredArray?.id"
                                     />
@@ -23,7 +23,7 @@
                                 <mission-modal
                                         v-else
                                 />
-                            </span>
+                            </div>
                         </div>
                     </div>
                     <div class="tw-flex tw-gap-4 tw-flex-wrap">
@@ -102,7 +102,7 @@ const handleDiscuss = async () => {
         members: [{userId: announcement.value.user.id, userFirstname: announcement.value.user.firstname}],
         announcementId: announcement.value.id
     })
-    router.push({name: 'client-chat', params: {id: conversation._id}})
+    router.push({name: 'contractor-chat', params: {id: conversation._id}})
 }
 
 onMounted(async () => {
