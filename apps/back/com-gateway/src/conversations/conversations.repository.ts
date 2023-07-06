@@ -15,7 +15,9 @@ export class ConversationsRepository {
 
   async findAllConversations(id): Promise<any> {
     const findAll = await this.conversationModel.find({
-      members: { $all: [id] },
+      members: {
+        $elemMatch: { userId: id },
+      },
     });
     return findAll;
   }

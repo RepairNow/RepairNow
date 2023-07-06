@@ -4,11 +4,13 @@
             <router-link :to="{name: 'client-chats'}" class="tw-p-3 tw-flex tw-items-center tw-justify-center hover:tw-bg-neutral-100">
                 <v-icon icon="mdi-chevron-left" />
             </router-link>
-            <v-avatar color="surface-variant" size="45" class="tw-ml-3"/>
             <p v-for="member in currentChatMembersWithoutMe" class="tw-px-4 tw-text-xl tw-font-bold">
                 <span>
-                    {{ member }}
+                    <v-avatar color="surface-variant" size="45" class="tw-ml-3"> {{ member.userFirstname?.[0] }}</v-avatar>
+                    {{ member.userFirstname  }}
                 </span>
+                <!-- TODO: Add link to redirect to the current Annoucement -->
+                <v-btn class="tw-ml-4"> Putn </v-btn> 
             </p>
         </div>
         <div class="tw-h-full tw-p-4 tw-pb-16 overflow-auto tw-flex tw-flex-col tw-gap-4">

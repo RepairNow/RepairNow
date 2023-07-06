@@ -15,6 +15,7 @@ import { MessagesService } from './messages/messages.service';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { ConversationsService } from './conversations/conversations.service';
+// import { UsersService } from './users/users.service';
 
 @WebSocketGateway({
   cors: {
@@ -27,6 +28,7 @@ export class ComGateway
   constructor(
     private readonly messagesService: MessagesService,
     private readonly conversationsService: ConversationsService,
+    // private readonly usersConnectedService: UsersService,
     private jwtService: JwtService,
     private configService: ConfigService,
   ) {}

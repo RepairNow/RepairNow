@@ -2,7 +2,7 @@ import { Types } from 'mongoose';
 
 export class ConversationDo {
   _id: Types.ObjectId;
-  members: Array<string>;
+  members: Array<object>;
 
   constructor(props: Partial<ConversationDo>) {
     this._id = props._id || null;
