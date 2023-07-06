@@ -92,6 +92,7 @@
 							</div>
 							<router-link
 								v-for="item in (items as any[])"
+                                @click="drawer = false"
 								:to="{ name: item.to }">
 								<v-btn
 									variant="text"

@@ -1,9 +1,10 @@
 <template>
-    <div v-if="announcement" class="tw-flex tw-flex-col tw-p-8 tw-rounded-xl tw-gap-4 tw-border-primary">
+    <div v-if="announcement" class="tw-flex tw-flex-col tw-p-8 tw-rounded-xl tw-gap-4 tw-shadow-lg">
         <div class="tw-flex tw-flex-col lg:tw-flex-row tw-gap-4 tw-w-full">
             <div class="tw-flex tw-flex-col tw-w-full lg:tw-w-1/2">
-                <div class="tw-h-56 tw-bg-red-100 tw-rounded-xl">
+                <div class="tw-h-56 tw-rounded-xl">
                     <v-img v-if="announcement.images.length > 0" :src="getImage(announcement.images[0].id)" />
+                    <v-img v-else :src="useJobImages(announcement?.job?.title)" />
                 </div>
                 <div class="tw-my-4">
                     <p class="tw-text-xl tw-font-bold">{{announcement.title}}</p>
@@ -33,20 +34,20 @@
             </div>
         </div>
         <div class="tw-flex tw-gap-4 tw-flex-wrap">
-            <div class="tw-p-2 tw-bg-primary tw-rounded-lg tw-text-white tw-flex tw-gap-2">
+            <div class="tw-p-2 tw-bg-primary/20 tw-rounded-lg tw-text-black tw-flex tw-gap-2">
                 <v-icon icon="mdi-calendar-outline" /><span>{{ startTime }}</span>
             </div>
-            <div class="tw-p-2 tw-bg-primary tw-rounded-lg tw-text-white tw-flex tw-gap-2">
+            <div class="tw-p-2 tw-bg-primary/20 tw-rounded-lg tw-text-black tw-flex tw-gap-2">
                 <v-icon icon="mdi-clock-outline" /><span>{{announcement.estimatedTime}} heures</span>
             </div>
             <a
-                    class="tw-p-2 tw-bg-primary tw-rounded-lg tw-text-white tw-flex tw-gap-2 hover:tw-bg-primary/90"
+                    class="tw-p-2 tw-bg-primary/20 tw-rounded-lg tw-text-black tw-flex tw-gap-2 hover:tw-bg-primary/30"
                     :href="`https://www.google.com/maps/search/${announcement.address}`"
             >
                 <v-icon icon="mdi-map-outline"/><span>{{announcement.address}}</span><v-icon icon="mdi-link"/>
             </a>
             <div
-                    class="tw-p-2 tw-bg-primary tw-rounded-lg tw-text-white tw-flex tw-gap-2"
+                    class="tw-p-2 tw-bg-primary/20 tw-rounded-lg tw-text-black tw-flex tw-gap-2"
             >
                 <v-icon icon="mdi-tools"/><span>{{announcement?.job?.title}}</span>
             </div>
@@ -93,7 +94,7 @@ import {onMounted, PropType, ref} from "vue";
 import {AnnouncementI} from "@/interfaces/announcement";
 import ReviewForm from "@/components/modal/form/review/review-form.vue";
 import imageService from "@/services/api/image";
-
+import {useJobImages} from "@/composables/jobImages"
 const { getImage } = imageService;
 const props = defineProps({
     announcement: {
