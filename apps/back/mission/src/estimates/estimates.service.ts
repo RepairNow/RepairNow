@@ -153,8 +153,6 @@ export class EstimatesService {
         },
       });
 
-      console.log(estimateAccepted)
-
       if (estimateAccepted) {
         throw new BadRequestException("Un devis est déjà accepté pour cette mission");
       }
@@ -364,8 +362,6 @@ export class EstimatesService {
           currentStatus: AnnouncementStatus.ACTIVE
         }
       })
-
-      console.log(updatedAnnouncement)
 
       await this.prismaService.validationCode.create({
         // @ts-ignore

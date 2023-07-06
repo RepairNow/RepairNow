@@ -86,9 +86,7 @@ const props = defineProps({
 
 const filteredArray = ref()
 const startTime = ref()
-onMounted(async () => {
-    console.log(props.announcement);
-    
+onMounted(async () => {    
     const estimates = props.announcement.estimates
     filteredArray.value = estimates.filter(estimate => estimate.currentStatus === 'ACCEPTED');
     startTime.value = new Date(props.announcement.startTime).toLocaleString('fr-FR', { day: "2-digit", month: "long", hour: "2-digit", minute: "2-digit" })

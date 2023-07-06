@@ -1,4 +1,4 @@
-import { Controller, Request, Inject, Body, UseGuards, Post, Query, Get, Param, Patch, UseFilters, Delete, UseInterceptors, UploadedFiles } from "@nestjs/common";
+import { Controller, Request, Inject, Body, UseGuards, ParseFilePipe, MaxFileSizeValidator, Post, Query, Get, Param, Patch, UseFilters, Delete, UseInterceptors, UploadedFiles } from "@nestjs/common";
 import { FilesInterceptor } from "@nestjs/platform-express";
 import { ClientProxy } from "@nestjs/microservices";
 import { AuthGuard } from "../guards/auth.guard";
@@ -49,7 +49,7 @@ export class AnnouncementsController {
   @UseFilters(new ExceptionFilter())
   @UseGuards(AuthGuard)
   @UseInterceptors(FilesInterceptor('files'))
-  uploadAnnouncementImages(@UploadedFiles() files: Array<Express.Multer.File>, @Param() params, @Request() request): Observable<any> {
+  uploadAnnouncementImages(@UploadedFiles(new ParseFilePipe({ validators: [new MaxFileSizeValidator({ maxSize: 1000000 })]})) files: Array<Express.Multer.File>, @Param() params, @Request() request): Observable<any> {
     const { user } = request;
     return this.missionClient.send({ cmd: "uploadAnnouncementImages" }, { files, user, id: params.id });
   }

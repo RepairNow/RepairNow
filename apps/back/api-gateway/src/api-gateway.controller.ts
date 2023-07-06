@@ -11,6 +11,8 @@ import {
   Patch,
   UseInterceptors,
   UploadedFile,
+  ParseFilePipe,
+  MaxFileSizeValidator
 } from '@nestjs/common';
 import { ApiGatewayService } from './api-gateway.service';
 import { ClientProxy } from '@nestjs/microservices';
@@ -80,7 +82,7 @@ export class ApiGatewayController {
   @UseGuards(AuthGuard)
   @UseInterceptors(FileInterceptor('file'))
   updateAvatar(
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile(new ParseFilePipe({ validators: [new MaxFileSizeValidator({ maxSize: 1000000 })]})) file: Express.Multer.File,
     @Request() request,
   ): Observable<any> {
     const { user } = request;

@@ -81,7 +81,6 @@ const login = () => {
 };
 
 const handleForgotPassword = () => {
-	console.log("send email to reset password", emailForgotPassword.value);
 	isForgotPasswordSent.value = true;
 
 	setTimeout(() => {

@@ -70,7 +70,6 @@ watch(
 onMounted(async () => {
 	try {
 		user.value = await getUserById(route?.params?.id as string);
-		console.log(user.value);
 	} catch {}
 });
 
