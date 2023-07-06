@@ -30,7 +30,7 @@ import { onMounted, ref } from "vue";
 
 const notifications = ref([]);
 
-const socket = io("http://localhost:3005", {
+const socket = io(import.meta.env.VITE_BACKENDCOM_URL, {
 	auth: {
 		token: token.value,
 	},
