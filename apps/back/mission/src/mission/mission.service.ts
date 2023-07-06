@@ -88,7 +88,11 @@ export class MissionService {
             currentStatus: MissionStatus[payload.status]
           },
           include: {
-            announcement: true
+            announcement: {
+              include: {
+                images: true
+              }
+            }
           }
         })
       } else {
@@ -119,6 +123,7 @@ export class MissionService {
         include: {
           announcement: {
             include: {
+              images: true,
               estimates: {
                 include: {
                   prestataire: true
