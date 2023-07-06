@@ -123,7 +123,7 @@ class User {
 
     async _updateUser(payload: UpdateUser): Promise<UserI> {
         try {
-            const uri = `/users/${payload.id}`;
+            const uri = `/user/${payload.id}`;
             const res = await client.patch(uri, payload);
             return res.data;
         } catch (error) {

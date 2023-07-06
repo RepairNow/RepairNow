@@ -13,7 +13,8 @@ import { StripeService } from 'src/stripe/stripe.service';
 import { AnnouncementStatus } from 'src/announcements/announcements.service';
 import {CurrentUserI} from "../mission/dto/current-user.dto";
 import {MissionStatus} from "../mission/enums/mission-status.enum";
-
+import { MailerService } from '@nestjs-modules/mailer/dist';
+import { ConfigService } from '@nestjs/config';
 enum EstimateStatus {
   PENDING = "PENDING",
   ACCEPTED = "ACCEPTED",
@@ -27,7 +28,7 @@ function generateRandomNumber() {
 
 @Injectable()
 export class EstimatesService {
-  constructor(private prismaService: PrismaService, private stripeService: StripeService) { }
+  constructor(private prismaService: PrismaService, private stripeService: StripeService, private mailerService: MailerService, private configService: ConfigService) { }
 
   async create(payload: { createEstimateDto: CreateEstimateDto, announcementId: string, user: CurrentUserI}) {
 
@@ -289,10 +290,63 @@ export class EstimatesService {
         where: {
           id: payload.estimateId
         },
+        include: {
+          prestataire: true
+        },
         data: {
           currentStatus: EstimateStatus.ACCEPTED
         }
+      });
+
+      const announcementClient = await this.prismaService.announcement.findUnique({
+        where: {
+          id: estimateUpdated.announcementId
+        }
+      });
+
+      const client = await this.prismaService.user.findUnique({
+        where: {
+          id: announcementClient.userId
+        }
+      });
+      const emailBody = `
+        <h2>Récapitulatif du devis</h2>
+        
+        <table>
+            <tr>
+                <th>Description</th>
+                <th>Prix</th>
+            </tr>
+            <tr>
+                <td>${estimateUpdated.description}</td>
+                <td>${estimateUpdated.price}€</td>
+            </tr>
+            <tr>
+                <td><strong>Total</strong></td>
+                <td><strong>${estimateUpdated.price}€</strong></td>
+            </tr>
+        </table>
+        
+        <p>Paiement effectué par Stripe</p>
+        
+        <p>Merci de votre confiance. Si vous avez des questions ou des préoccupations, n'hésitez pas à nous contacter.</p>
+        
+        <p>Cordialement,</p>
+        <p>Nom du prestataire : ${estimateUpdated.prestataire.firstname} ${estimateUpdated.prestataire.lastname}</p>
+      `;
+      
+      this.mailerService.sendMail({
+        to: client.email, // list of receivers
+        from: this.configService.get('MAILER_FROM'), // sender address
+        subject: 'Réinitialisation de votre mot de passe', // Subject line
+        html: emailBody, // HTML body content
       })
+      .then(async () => {
+        console.log('email sent')   
+      }) 
+      .catch(err => {
+        throw new BadRequestException(err)
+      });
 
       const createdMission = await this.prismaService.mission.create({
         data: {

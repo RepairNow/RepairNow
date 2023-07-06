@@ -3,7 +3,6 @@ import {
   Controller,
   Get,
   HttpException,
-  ForbiddenException,
   HttpStatus,
   UseFilters,
   ValidationPipe,
@@ -13,6 +12,7 @@ import { MessagePattern, Payload } from '@nestjs/microservices';
 import { RpcValidationFilter } from './filters/rpc-validation.filter';
 import { SignInDto, SignUpDto } from './dto/sign-with-email.dto';
 import { CurrentUserDto } from '@repairnow/dto';
+import { UpdateUserDto } from './users/dto/user.dto';
 @Controller()
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -35,8 +35,18 @@ export class AuthController {
   }
 
   @UseFilters(new RpcValidationFilter())
+  @MessagePattern({ cmd: 'patch_user' })
+  patchUser(
+    @Payload() payload: { userId: string; updateUserDto: UpdateUserDto },
+  ): any {
+    return this.authService.patchUser(payload);
+  }
+
+  @UseFilters(new RpcValidationFilter())
   @MessagePattern({ cmd: 'update_avatar' })
-  updateAvatar(@Payload() payload: { file: Express.Multer.File, user: CurrentUserDto }) {
+  updateAvatar(
+    @Payload() payload: { file: Express.Multer.File; user: CurrentUserDto },
+  ) {
     return this.authService.updateAvatar(payload);
   }
 
@@ -73,7 +83,14 @@ export class AuthController {
 
   @UseFilters(new RpcValidationFilter())
   @MessagePattern({ cmd: 'reset_password' })
-  resetPassword(@Payload() payload: { user: CurrentUserDto, oldPassword: string, newPassword: string }) {
+  resetPassword(
+    @Payload()
+    payload: {
+      user: CurrentUserDto;
+      oldPassword: string;
+      newPassword: string;
+    },
+  ) {
     return this.authService.resetPassword(payload);
   }
 

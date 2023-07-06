@@ -1,4 +1,9 @@
-import { Injectable, UnauthorizedException, BadRequestException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  BadRequestException,
+  NotFoundException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { SignInDto } from './dto/sign-with-email.dto';
 import { PrismaService, User } from '@repairnow/prisma';
@@ -10,6 +15,7 @@ import { CurrentUserDto } from '@repairnow/dto';
 import { compare, hash as bHash } from 'bcrypt';
 import { RpcException } from '@nestjs/microservices';
 import { MailerService } from '@nestjs-modules/mailer';
+import { UpdateUserDto } from './users/dto/user.dto';
 
 interface IJwtPayload {
   email: string;
@@ -22,7 +28,8 @@ interface IJwtPayload {
 }
 
 function genererMdpRobuste(longueur) {
-  const caracteres = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+[]{}|;:,.<>?!!@@##$$%%^^&&';
+  const caracteres =
+    'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_=+[]{}|;:,.<>?!!@@##$$%%^^&&';
   let mdp = '';
   while (mdp.length < longueur) {
     const index = Math.floor(Math.random() * caracteres.length);
@@ -38,7 +45,7 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
     private configService: ConfigService,
-    private mailerService: MailerService
+    private mailerService: MailerService,
   ) {}
 
   async isUserExist(email: SignInDto['email']): Promise<boolean> {
@@ -72,6 +79,9 @@ export class AuthService {
     );
     if (!user) {
       throw new UnauthorizedException();
+    }
+    if (user.isUserDeleted) {
+      throw new ForbiddenException('User is deleted');
     }
     const payload: IJwtPayload = {
       email: user.email,
@@ -146,40 +156,43 @@ export class AuthService {
     return 'Hello World from auth service!';
   }
 
-  async updateAvatar(payload: { file: Express.Multer.File, user: CurrentUserDto }) {
+  async updateAvatar(payload: {
+    file: Express.Multer.File;
+    user: CurrentUserDto;
+  }) {
     const userAvatar = await this.prismaService.files.findUnique({
       where: {
         // @ts-ignore
-        userId: payload.user.sub
-      }
+        userId: payload.user.sub,
+      },
     });
     if (userAvatar) {
       await this.prismaService.files.update({
         where: {
           // @ts-ignore
-          userId: payload.user.sub
+          userId: payload.user.sub,
         },
         include: {
-          user: true
+          user: true,
         },
         data: {
-          ...payload.file
-        }
+          ...payload.file,
+        },
       });
     } else {
       await this.prismaService.files.create({
         include: {
-          user: true
+          user: true,
         },
         data: {
           userId: payload.user.sub,
-          ...payload.file
-        }
+          ...payload.file,
+        },
       });
     }
     return 'file(s) created';
   }
-  
+
   getUsers() {
     return this.prismaService.user.findMany();
   }
@@ -190,8 +203,27 @@ export class AuthService {
         id: userId,
       },
       include: {
-        avatar: true
-      }
+        avatar: true,
+      },
+    });
+  }
+
+  async patchUser(payload: { userId: string; updateUserDto: UpdateUserDto }) {
+    const user = await this.prismaService.user.findUnique({
+      where: {
+        id: payload.userId,
+      },
+    });
+    if (!user) {
+      throw new NotFoundException(`User with id ${payload.userId} not found`);
+    }
+    return this.prismaService.user.update({
+      where: {
+        id: payload.userId,
+      },
+      data: {
+        ...payload.updateUserDto,
+      },
     });
   }
 
@@ -273,51 +305,54 @@ export class AuthService {
     return tokens;
   }
 
-  async resetPassword(payload: { user: CurrentUserDto, oldPassword: string, newPassword: string }) {
+  async resetPassword(payload: {
+    user: CurrentUserDto;
+    oldPassword: string;
+    newPassword: string;
+  }) {
     const user = await this.prismaService.user.findUnique({
       where: {
-        id: payload.user.sub
-      }
+        id: payload.user.sub,
+      },
     });
 
     const areEqual = await compare(payload.oldPassword, user.password);
 
-    if(!areEqual) {
+    if (!areEqual) {
       throw new RpcException(new BadRequestException());
     }
 
     await this.prismaService.user.update({
       where: {
-        id: payload.user.sub
+        id: payload.user.sub,
       },
       data: {
-        password: await bHash(payload.newPassword, 10)
-      }
+        password: await bHash(payload.newPassword, 10),
+      },
     });
 
     return 'password updated';
   }
 
   async passwordForgotten(payload: { email: string }) {
-
     const user = await this.prismaService.user.findUnique({
       where: {
-        email: payload.email
-      }
+        email: payload.email,
+      },
     });
 
-    if(!user) {
+    if (!user) {
       throw new BadRequestException();
     }
 
     const password = genererMdpRobuste(20);
     await this.prismaService.user.update({
       where: {
-        email: payload.email
+        email: payload.email,
       },
       data: {
-        password: await bHash(password, 10)
-      }
+        password: await bHash(password, 10),
+      },
     });
 
     const emailBody = `
@@ -330,19 +365,20 @@ export class AuthService {
       <p>Nom de votre entreprise</p>
     `;
 
-    this.mailerService.sendMail({
-      to: payload.email, // list of receivers
-      from: this.configService.get('MAILER_FROM'), // sender address
-      subject: 'Réinitialisation de votre mot de passe', // Subject line
-      html: emailBody, // HTML body content
-    })
-    .then(async () => {
-      console.log('email sent')   
-    }) 
-    .catch(err => {
-      throw new BadRequestException(err)
-    });
+    this.mailerService
+      .sendMail({
+        to: payload.email, // list of receivers
+        from: this.configService.get('MAILER_FROM'), // sender address
+        subject: 'Réinitialisation de votre mot de passe', // Subject line
+        html: emailBody, // HTML body content
+      })
+      .then(async () => {
+        console.log('email sent');
+      })
+      .catch((err) => {
+        throw new BadRequestException(err);
+      });
 
-    return 'email sent'
+    return 'email sent';
   }
 }
