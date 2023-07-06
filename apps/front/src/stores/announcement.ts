@@ -4,8 +4,7 @@ import announcementService from "@/services/api/announcement";
 import { AnnouncementI, CreateAnnouncement, UpdateAnnouncement } from "@/interfaces/announcement";
 import {CreateMission, DeleteMission, MissionI, UpdateMission} from "@/interfaces/mission";
 import {CreateEstimate, EstimateI, UpdateEstimate} from "@/interfaces/estimate";
-import {Estimate} from "mission/dist/estimates/entities/estimate.entity";
-import {CreateReview} from "@/interfaces/review";
+import {CreateReview, ReviewI, UpdateReview} from "@/interfaces/review";
 
 export const useAnnouncementStore = defineStore("announcement", () => {
     const {
@@ -190,9 +189,24 @@ export const useAnnouncementStore = defineStore("announcement", () => {
      * Announcement review
      */
 
+    //@ts-ignore
+    const announcementReview: Ref<ReviewI> = ref({})
+
     async function createAnnouncementReview(announcementId: string, payload: CreateReview) {
+        console.log(announcementId)
+        console.log(payload)
         try {
             const res = await _createReview(announcementId, payload);
+            announcementReview.value = res
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async function updateAnnouncementReview(announcementId: string, payload: UpdateReview) {
+        try {
+            const res = await _updateReview(announcementId, payload);
+            announcementReview.value = res
         } catch (error) {
             throw error
         }
@@ -219,5 +233,7 @@ export const useAnnouncementStore = defineStore("announcement", () => {
         deleteAnnouncementEstimate,
         getAnnouncementEstimate,
         getAnnouncementEstimates,
+        createAnnouncementReview,
+        updateAnnouncementReview
     };
 });

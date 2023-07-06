@@ -57,7 +57,9 @@
                         Voir ma demande
                     </v-btn>
                 </router-link>
-                <review-form />
+                <review-form
+                    :announcement="announcement"
+                />
             </div>
             <div v-else>
                 <router-link :to="{name: 'client-announcement', params: { id: announcement.id }}" class="tw-w-full">

@@ -211,6 +211,7 @@ class Announcement {
 
     async _createReview(announcementId: string, payload: CreateReview): Promise<ReviewI> {
         try {
+            console.log('create review')
             const uri = `${namespace}/${announcementId}/mission/review`;
             const res = await client.post(uri, payload);
             return res.data;
