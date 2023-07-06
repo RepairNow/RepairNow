@@ -25,6 +25,7 @@
 					{{ formError }}
 				</p>
 				<v-text-field
+                    data-testid="login-email"
 					v-model="loginForm.email"
 					prepend-inner-icon="mdi-email-outline"
 					variant="filled"
@@ -33,6 +34,7 @@
 					:rules="[rules.required, rules.email]"
 					class="rounded-lg" />
 				<v-text-field
+                    data-testid="login-password"
 					v-model="loginForm.password"
 					prepend-inner-icon="mdi-lock-outline"
 					variant="filled"
@@ -40,7 +42,7 @@
 					:rules="[rules.required]"
 					class="rounded-lg"
 					type="password" />
-				<v-alert v-if="isErrorMessageDisplayed" color="error"
+				<v-alert data-testid="login-alert" testId="login-alert" v-if="isErrorMessageDisplayed" color="error"
 					>Combinaison impossible</v-alert
 				>
 				<div class="tw-flex tw-items-center tw-flex-wrap">
@@ -59,6 +61,7 @@
 				</div>
 				<div class="tw-flex tw-flex-col tw-items-center">
 					<v-btn
+                        data-testid="login-submit"
 						type="submit"
 						@click="handleLogin()"
 						text="Se connecter"

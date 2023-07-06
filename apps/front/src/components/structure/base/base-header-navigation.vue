@@ -12,6 +12,7 @@
 				<login-form>
 					<template #button>
 						<span
+                            data-testid="login-button"
 							class="tw-text-md tw-py-2 tw-px-4 tw-rounded-full tw-font-medium tw-truncate tw-flex tw-flex-col tw-items-center hover:tw-bg-primary/20 tw-h-full tw-justify-center tw-cursor-pointer">
 							Connexion
 						</span>
