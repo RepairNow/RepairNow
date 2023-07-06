@@ -28,9 +28,9 @@ export const useMissionStore = defineStore("mission", () => {
         }
     }
 
-    async function getSelfMissions() {
+    async function getSelfMissions(status: string) {
         try {
-            const res = await _getSelfMissions();
+            const res = await _getSelfMissions(status);
             missions.value = res;
         } catch (error) {
             throw error;

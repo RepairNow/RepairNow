@@ -42,26 +42,46 @@
                 />
             </div>
             <div class="tw-flex tw-flex-col tw-items-center">
-                <v-btn @click="handleNotification()" text="Envoyer" :disabled="isSent" block class="tw-normal-case" />
+                <v-btn @click="sendNotificationViaSocket()" text="Envoyer" :disabled="isSent" block class="tw-normal-case" />
             </div>
         </v-card>
     </v-dialog>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { SendNotification } from "@/interfaces/notification";
 import { useNotificationStore } from "@/stores/notifications";
+import { io } from "socket.io-client";
+import { token } from "@/services";
 
 const { sendNotification } = useNotificationStore();
 const router = useRouter()
 
+const socket = io(import.meta.env.VITE_BACKENDCOM_URL, {
+	auth: {
+		token: token.value,
+	},
+});
+
 const notificationForm = ref<SendNotification>({
-    userId: "",
     title: "",
     content: "",
 })
+
+onMounted(() => {
+	socket.on("response_notification", (data) => {
+		console.log(data);
+	});
+});
+
+const sendNotificationViaSocket = () => {
+    socket.emit("create_notification", {
+        title: notificationForm.value.title,
+        content: notificationForm.value.content
+    });
+};
 
 const isSent = ref<boolean>(false);
 const formError = ref<string>('')

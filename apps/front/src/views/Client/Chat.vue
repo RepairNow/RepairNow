@@ -39,17 +39,18 @@ import { ref, watch } from "vue";
 import { token } from "@/services";
 import { useUserStore } from "@/stores/user";
 
-const socket = io("http://localhost:3005", {
+// get my current user_id just to display names
+const { currentUser } = storeToRefs(useUserStore());
+
+const socket = io(import.meta.env.VITE_BACKENDCOM_URL, {
 	auth: {
 		token: token.value,
+		firstname: currentUser.value?.firstname,
 	},
 });
 
 const conversationsRef = ref([]);
 const messagesRef = ref();
-
-// get my current user_id just to display names
-const { currentUser } = storeToRefs(useUserStore());
 
 // each time we open/switch to a conversation, we ask messages from the server
 watch(
@@ -71,10 +72,8 @@ onMounted(() => {
 	socket.on("conversations", (conversations) => {
 		const conversationArrayWithoutMe = conversations.map(
 			(conversation: any) => {
-				// Remove the current user from the list of members
-				// Just to display names of other members in the chat list
 				conversation.members = conversation.members.filter(
-					(member: string) => member !== currentUser?.value?.sub
+					(user: any) => user.userId !== currentUser.value?.sub
 				);
 				return conversation;
 			}

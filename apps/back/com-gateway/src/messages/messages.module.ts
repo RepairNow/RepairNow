@@ -26,4 +26,4 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
   providers: [MessagesService, MessagesRepository],
   exports: [MessagesService],
 })
-export class MessagesModule {}
+export class MessagesModule { }

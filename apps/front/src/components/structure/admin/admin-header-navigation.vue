@@ -14,12 +14,6 @@
                 to: 'admin-users',
             },
             {
-                title: 'Geolocalisation',
-                value: 'geolocalisation',
-                icon: 'mdi-map-outline',
-                to: 'admin-geo-locations',
-            },
-            {
                 title: 'Partenariat',
                 value: 'partenariat',
                 icon: 'mdi-handshake-outline',

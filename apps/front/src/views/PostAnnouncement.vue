@@ -364,7 +364,7 @@ const handleSendFormValues = async () => {
             await _uploadAnnouncementImages(formData);
         }
 		if (annoucementCreated.id) {
-			router.push({ name: "client-announcements" });
+			await router.push({ name: "client-announcements" });
 		}
 	} catch (e) {
 		console.log("error when creating announcement", e);

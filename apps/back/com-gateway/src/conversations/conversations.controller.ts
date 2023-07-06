@@ -21,9 +21,15 @@ export class ConversationsController {
     @Body() createConversationDto: CreateConversationtDto,
   ) {
     const membersWithMe = {
-      members: [...createConversationDto.members, req.user.sub],
+      members: [
+        ...createConversationDto.members,
+        { userId: req.user.sub, userFirstname: req.user.firstname },
+      ],
     };
-    return await this.conversationsService.createConversation(membersWithMe);
+    return await this.conversationsService.createConversation({
+      ...membersWithMe,
+      announcementId: createConversationDto.announcementId,
+    });
   }
 
   @Get(':id')

@@ -1,18 +1,46 @@
 <template>
-    <div class="tw-w-full tw-p-6 tw-bg-white tw-rounded-xl tw-shadow-lg">
-        <p class="tw-text-neutral-400 tw-text-xs">Il y a {{notification.created_at}}</p>
-        <p class="tw-font-bold tw-text-lg">{{notification.title}}</p>
-        <p class="">{{notification.content}}</p>
+    <div>
+      <v-snackbar
+        elevation="24"
+        v-model="snackbar"
+      >
+        {{ text }}
+  
+        <template v-slot:actions>
+          <v-btn
+            color="white"
+            variant="text"
+            @click="snackbar = false"
+          >
+            Fermer
+          </v-btn>
+        </template>
+      </v-snackbar>
     </div>
 </template>
 
 <script setup lang="ts">
-    import {PropType} from "vue";
-    import {NotificationI} from "@/interfaces/notification";
+import { token } from '@/services';
+import { io } from 'socket.io-client';
+import { onMounted, ref } from 'vue';
 
-    const props = defineProps({
-        notification: { type: Object as PropType<NotificationI>, required: true}
-    })
+const snackbar = ref(false);
+const text = ref('Hello, world!');
+
+const socket = io(import.meta.env.VITE_BACKENDCOM_URL, {
+    auth: {
+        token: token.value,
+    },
+});
+
+onMounted(() => {
+	socket.on("response_notification", (data) => {
+		console.log(data);
+        const { title, content } = data;
+        text.value = `${title.toUpperCase()} : ${content}`;
+        snackbar.value = true;
+	});
+});
 </script>
 
 <style scoped>

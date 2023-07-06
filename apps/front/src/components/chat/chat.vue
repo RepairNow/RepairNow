@@ -4,12 +4,14 @@
             <router-link :to="{name: 'client-chats'}" class="tw-p-3 tw-flex tw-items-center tw-justify-center hover:tw-bg-neutral-100">
                 <v-icon icon="mdi-chevron-left" />
             </router-link>
-            <v-avatar color="surface-variant" size="45" class="tw-ml-3"/>
             <p v-for="member in currentChatMembersWithoutMe" class="tw-px-4 tw-text-xl tw-font-bold">
                 <span>
-                    {{ member }}
+                    <v-avatar color="surface-variant" size="45" class="tw-ml-3"> {{ member.userFirstname?.[0] }}</v-avatar>
+                    {{ member.userFirstname  }}
                 </span>
+                <!-- TODO: Add link to redirect to the current Annoucement -->
             </p>
+            <v-btn class="tw-ml-4" @click="handleClickShowAnnounce()"> Voir l'annonce </v-btn> 
         </div>
         <div class="tw-h-full tw-p-4 tw-pb-16 overflow-auto tw-flex tw-flex-col tw-gap-4">
             <div
@@ -44,7 +46,7 @@
 </template>
 
 <script setup lang="ts">
-import {useRoute} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import { ref, watch } from "vue";
 const props = defineProps({
     handleSendMessage: {
@@ -66,14 +68,22 @@ const props = defineProps({
 });
 
 const route = useRoute();
+const router = useRouter();
+
+const handleClickShowAnnounce = () => {
+    router.push({name: 'client-announcement', params: {id: currentChat.value.announcementId}});
+}
 
 const currentChatMembersWithoutMe = ref(props.chats.find((chat) => chat._id === route.params.id)?.members?.filter((member) => member !== props.currentUser.sub));
+
+const currentChat = ref(props.chats.find((chat) => chat._id === route.params.id));
 
 // each time we open/switch to a conversation, we need to update the currentChatMembersWithoutMe
 watch(
 	() => route.params.id,
 	(newId) => {
         currentChatMembersWithoutMe.value = props.chats.find((chat) => chat._id === newId)?.members?.filter((member) => member !== props.currentUser.sub);
+        currentChat.value = props.chats.find((chat) => chat._id === newId);
 	}
 );
 
