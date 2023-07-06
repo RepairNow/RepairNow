@@ -14,7 +14,6 @@
         >
             <announcement
                 v-for="announcement in announcements"
-                class="tw-p-3 border"
                 :announcement="announcement"
             />
         </div>
@@ -22,7 +21,7 @@
             v-else
             class="tw-flex tw-flex-col tw-items-center tw-justify-center tw-my-32 tw-gap-4"
         >
-            <p class="tw-font-bold lg:tw-text-2xl tw-text-lg">Aucune demande en cours</p>
+            <p class="tw-font-bold lg:tw-text-2xl tw-text-lg">Aucune demande {{ currentStatus }}</p>
             <p>Faites une demande de service et trouvez un prestataire en quelques minutes</p>
             <announcements-modal>
                 <template #button>

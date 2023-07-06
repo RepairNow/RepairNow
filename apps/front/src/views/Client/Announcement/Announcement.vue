@@ -19,51 +19,50 @@
                 </div>
             </div>
         </div>
-        <div class="tw-w-full tw-bg-primary tw-h-32 md:tw-h-64">
-            <v-img v-if="announcement.images" :src="getImage(announcement.images[0]?.id)" />
-            <div v-else></div>
-        </div>
-        <div class="tw-w-full tw-p-10">
+        <div class="tw-w-full sm:tw-p-10 tw-p-2">
             <div class="tw-flex tw-flex-col xl:tw-flex-row">
                 <div class="xl:tw-w-7/12 tw-flex tw-flex-col tw-gap-4">
                     <div class="tw-flex tw-items-center tw-w-full">
-                        <div class="tw-grow-1 tw-w-full tw-text-xl tw-font-bold xl:tw-text-4xl tw-flex tw-items-center">
-                            {{ announcement.title }} <span class="tw-text-white tw-text-2xl tw-bg-primary tw-py-1 tw-px-2 tw-mx-4 tw-rounded-md">{{ announcement.currentStatus }}</span>
+                        <div class="tw-flex-wrap tw-gap-y-2 tw-w-full tw-text-xl tw-font-bold xl:tw-text-4xl tw-flex tw-items-center">
+                            {{ announcement.title }} <span class="tw-text-white tw-text-sm tw-bg-primary tw-py-1 tw-px-2 tw-mx-4 tw-rounded-md">{{ announcement.currentStatus }}</span>
+                            <v-btn :to="{name: 'client-geo-location', params: { id: announcement.id }}">
+                                <v-btn>Voir Position du prestataire</v-btn>
+                            </v-btn>
                         </div>
                     </div>
                     <div class="tw-flex tw-gap-4 tw-flex-wrap">
-                        <div class="tw-p-2 tw-bg-primary tw-rounded-lg tw-text-white tw-flex tw-gap-2">
+                        <div class="tw-p-2 tw-bg-primary/20 tw-rounded-lg tw-text-black tw-flex tw-gap-2">
                             <v-icon icon="mdi-calendar-outline" /><span>{{ startTime }}</span>
                         </div>
-                        <div class="tw-p-2 tw-bg-primary tw-rounded-lg tw-text-white tw-flex tw-gap-2">
+                        <div class="tw-p-2 tw-bg-primary/20 tw-rounded-lg tw-text-black tw-flex tw-gap-2">
                             <v-icon icon="mdi-clock-outline" /><span>4 heures</span>
                         </div>
                         <a
-                                class="tw-p-2 tw-bg-primary tw-rounded-lg tw-text-white tw-flex tw-gap-2 hover:tw-bg-primary/90"
+                                class="tw-p-2 tw-bg-primary/20 tw-rounded-lg tw-text-black tw-flex tw-gap-2 hover:tw-bg-primary/30"
                                 :href="`https://www.google.com/maps/search/${announcement.address}`"
                         >
                             <v-icon icon="mdi-map-outline"/><span>{{announcement.address}}</span><v-icon icon="mdi-link"/>
                         </a>
                         <div
-                            class="tw-p-2 tw-bg-primary tw-rounded-lg tw-text-white tw-flex tw-gap-2"
+                            class="tw-p-2 tw-bg-primary/20 tw-rounded-lg tw-text-black tw-flex tw-gap-2"
                         >
                             <v-icon icon="mdi-tools"/><span>{{announcement?.job?.title}}</span>
                         </div>
                     </div>
-                    <div class="">
-                        <p>
+                    <div class="md:tw-border-l-4 md:tw-border-primary md:tw-h-full">
+                        <p class="tw-pl-4 tw-italic">
                            {{announcement.description}}
                         </p>
                     </div>
-                    <div class="tw-flex tw-gap-4 tw-flex-wrap">
+                    <div class="tw-flex tw-justify-center sm:tw-justify-left tw-gap-4 tw-flex-wrap tw-rounded-lg tw-pt-4 tw-mx-2">
                         <div v-for="image in announcement.images"
-                            class="tw-w-64 tw-h-64 tw-bg-primary tw-text-white tw-p-3"
+                            class="tw-text-white tw-p-3"
                         >
                             <v-img :src="getImage(image.id)" />
                         </div>
                     </div>
                 </div>
-                <div class="xl:tw-w-5/12 tw-border-l-2">
+                <div class="xl:tw-w-5/12 tw-pt-4 xl:tw-pt-0 xl:tw-border-l-2">
                     <div v-if="!filteredArray?.length"
                          class="tw-flex tw-flex-col tw-w-full xl:tw-p-4"
                     >
@@ -134,9 +133,9 @@
                                     </div>
                                 </div>
                                 <div class="tw-my-8">
-                                    <p><span class="tw-underline">Tarif :</span> {{estimate.price}} €</p>
+                                    <p><span class="tw-font-bold">Tarif :</span> {{estimate.price}} €</p>
                                     <p>
-                                        <span class="tw-underline">Description :</span> {{estimate.description}}
+                                        <span class="tw-font-bold">Description :</span> {{estimate.description}}
                                     </p>
                                 </div>
                                 <div>
@@ -166,9 +165,6 @@
                     </div>
                 </div>
             </div>
-            <router-link :to="{name: 'client-geo-location', params: { id: announcement.id }}">
-                <v-btn>Voir Position du prestataire</v-btn>
-            </router-link>
         </div>
     </div>
 </template>

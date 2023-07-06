@@ -29,6 +29,7 @@
 					prepend-inner-icon="mdi-email-outline"
 					variant="filled"
 					label="Email"
+					type="email"
 					:rules="[rules.required, rules.email]"
 					class="rounded-lg" />
 				<v-text-field
