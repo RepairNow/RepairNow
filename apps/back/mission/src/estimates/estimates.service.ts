@@ -302,7 +302,7 @@ export class EstimatesService {
         }
       })
 
-      this.prismaService.announcement.update({
+      const updatedAnnouncement = await this.prismaService.announcement.update({
         where: {
           id: payload.announcementId
         },
@@ -310,6 +310,8 @@ export class EstimatesService {
           currentStatus: AnnouncementStatus.ACTIVE
         }
       })
+
+      console.log(updatedAnnouncement)
 
       await this.prismaService.validationCode.create({
         // @ts-ignore

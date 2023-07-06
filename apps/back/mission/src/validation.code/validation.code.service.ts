@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import {Injectable, BadRequestException, NotFoundException} from '@nestjs/common';
 import { PrismaService } from '@repairnow/prisma';
 import { ValicationCodeDto } from './dto/validationCodeDto';
 import { MissionStatus } from 'src/mission/enums/mission-status.enum';
@@ -14,6 +14,10 @@ export class ValidationCodeService {
           id: payload.missionId
         }
       });
+
+      if (!mission){
+        return new NotFoundException("Cette mission n'existe pas");
+      }
 
       if (mission.currentStatus === MissionStatus.DONE) {
         return new BadRequestException("Cette mission est déjà validée");
@@ -93,6 +97,10 @@ export class ValidationCodeService {
           id: missionId
         }
       });
+
+      if (!mission){
+        return new NotFoundException("Cette mission n'existe pas");
+      }
 
       if (mission.currentStatus === MissionStatus.DONE) {
         return new BadRequestException("Cette mission est déjà validée");

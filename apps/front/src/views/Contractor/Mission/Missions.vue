@@ -1,8 +1,7 @@
 <template>
     <div class="tw-m-5 xl:tw-mx-64">
         <div class="tw-font-bold tw-text-2xl lg:tw-text-4xl">
-            Mes demandes
-            {{announcements}}
+            Mes missions
         </div>
         <div class="tw-flex tw-gap-2 tw-my-6">
             <v-btn
@@ -17,46 +16,42 @@
             </v-btn>
         </div>
         <div
-                v-if="announcements.length"
+                v-if="missions.length"
                 class="tw-flex tw-flex-col tw-gap-4 tw-my-4"
         >
-            <announcement
-                    v-for="announcement in announcements"
+            <mission
+                    v-for="mission in missions"
                     class="tw-p-3 border"
-                    :announcement="announcement"
+                    :mission="mission"
             />
         </div>
         <div
                 v-else
                 class="tw-flex tw-flex-col tw-items-center tw-justify-center tw-my-32 tw-gap-4"
         >
-            <p class="tw-font-bold lg:tw-text-2xl tw-text-lg">Aucune demande en cours</p>
-            <p>Faites une demande de service et trouvez un prestataire en quelques minutes</p>
-            <announcements-modal>
-                <template #button>
-                    <v-btn>
-                        Demander un service
-                    </v-btn>
-                </template>
-            </announcements-modal>
+            <p class="tw-font-bold lg:tw-text-2xl tw-text-lg">Aucune mission en cours</p>
+            <router-link
+                    :to="{name: 'contractor-announcements'}"
+                    class="tw-rounded-md tw-border-0 tw-bg-primary tw-text-white tw-p-2"
+            >
+                Voir les annonces
+            </router-link>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
-import AnnouncementsModal from "@/components/modal/form/announcements/announcements-modal.vue";
-import Announcement from "@/components/annoucement/annoucement.vue";
-import {useAnnouncementStore} from "@/stores/announcement";
 import {storeToRefs} from "pinia";
 import {useMissionStore} from "@/stores/mission";
+import Mission from "@/components/mission/mission.vue";
 
 const missionStore = useMissionStore()
 const {missions} = storeToRefs(missionStore)
-const {getMissions} = missionStore
+const {getSelfMissions} = missionStore
 
 onMounted(async () => {
-    await getMissions();
+    await getSelfMissions();
 });
 </script>
 
