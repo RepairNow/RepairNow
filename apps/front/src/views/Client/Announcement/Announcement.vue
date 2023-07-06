@@ -90,10 +90,11 @@
                                         <span class="tw-font-bold">Description: </span>{{estimate.description}}
                                     </div>
                                 </div>
-                                <div>
+                                <div class="tw-flex tw-gap-4">
                                     <estimation-confirmation
                                         :estimate="estimate"
                                     />
+                                    <v-btn class="lg:tw-mr-16" @click="handleDiscuss(estimate.prestataireId)">Discuter</v-btn>
                                 </div>
                             </div>
                         </div>
@@ -175,11 +176,12 @@
 import {useAnnouncementStore} from "@/stores/announcement";
 import {storeToRefs} from "pinia";
 import {onMounted, ref} from "vue";
-import {useRoute} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import EstimationConfirmation from "@/components/modal/confirm/estimation-confirmation.vue";
 import {useEstimateStore} from "@/stores/estimate";
 import MissionValidationModal from "@/components/modal/form/missions/mission-validation-modal.vue";
 import imageService from "@/services/api/image";
+import chatService from "@/services/api/chat";
 
 const { getImage } = imageService;
 const announcementsStore = useAnnouncementStore()
@@ -191,6 +193,7 @@ const {checkAnnouncementEstimateStatus} = estimateStore
 const {estimate} = storeToRefs(estimateStore)
 
 const route = useRoute()
+const router = useRouter()
 
 const dialog = ref(false)
 const startTime = ref('')
@@ -202,6 +205,8 @@ const estimateStatus = ref({
     text: '',
     color: ''
 })
+const { _createChat } = chatService;
+
 const showValidationCode = ref(false)
 onMounted(async () => {
     if (route.query?.estimate_id) {
@@ -240,6 +245,15 @@ onMounted(async () => {
     startTime.value = new Date(announcement.value.startTime).toLocaleString('fr-FR', { day: "2-digit", month: "long", hour: "2-digit", minute: "2-digit" })
     endTime.value = new Date(announcement.value.endTime).toLocaleString('fr-FR', { day: "2-digit", month: "long", hour: "2-digit", minute: "2-digit" })
 })
+
+const handleDiscuss = async (prestataireId: string) => {
+    const conversation = await _createChat({
+        members: [{userId: announcement.value.user.id, userFirstname: prestataireId}],
+        announcementId: announcement.value.id
+    })
+
+    await router.push({name: 'client-chat', params: {id: conversation._id}})
+}
 </script>
 
 <style scoped>
