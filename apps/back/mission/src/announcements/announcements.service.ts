@@ -144,7 +144,11 @@ export class AnnouncementsService {
               prestataire: true,
             },
           },
-          mission: true,
+          mission: {
+            include: {
+              review: true
+            }
+          },
           job: true
         },
       });

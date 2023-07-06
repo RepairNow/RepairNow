@@ -5,6 +5,7 @@ import { AnnouncementI, CreateAnnouncement, UpdateAnnouncement } from "@/interfa
 import {CreateMission, DeleteMission, MissionI, UpdateMission} from "@/interfaces/mission";
 import {CreateEstimate, EstimateI, UpdateEstimate} from "@/interfaces/estimate";
 import {Estimate} from "mission/dist/estimates/entities/estimate.entity";
+import {CreateReview} from "@/interfaces/review";
 
 export const useAnnouncementStore = defineStore("announcement", () => {
     const {
@@ -22,7 +23,11 @@ export const useAnnouncementStore = defineStore("announcement", () => {
         _updateAnnouncementEstimate,
         _deleteAnnouncementEstimate,
         _getAnnouncementEstimates,
-        _getAnnouncementEstimate
+        _getAnnouncementEstimate,
+        _createReview,
+        _deleteReview,
+        _getReview,
+        _updateReview
     } = announcementService;
 
     const announcements: Ref<AnnouncementI[]> = ref([]);
@@ -178,6 +183,18 @@ export const useAnnouncementStore = defineStore("announcement", () => {
             announcementEstimate.value = res
         } catch (e) {
             throw e;
+        }
+    }
+
+    /**
+     * Announcement review
+     */
+
+    async function createAnnouncementReview(announcementId: string, payload: CreateReview) {
+        try {
+            const res = await _createReview(announcementId, payload);
+        } catch (error) {
+            throw error
         }
     }
 

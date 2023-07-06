@@ -23,12 +23,12 @@ export class ReviewController {
     }
 
     @Patch()
-    update(@Body() updateReviewDto: any) {
-        return this.missionClient.send({ cmd: 'updateReview' }, updateReviewDto);
+    update(@Param('announcementId') id: string, @Body() updateReviewDto: any) {
+        return this.missionClient.send({ cmd: 'updateReview' }, {announcementId: id, payload: updateReviewDto});
     }
 
     @Delete(':id')
-    remove(@Param('id') id: string) {
+    remove(@Param('announcementId') id: string) {
         return this.missionClient.send({ cmd: 'removeReview' }, id);
     }
 }

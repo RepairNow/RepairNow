@@ -3,6 +3,7 @@ import { PrismaService } from '@repairnow/prisma';
 import { ValicationCodeDto } from './dto/validationCodeDto';
 import { MissionStatus } from 'src/mission/enums/mission-status.enum';
 import { ValidationStatus } from './enums/validation-status';
+import {AnnouncementStatus} from "../announcements/announcements.service";
 @Injectable()
 export class ValidationCodeService {
   constructor(private prismaService: PrismaService) { }
@@ -76,6 +77,15 @@ export class ValidationCodeService {
       if (mission.currentStatus === MissionStatus.DONE) {
         return new BadRequestException("Cette mission est déjà validée");
       }
+
+      this.prismaService.announcement.update({
+        where: {
+          id: mission.announcementId
+        },
+        data: {
+          currentStatus: AnnouncementStatus.DONE
+        }
+      })
 
       return this.prismaService.validationCode.update({
         where: {

@@ -28,7 +28,6 @@ export interface UpdateAnnouncement extends Partial<AnnouncementI> {
 
 export interface AnnouncementI {
     jobId: string
-
     job: JobI
     id: string
     userId: string
