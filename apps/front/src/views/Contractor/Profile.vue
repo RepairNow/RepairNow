@@ -156,13 +156,6 @@
             <span class="tw-font-bold">Rôle :</span>
             {{ myUser?.role }}
         </span>
-
-        <div>
-            <p class="tw-text-3xl tw-font-bold">
-                Gain du mois
-            </p>
-        </div>
-
     </div>
 </template>
 
