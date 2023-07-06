@@ -18,7 +18,7 @@
                 :class="chat.fromSelf ? 'tw-justify-end' : '' "
             >
                 <span
-                    class="tw-width-auto tw-justify-end tw-rounded-t-lg tw-p-3 tw-bg-red-100 tw-relative"
+                    class="tw-mb-1 tw-width-auto tw-justify-end tw-rounded-t-lg tw-p-3 tw-bg-red-100 tw-relative"
                     :class="chat.fromSelf ? 'tw-justify-end tw-rounded-l-lg' : 'tw-justify-end tw-rounded-r-lg' "
                 >
                     {{ chat.message }}
@@ -28,7 +28,7 @@
                 </span>
             </div>
         </div>
-        <div class="tw-absolute tw-bottom-3 tw-w-full tw-px-4 tw-flex tw-gap-4 tw-items-center">
+        <div class="lg:tw-absolute tw-bottom-3 tw-w-full tw-px-4 tw-flex tw-gap-4 tw-items-center">
             <v-text-field v-model="messageToSend" class="tw-bg-neutral-100" variant="filled" hide-details/>
             <v-btn @click="clickSend()" :disabled="messageToSend === ''" class="tw-h-full tw-rounded" icon="mdi-send"></v-btn>
         </div>

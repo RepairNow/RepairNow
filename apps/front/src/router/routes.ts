@@ -179,7 +179,7 @@ const routes = [
 			{
 				name: "contractor-chat",
 				path: "chat",
-				component: () => import("@/views/Contractor/Chat.vue"),
+				component: () => import("@/views/Client/Chat.vue"),
 			},
 			{
 				name: "contractor-geo-location",
@@ -254,7 +254,7 @@ const routes = [
 			{
 				name: "admin-chat",
 				path: "chat",
-				component: () => import("@/views/Admin/Chat.vue"),
+				component: () => import("@/views/Client/Chat.vue"),
 			},
 			{
 				name: "admin-geo-locations",

@@ -19,7 +19,7 @@ import SmsService from './sms/sms.service';
       useFactory: (configService: ConfigService) => ({
         global: true,
         secret: configService.get('JWT_SECRET'),
-        signOptions: { expiresIn: '1h' },
+        signOptions: { expiresIn: '7d' },
       }),
       inject: [ConfigService],
     }),
@@ -28,7 +28,7 @@ import SmsService from './sms/sms.service';
       global: true,
       // TODO: I don't know if the secret is being read from the env file. Check this.
       secret: `${process.cwd()}/env/${process.env.NODE_ENV}.env.JWT_SECRET`,
-      signOptions: { expiresIn: '120s' },
+      signOptions: { expiresIn: '7d' },
     }),
     MailerModule.forRootAsync({
       useFactory: (configService: ConfigService) => ({
