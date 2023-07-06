@@ -10,7 +10,7 @@
                     <p class="tw-truncate">{{ announcement.description }}</p>
                 </div>
             </div>
-            <div class="tw-w-full lg:tw-w-1/2">
+            <div v-if="!contractorView" class="tw-w-1/2">
                 <div class="tw-border-y tw-p-6" v-if="filteredArray?.length" v-for="array in filteredArray">
                     <div>
                         Vous avez réservé un prestataire

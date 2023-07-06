@@ -13,6 +13,7 @@
 
 		<v-card class="tw-w-2/3 tw-mx-auto tw-p-4 rounded-lg">
 			<div class="tw-flex">
+				<v-spacer></v-spacer>
 				<v-btn icon="mdi-close" color="none" @click="dialog = false" />
 			</div>
             <div class="tw-flex tw-flex-col tw-items-center tw-justify-center tw-text-center">
@@ -22,7 +23,7 @@
                     <p>Pour valider la mission, veuillez renseigner le code de validation partager par votre prestataire</p>
                     <v-btn
                         class="mt-5"
-                        @click="validateCode(mission.id, parseInt(code))"
+                        @click="validateFourDigitCode()"
                     >
                         Confirmer
                     </v-btn>
@@ -57,4 +58,13 @@ const screenSizeStore = useScreenSize();
 const { isSizeLG } = storeToRefs(screenSizeStore);
 
 const router = useRouter();
+
+const validateFourDigitCode = async () => {
+	try {
+		await validateCode(props.mission.id, parseInt(code.value))
+		dialog.value = false;
+	} catch (error) {
+		console.error(error);
+	}
+}
 </script>

@@ -213,7 +213,7 @@ onMounted(async () => {
             case 'ACCEPTED':
                 estimateStatus.value = {
                     icon: 'mdi-check-circle',
-                    text: 'Le paiement à été accepter.',
+                    text: 'Le paiement à été accepté',
                     color: 'success'
                 }
                 break;
@@ -228,7 +228,7 @@ onMounted(async () => {
             case 'REFUSED':
                 estimateStatus.value = {
                     icon: 'mdi-close-circle',
-                    text: 'Le paiement à été refuser.',
+                    text: 'Le paiement à été refusé',
                     color: 'error'
                 }
                 break;
