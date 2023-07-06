@@ -32,6 +32,12 @@
                     <p>{{announcement.mission.review[0].description}}</p>
                 </div>
             </div>
+            <div v-else-if="filteredArray?.length" class=" tw-w-full lg:tw-w-1/2">
+                <p class="tw-p-3 tw-border tw-rounded-lg">Vous avez soumis un devis de {{ filteredArray[0].price}} €</p>
+            </div>
+            <div v-else class=" tw-w-full lg:tw-w-1/2">
+                <p class="tw-p-3 tw-border tw-rounded-lg">Vous n'avez soumis aucun devis</p>
+            </div>
         </div>
         <div class="tw-flex tw-gap-4 tw-flex-wrap">
             <div class="tw-p-2 tw-bg-primary/20 tw-rounded-lg tw-text-black tw-flex tw-gap-2">
@@ -95,7 +101,10 @@ import {AnnouncementI} from "@/interfaces/announcement";
 import ReviewForm from "@/components/modal/form/review/review-form.vue";
 import imageService from "@/services/api/image";
 import {useJobImages} from "@/composables/jobImages"
+import {useUserStore} from "@/stores/user";
 const { getImage } = imageService;
+const userStore = useUserStore()
+const {currentUser} = userStore
 const props = defineProps({
     announcement: {
         type: Object as PropType<AnnouncementI>,
@@ -112,7 +121,11 @@ const startTime = ref()
 onMounted(async () => {
     
     const estimates = props.announcement.estimates
-    filteredArray.value = estimates.filter(estimate => estimate.currentStatus === 'ACCEPTED');
+    if(!props.contractorView) {
+        filteredArray.value = estimates.filter(estimate => estimate.currentStatus === 'ACCEPTED');
+    } else {
+        filteredArray.value = estimates.filter(estimate => estimate.prestataire.id === currentUser?.sub);
+    }
     startTime.value = new Date(props.announcement.startTime).toLocaleString('fr-FR', { day: "2-digit", month: "long", hour: "2-digit", minute: "2-digit" })
 })
 /**
