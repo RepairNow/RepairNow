@@ -45,6 +45,7 @@ export interface UserI {
     isPhoneVerified: boolean
     isEmailVerified: boolean 
     isUserDeleted: boolean
+    isContractorRoleAsked: boolean
     createdAt: Date
     jobs: JobI[]
 }

@@ -75,6 +75,11 @@
 							class="tw-text-sm tw-font-medium tw-text-gray-900 tw-px-6 tw-py-2 tw-text-left">
 							Rôle
 						</th>
+						<th
+							scope="col"
+							class="tw-text-sm tw-font-medium tw-text-gray-900 tw-text-left">
+							Demande de presta
+						</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -99,6 +104,9 @@
 						</td>
 						<td class="text-sm text-gray-900 font-light px-6 py-2">
 							{{ parseRole(user.role) }}
+						</td>
+						<td class="text-sm text-gray-900 font-light px-10 py-2">
+							{{ user.isContractorRoleAsked ? "Oui" : "Non" }}
 						</td>
 					</tr>
 				</tbody>

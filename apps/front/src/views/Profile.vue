@@ -68,15 +68,14 @@
 				v-if="!(myUser?.role === 'ADMIN')"
 				class="tw-text-center tw-mt-96">
 				<span
-					v-if="!myUser?.isPhoneVerified || !myUser?.isEmailVerified"
+					v-if="!myUser?.isPhoneVerified"
 					>Envie de
 					<span class="tw-font-bold">devenir prestataire</span>?
 					Faites
 					<span class="tw-text-red-800 tw-font-bold">vérifier</span>
 					vos informations et faites la demande!</span
 				>
-				<v-btn v-else variant="text" class="tw-w-fit tw-m-auto"
-					>Devenir prestataire</v-btn
+				<v-btn v-else variant="text" class="tw-w-fit tw-m-auto" @click="handleAskPresta()">Devenir prestataire</v-btn
 				>
 			</div>
 		</section>
@@ -215,6 +214,10 @@ const handleVerifyCode = async (code: string) => {
 		myUser.value.isPhoneVerified = true;
 	}
 };
+
+const handleAskPresta = () => {
+    alert('demande envoyée')
+}
 
 /** Profile picture */
 let formData = new FormData();
