@@ -28,10 +28,12 @@ class Mission {
         }
     }
 
-    async _getSelfMissions(): Promise<MissionI[]> {
+    async _getSelfMissions(status: string): Promise<MissionI[]> {
         try {
-            const uri = `${namespace}/my-missions`;
+            const uri = `${namespace}/my-missions?status=${status}`;
             const res = await client.get(uri);
+            console.log(res.data)
+
             return res.data;
         } catch (err) {
             throw err;

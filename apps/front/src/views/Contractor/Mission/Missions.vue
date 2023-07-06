@@ -6,11 +6,13 @@
         <div class="tw-flex tw-gap-2 tw-my-6">
             <v-btn
                     class="tw-rounded-full"
+                    @click="getSelfMissions('IN_PROGRESS')"
             >
                 En cours
             </v-btn>
             <v-btn
                     class="tw-rounded-full"
+                    @click="getSelfMissions('DONE')"
             >
                 Terminées
             </v-btn>
@@ -50,7 +52,7 @@ const {missions} = storeToRefs(missionStore)
 const {getSelfMissions} = missionStore
 
 onMounted(async () => {
-    await getSelfMissions();
+    await getSelfMissions('IN_PROGRESS');
 });
 </script>
 
