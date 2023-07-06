@@ -100,7 +100,8 @@ export class AnnouncementsService {
                 prestataire: true
               }
             },
-            job: true
+            job: true,
+            mission: true
           },
         });
           

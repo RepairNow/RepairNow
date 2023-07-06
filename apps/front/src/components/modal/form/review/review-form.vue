@@ -45,7 +45,7 @@
                         text="Envoyer"
                         block
                         class="tw-normal-case"
-                        @click="handleAnnouncement()"
+                        @click="handleReview()"
                 />
             </div>
         </v-card>
@@ -59,14 +59,14 @@ import {storeToRefs} from "pinia";
 import {useAnnouncementStore} from "@/stores/announcement"
 import {useRoute} from "vue-router";
 import {CreateReview} from "@/interfaces/review";
-import {MissionI} from "@/interfaces/mission";
+import {AnnouncementI} from "@/interfaces/announcement";
 
 const dialog = ref(false);
 const screenSizeStore = useScreenSize()
 const { isSizeMD } = storeToRefs(screenSizeStore)
 
 const announcementStore = useAnnouncementStore()
-const { create } = announcementStore
+const { createAnnouncementReview } = announcementStore
 
 const route = useRoute()
 const reviewForm = ref<CreateReview>({
@@ -76,22 +76,24 @@ const reviewForm = ref<CreateReview>({
 })
 
 const props = defineProps({
-    mission: {
-        type: Object as PropType<MissionI>,
+    announcement: {
+        type: Object as PropType<AnnouncementI>,
         required: true
     }
 })
 
-const handleAnnouncement = async () => {
+const handleReview = async () => {
     try {
-        await createReviw(route.params.id.toString(),
+        await createAnnouncementReview(
+            props.announcement.id,
             {
-                missionId: props.mission.id,
-                rating: parseFloat(reviewForm.value.rating.toString()),
+                missionId: props.announcement.mission.id,
+                rating: reviewForm.value.rating,
                 comment: reviewForm.value.comment
-            })
+            }
+        )
     } catch (e) {
-
+        console.error(e)
     } finally {
         reviewForm.value = {
             missionId: '',

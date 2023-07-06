@@ -60,6 +60,15 @@ export class ValidationCodeService {
         }
       });
 
+      const updatedAnnouncement = await this.prismaService.announcement.update({
+        where: {
+          id: mission.announcementId
+        },
+        data: {
+          currentStatus: AnnouncementStatus.DONE
+        }
+      })
+
       return { message: "Code validé" }
     } catch (error) {
       return new BadRequestException(error.message);
@@ -77,15 +86,6 @@ export class ValidationCodeService {
       if (mission.currentStatus === MissionStatus.DONE) {
         return new BadRequestException("Cette mission est déjà validée");
       }
-
-      this.prismaService.announcement.update({
-        where: {
-          id: mission.announcementId
-        },
-        data: {
-          currentStatus: AnnouncementStatus.DONE
-        }
-      })
 
       return this.prismaService.validationCode.update({
         where: {
