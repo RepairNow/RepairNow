@@ -243,7 +243,7 @@ onMounted(async () => {
     const estimates = announcement.value.estimates
     filteredArray.value = estimates.filter(estimate => estimate.currentStatus === 'ACCEPTED' || estimate.currentStatus === 'WAITING_PAYMENT');
     startTime.value = new Date(announcement.value.startTime).toLocaleString('fr-FR', { day: "2-digit", month: "long", hour: "2-digit", minute: "2-digit" })
-    endTime.value = new Date(announcement.value.endTime).toLocaleString('fr-FR', { day: "2-digit", month: "long", hour: "2-digit", minute: "2-digit" })
+    //endTime.value = new Date(announcement.value.endTime).toLocaleString('fr-FR', { day: "2-digit", month: "long", hour: "2-digit", minute: "2-digit" })
 })
 
 const handleDiscuss = async (prestataireId: string) => {
