@@ -14,12 +14,6 @@
                 to: 'admin-users',
             },
             {
-                title: 'Partenariat',
-                value: 'partenariat',
-                icon: 'mdi-handshake-outline',
-                to: 'admin-partnerships',
-            },
-            {
                 title: 'Notifications',
                 value: 'notifications',
                 icon: 'mdi-bell-outline',
