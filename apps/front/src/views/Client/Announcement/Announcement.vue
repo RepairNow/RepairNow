@@ -139,7 +139,9 @@
                                     </p>
                                 </div>
                                 <div>
-                                    Valider la mission
+                                    <mission-validation-modal
+                                        :mission="announcement.mission"
+                                    />
                                 </div>
                                 <!--<div class="tw-h-10 tw-bg-white tw-relative tw-border-2 tw-border-primary tw-rounded-lg tw-cursor-pointer"
                                      @click="showValidationCode = !showValidationCode"
@@ -171,13 +173,13 @@
 </template>
 
 <script setup lang="ts">
-
 import {useAnnouncementStore} from "@/stores/announcement";
 import {storeToRefs} from "pinia";
 import {onMounted, ref} from "vue";
 import {useRoute} from "vue-router";
 import EstimationConfirmation from "@/components/modal/confirm/estimation-confirmation.vue";
 import {useEstimateStore} from "@/stores/estimate";
+import MissionValidationModal from "@/components/modal/form/missions/mission-validation-modal.vue";
 
 const announcementsStore = useAnnouncementStore()
 const {announcement} = storeToRefs(announcementsStore)
@@ -201,14 +203,6 @@ const estimateStatus = ref({
 })
 const showValidationCode = ref(false)
 onMounted(async () => {
-    await getAnnouncement(route.params.id.toString())
-    console.log(announcement.value);
-    
-    const estimates = announcement.value.estimates
-    filteredArray.value = estimates.filter(estimate => estimate.currentStatus === 'ACCEPTED' || estimate.currentStatus === 'WAITING_PAYMENT');
-    startTime.value = new Date(announcement.value.startTime).toLocaleString('fr-FR', { day: "2-digit", month: "long", hour: "2-digit", minute: "2-digit" })
-    endTime.value = new Date(announcement.value.endTime).toLocaleString('fr-FR', { day: "2-digit", month: "long", hour: "2-digit", minute: "2-digit" })
-
     if (route.query?.estimate_id) {
         await checkAnnouncementEstimateStatus({announcementId: route.params.id.toString(), estimateId: route.query?.estimate_id.toString()});
         checkEstimate.value = true
@@ -238,6 +232,14 @@ onMounted(async () => {
         }
 
     }
+
+    await getAnnouncement(route.params.id.toString())
+    console.log(announcement.value);
+    
+    const estimates = announcement.value.estimates
+    filteredArray.value = estimates.filter(estimate => estimate.currentStatus === 'ACCEPTED' || estimate.currentStatus === 'WAITING_PAYMENT');
+    startTime.value = new Date(announcement.value.startTime).toLocaleString('fr-FR', { day: "2-digit", month: "long", hour: "2-digit", minute: "2-digit" })
+    endTime.value = new Date(announcement.value.endTime).toLocaleString('fr-FR', { day: "2-digit", month: "long", hour: "2-digit", minute: "2-digit" })
 })
 </script>
 

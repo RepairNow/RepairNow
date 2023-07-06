@@ -86,12 +86,22 @@ export class MissionService {
           where: {
             prestataireId: payload.user.id,
             currentStatus: MissionStatus[payload.status]
+          },
+          include: {
+            announcement: true
           }
         })
       } else {
         return await this.prismaService.mission.findMany({
           where: {
             prestataireId: payload.user.id,
+          },
+          include: {
+            announcement: {
+              include: {
+                job: true
+              }
+            }
           }
         })
       }
@@ -105,6 +115,23 @@ export class MissionService {
       const mission = await this.prismaService.mission.findUnique({
         where: {
           id: payload.id
+        },
+        include: {
+          announcement: {
+            include: {
+              estimates: {
+                include: {
+                  prestataire: true
+                }
+              },
+              job: true
+            }
+          },
+          validationCode: {
+            select: {
+              currentStatus: true
+            }
+          }
         }
       });
       if (!mission) {

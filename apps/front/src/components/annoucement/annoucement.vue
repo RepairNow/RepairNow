@@ -32,7 +32,7 @@
                 <v-icon icon="mdi-calendar-outline" /><span>{{ startTime }}</span>
             </div>
             <div class="tw-p-2 tw-bg-primary tw-rounded-lg tw-text-white tw-flex tw-gap-2">
-                <v-icon icon="mdi-clock-outline" /><span>4 heures</span>
+                <v-icon icon="mdi-clock-outline" /><span>{{announcement.estimatedTime}} heures</span>
             </div>
             <a
                     class="tw-p-2 tw-bg-primary tw-rounded-lg tw-text-white tw-flex tw-gap-2 hover:tw-bg-primary/90"
