@@ -5,6 +5,7 @@ import {
   BadRequestException,
 } from '@nestjs/common';
 import SmsService from './sms.service';
+import { UsersService } from '../users/users.service';
 import { RpcValidationFilter } from 'src/filters/rpc-validation.filter';
 import { UseFilters } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
@@ -12,15 +13,36 @@ import { MessagePattern, Payload } from '@nestjs/microservices';
 // @Controller('sms')
 @UseInterceptors(ClassSerializerInterceptor)
 export default class SmsController {
-  constructor(private readonly smsService: SmsService) {}
+  constructor(
+    private readonly smsService: SmsService,
+    private readonly usersService: UsersService,
+  ) {}
 
   @UseFilters(new RpcValidationFilter())
   @MessagePattern({ cmd: 'initiate-verification' })
-  async initiatePhoneNumberVerification(@Payload() user: any) {
-    if (user.isPhoneVerified) {
+  async initiatePhoneNumberVerification(
+    @Payload()
+    payload: {
+      user: any;
+      phoneNumber: {
+        phoneNumber: string;
+      };
+    },
+  ) {
+    if (payload.user.isPhoneVerified) {
       throw new BadRequestException('Phone number already confirmed');
     }
-    await this.smsService.initiatePhoneNumberVerification(user.phoneNumber);
+    const respSendSMS = await this.smsService.initiatePhoneNumberVerification(
+      payload.phoneNumber.phoneNumber,
+    );
+    if (respSendSMS.status === 'pending') {
+      await this.usersService.updateUser(
+        {
+          phoneNumber: payload.phoneNumber.phoneNumber,
+        },
+        payload.user.sub,
+      );
+    }
     return 'Verification code sent';
   }
 

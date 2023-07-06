@@ -1,5 +1,5 @@
 <template>
-	<div class="tw-flex tw-flex-col tw-gap-5 tw-m-5 xl:tw-mx-64">
+	<div v-if="myUser" class="tw-flex tw-flex-col tw-gap-5 tw-m-5 xl:tw-mx-64">
 		<div class="tw-flex tw-justify-between tw-items-center">
 			<div class="tw-font-bold tw-text-2xl lg:tw-text-4xl">
 				Mon profil
@@ -96,20 +96,17 @@
 				<p v-else class="tw-text-center tw-font-bold">
 					Saisissez le code reçu par SMS
 				</p>
-				<!-- TODO: see why i can't have this v-model="myUser?.phoneNumber" -->
 				<v-text-field
 					v-if="!isSMSSent"
 					class="tw-mt-5 tw-w-48 tw-m-auto tw-inline-block"
-					label="Numéro de téléphone"
-					v-model="phoneNumberInput"
+					label="Téléphone"
+					v-model="myUser.phoneNumber"
 					type="tel"
+					append-inner-icon="mdi-cellphone"
 					:rules="[
 						(value) =>
-							(value.length > 9 &&
-								value
-									.split('')
-									.every((char: number) => !isNaN(char))) ||
-							'Veuillez renseigner votre numéro de téléphone',
+							(value.length > 9 && value.length < 13) ||
+							'10 à 12 chiffres attendus',
 					]"
 					required
 					:disabled="myUser?.isPhoneVerified || isSMSSent" />
@@ -132,7 +129,9 @@
 					</v-btn>
 					<v-btn
 						v-if="!isSMSSent"
-						:disabled="isSMSSent || phoneNumberInput.length < 10"
+						:disabled="
+							isSMSSent || !isPhoneIsValid(myUser?.phoneNumber)
+						"
 						class="tw-mt-5"
 						color="primary"
 						@click="handleSendSMS()">
@@ -143,7 +142,7 @@
 						:disabled="codeReceivedInput.length < 3"
 						class="tw-mt-5"
 						color="primary"
-						@click="handleVerifyCode('1234')">
+						@click="handleVerifyCode(codeReceivedInput)">
 						Vérifier le code 🔓
 					</v-btn>
 				</div>
@@ -168,7 +167,7 @@ const myUser = ref();
 const fileInput = ref();
 const { getSelfAllInfos } = useUserStore();
 const { getImage } = imageService;
-const { _uploadAvatar } = userService;
+const { _uploadAvatar, _sendSMSVerif, _checkCodeReceived } = userService;
 
 /** Email Verif */
 const isEmailSent = ref(false);
@@ -182,13 +181,21 @@ const handleSendVerifMail = () => {
 };
 
 /** Phone Verif */
+const isPhoneIsValid = (num: string) => {
+	return num.length > 9 && num.length < 13;
+};
+const parsePhoneNumber = (num: string) => {
+	// convert 06123456789 to +336123456789
+	// return `+33${num.slice(1)}`;
+	return num.replace(/^0/, "+33");
+};
 const screenSize = useScreenSize();
 const { isSizeLG } = storeToRefs(screenSize);
 const isPhoneDialogOpened = ref(false);
 const isSMSSent = ref(false);
-const phoneNumberInput = ref("");
-const handleSendSMS = () => {
+const handleSendSMS = async () => {
 	isSMSSent.value = true;
+	await _sendSMSVerif(parsePhoneNumber(myUser.value.phoneNumber));
 	createToast("SMS de vérification envoyé", {
 		type: "success",
 		position: "top-right",
@@ -196,8 +203,17 @@ const handleSendSMS = () => {
 	});
 };
 const codeReceivedInput = ref("");
-const handleVerifyCode = (code: string) => {
-	console.log("code");
+const handleVerifyCode = async (code: string) => {
+	const resCodeCheck = await _checkCodeReceived(code);
+	if (resCodeCheck) {
+		createToast("Numéro de téléphone vérifié", {
+			type: "success",
+			position: "top-right",
+			timeout: 4000,
+		});
+		isPhoneDialogOpened.value = false;
+		myUser.value.isPhoneVerified = true;
+	}
 };
 
 /** Profile picture */

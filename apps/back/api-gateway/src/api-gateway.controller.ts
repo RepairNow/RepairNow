@@ -148,8 +148,8 @@ export class ApiGatewayController {
 
   @UseGuards(AccessTokenGuard)
   @Post('initiate-verification')
-  initiateVerification(@Request() req) {
-    return this.apiGatewayService.initiateVerification(req.user);
+  initiateVerification(@Request() req, @Body() phoneNumber: string) {
+    return this.apiGatewayService.initiateVerification(req.user, phoneNumber);
   }
 
   @UseGuards(AccessTokenGuard)

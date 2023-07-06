@@ -69,6 +69,24 @@ class User {
             throw error;
         }
     }
+   
+    async _sendSMSVerif(phoneNumber: string): Promise<any> {
+        try {
+            const res = await client.post('/initiate-verification', { phoneNumber });
+            return res.data;
+        } catch (error) {
+            throw error;
+        }
+    }
+    
+    async _checkCodeReceived(code: string): Promise<any> {
+        try {
+            const res = await client.post('/check-verification-code', { code });
+            return res.data;
+        } catch (error) {
+            throw error;
+        }
+    }
 
     async _getSelfUser(): Promise<UserI> {
         try {

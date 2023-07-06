@@ -87,8 +87,11 @@ export class ApiGatewayService {
     return payload.res.type(file.mimetype).sendFile(fullfilepath);
   }
 
-  initiateVerification(user: any): Observable<any> {
-    return this.authClient.send({ cmd: 'initiate-verification' }, user);
+  initiateVerification(user: any, phoneNumber: string): Observable<any> {
+    return this.authClient.send(
+      { cmd: 'initiate-verification' },
+      { user, phoneNumber },
+    );
   }
 
   checkVerificationCode(payload: {
