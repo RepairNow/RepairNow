@@ -7,7 +7,7 @@
                     class="tw-text-xs tw-truncate tw-flex tw-flex-col tw-items-center hover:tw-bg-primary/20 tw-h-full tw-justify-center"
                     color="none"
                     stacked
-                    :to="{}"
+                    :to="{name: item.to}"
             >
                 <v-icon
                         color="primary"
