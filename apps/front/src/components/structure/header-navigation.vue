@@ -39,19 +39,19 @@
 					</slot>
 				</div>
 
-                <div v-if="isContractor" class="tw-mx-2 router">
+                <div v-if="isContractor" class="tw-mx-2 router hover:tw-text-primary">
                     <router-link :to="{name: 'contractor-announcements'}">
                         Prestatations
                     </router-link>
                 </div>
 
-                <div v-if="isAdmin" class="tw-mx-2 router">
+                <div v-if="isAdmin" class="tw-mx-2 router hover:tw-text-primary">
                     <router-link :to="{name: 'admin-announcements'}">
                         Admin
                     </router-link>
                 </div>
 
-                <div v-if="isClient" class="tw-mx-2 router">
+                <div v-if="isClient" class="tw-mx-2 router hover:tw-text-primary">
                     <router-link :to="{name: 'client-announcements'}">
                         Mon espace
                     </router-link>
