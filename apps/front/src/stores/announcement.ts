@@ -26,7 +26,7 @@ export const useAnnouncementStore = defineStore("announcement", () => {
         _createReview,
         _deleteReview,
         _getReview,
-        _updateReview
+        _updateReview,
     } = announcementService;
 
     const announcements: Ref<AnnouncementI[]> = ref([]);
@@ -193,11 +193,11 @@ export const useAnnouncementStore = defineStore("announcement", () => {
     const announcementReview: Ref<ReviewI> = ref({})
 
     async function createAnnouncementReview(announcementId: string, payload: CreateReview) {
-        console.log(announcementId)
-        console.log(payload)
         try {
             const res = await _createReview(announcementId, payload);
             announcementReview.value = res
+
+            return res
         } catch (error) {
             throw error
         }
@@ -207,6 +207,16 @@ export const useAnnouncementStore = defineStore("announcement", () => {
         try {
             const res = await _updateReview(announcementId, payload);
             announcementReview.value = res
+
+            return res
+        } catch (error) {
+            throw error
+        }
+    }
+
+    async function deleteAnnouncementReview(announcementId: string, reviewId: string) {
+        try {
+            await _deleteReview(announcementId, reviewId);
         } catch (error) {
             throw error
         }
@@ -234,6 +244,7 @@ export const useAnnouncementStore = defineStore("announcement", () => {
         getAnnouncementEstimate,
         getAnnouncementEstimates,
         createAnnouncementReview,
-        updateAnnouncementReview
+        updateAnnouncementReview,
+        deleteAnnouncementReview
     };
 });

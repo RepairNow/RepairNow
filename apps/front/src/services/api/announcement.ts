@@ -230,9 +230,9 @@ class Announcement {
         }
     }
 
-    async _deleteReview(announcementId: string): Promise<MissionI> {
+    async _deleteReview(announcementId: string, reviewId: string): Promise<MissionI> {
         try {
-            const uri = `${namespace}/${announcementId}/mission/review`;
+            const uri = `${namespace}/${announcementId}/reviews/${reviewId}`;
             const res = await client.delete(uri);
             return res.data;
         } catch (err) {

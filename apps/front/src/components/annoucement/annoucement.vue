@@ -11,7 +11,7 @@
                     <p class="tw-truncate">{{ announcement.description }}</p>
                 </div>
             </div>
-            <div v-if="!contractorView" class="tw-w-1/2">
+            <div v-if="!contractorView" class=" tw-w-full lg:tw-w-1/2">
                 <div class="tw-border-y tw-p-6" v-if="filteredArray?.length" v-for="array in filteredArray">
                     <div>
                         Vous avez réservé un prestataire
@@ -25,6 +25,11 @@
                 </div>
                 <div class="tw-my-3 tw-p-3 tw-border tw-border-primary tw-rounded-xl">
                     Vous avez reçu {{ announcement.estimates?.length ?? 0 }} offre(s)
+                </div>
+                <div v-if="announcement.currentStatus === 'DONE' && announcement.mission.review[0]?.id" class="tw-flex tw-flex-col tw-my-3 tw-p-3 tw-border tw-border-primary tw-rounded-xl">
+                    Votre avis
+                    <v-rating v-model="announcement.mission.review[0].rating" disabled=""/>
+                    <p>{{announcement.mission.review[0].description}}</p>
                 </div>
             </div>
         </div>
