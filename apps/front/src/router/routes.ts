@@ -127,7 +127,7 @@ const routes = [
 			{
 				name: "client-profile",
 				path: "profile",
-				component: () => import("@/views/Client/Profile.vue"),
+				component: () => import("@/views/Profile.vue"),
 			},
 			{
 				name: "client-reviews",
@@ -199,7 +199,7 @@ const routes = [
 			{
 				name: "contractor-profile",
 				path: "profile",
-				component: () => import("@/views/Contractor/Profile.vue"),
+				component: () => import("@/views/Profile.vue"),
 			},
 			{
 				name: "contractor-reviews",
@@ -224,11 +224,6 @@ const routes = [
 		path: "/admin",
 		component: () => import("@/views/Admin/Admin.vue"),
 		children: [
-			{
-				name: "admin-profile",
-				path: "profile",
-				component: () => import("@/views/Admin/Profile.vue"),
-			},
 			{
 				name: "admin-user",
 				path: "user/:id",
@@ -279,7 +274,7 @@ const routes = [
 			{
 				name: "admin-profile",
 				path: "profile",
-				component: () => import("@/views/Admin/Profile.vue"),
+				component: () => import("@/views/Profile.vue"),
 			},
 			{
 				name: "admin-reviews",

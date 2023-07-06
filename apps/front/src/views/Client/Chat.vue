@@ -2,10 +2,8 @@
 	<div class="tw-h-full tw-flex" v-if="conversationsRef.length === 0">
 		<h1 class="tw-text-xl tw-self-center tw-text-center tw-w-full">
 			Aucune conversation,
-			<span @click="$emit('someEvent')" class="tw-font-bold"
-				>demandez un service</span
-			>
-			et attendez d'avoir une proposition de devis
+			<span class="tw-font-bold">demandez</span> un service et
+			<span class="tw-font-bold">attendez</span> d'avoir une proposition
 		</h1>
 	</div>
 	<div v-else class="tw-h-full tw-flex">
