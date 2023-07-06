@@ -4,7 +4,7 @@ import { ClientProxy } from "@nestjs/microservices";
 import { AuthGuard } from "../guards/auth.guard";
 import { Observable, firstValueFrom } from "rxjs";
 import { ExceptionFilter } from "../filters/rpc-exception.filter";
-import { CurrentUserDto } from "@repairnow/dto"
+import { CurrentUserDto } from "@repairnow/dto";
 
 @Controller('/announcements')
 //@UseGuards(AuthGuard)
@@ -49,7 +49,7 @@ export class AnnouncementsController {
   @UseFilters(new ExceptionFilter())
   @UseGuards(AuthGuard)
   @UseInterceptors(FilesInterceptor('files'))
-  uploadAnnouncementImages(@UploadedFiles(new ParseFilePipe({ validators: [new MaxFileSizeValidator({ maxSize: 1000000 })]})) files: Array<Express.Multer.File>, @Param() params, @Request() request): Observable<any> {
+  uploadAnnouncementImages(@UploadedFiles() files: Array<Express.Multer.File>, @Param() params, @Request() request): Observable<any> {
     const { user } = request;
     return this.missionClient.send({ cmd: "uploadAnnouncementImages" }, { files, user, id: params.id });
   }
@@ -67,7 +67,7 @@ export class AnnouncementsController {
   @Post('/:id/mission')
   @UseGuards(AuthGuard)
   createMissionOfAnnouncement(@Param('id') id: string, @Body() createMissionDto: any) {
-    return this.missionClient.send({ cmd: 'createMissionOfAnnouncement' },{createMissionDto: createMissionDto, announcementId: id});
+    return this.missionClient.send({ cmd: 'createMissionOfAnnouncement' }, { createMissionDto: createMissionDto, announcementId: id });
   }
 
   @Get('/:id/mission')
@@ -79,7 +79,7 @@ export class AnnouncementsController {
   @Patch('/:id/mission')
   @UseGuards(AuthGuard)
   updateMissionOfAnnouncement(@Param('id') id: string, @Body() updateMissionDto: any) {
-    return this.missionClient.send({ cmd: 'updateMissionOfAnnouncement' }, {updateMissionDto: updateMissionDto, announcementId: id});
+    return this.missionClient.send({ cmd: 'updateMissionOfAnnouncement' }, { updateMissionDto: updateMissionDto, announcementId: id });
   }
 
   @Delete('/:id/mission')

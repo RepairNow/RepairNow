@@ -71,7 +71,7 @@
                         </div>
                         <div v-if="announcement.estimates?.length">
                             <div v-for="estimate in announcement.estimates"
-                                class="tw-border tw-my-2 tw-rounded-lg tw-p-4"
+                                class="tw-bg-white tw-shadow-md tw-rounded-lg tw-my-2 tw-p-4"
                             >
                                 <div class="tw-flex tw-items-center">
                                     <div>
@@ -82,12 +82,13 @@
                                         {{estimate.prestataire.lastname}}
                                     </div>
                                 </div>
-                                <div>
-                                    {{estimate.price}} €
-                                </div>
-
-                                <div>
-                                    {{estimate.description}}
+                                <div class="py-3">
+                                    <div>
+                                        <span class="tw-font-bold">Prix: </span>{{estimate.price}} €
+                                    </div>
+                                    <div>
+                                        <span class="tw-font-bold">Description: </span>{{estimate.description}}
+                                    </div>
                                 </div>
                                 <div>
                                     <estimation-confirmation
@@ -127,7 +128,7 @@
                                                 {{estimate.currentStatus}}
                                             </div>
                                             <div>
-                                                Pay
+                                                Paye
                                             </div>
                                         </div>
                                     </div>
@@ -140,6 +141,7 @@
                                 </div>
                                 <div>
                                     <mission-validation-modal
+                                        v-if="announcement.currentStatus !== 'DONE'"
                                         :mission="announcement.mission"
                                     />
                                 </div>

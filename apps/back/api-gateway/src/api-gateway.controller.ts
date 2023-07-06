@@ -82,7 +82,7 @@ export class ApiGatewayController {
   @UseGuards(AuthGuard)
   @UseInterceptors(FileInterceptor('file'))
   updateAvatar(
-    @UploadedFile(new ParseFilePipe({ validators: [new MaxFileSizeValidator({ maxSize: 1000000 })]})) file: Express.Multer.File,
+    @UploadedFile() file: Express.Multer.File,
     @Request() request,
   ): Observable<any> {
     const { user } = request;

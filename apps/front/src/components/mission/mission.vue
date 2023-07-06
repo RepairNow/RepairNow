@@ -1,8 +1,8 @@
 <template>
-    <div class="tw-flex tw-flex-col tw-gap-5 tw-shadow-lg tw-rounded-lg tw-p-6">
+    <div v-if="mission" class="tw-flex tw-flex-col tw-gap-5 tw-shadow-lg tw-rounded-lg tw-p-6">
         <div class="tw-flex tw-items-center tw-gap-x-3 tw-font-bold tw-text-2xl tw-text-slate-800 lg:tw-text-3xl">
             {{ mission.announcement.title }}
-            <span class="tw-border-0 tw-text-sm tw-p-2 tw-bg-primary tw-text-white tw-rounded-md">{{mission.currentStatus}}</span>
+            <span class="tw-border-0 tw-text-sm tw-p-2 tw-bg-primary tw-text-white tw-rounded-md tw-whitespace-nowrap">{{mission.currentStatus}}</span>
         </div>
         <div>
             {{ mission.announcement.description }}
@@ -24,10 +24,10 @@
                 <div
                         class="tw-p-2 tw-bg-primary/20 tw-rounded-lg tw-text-black tw-flex tw-gap-2"
                 >
-                    <v-icon icon="mdi-tools"/><span>{{mission.announcement?.job?.title}}</span>
+                    <v-icon icon="mdi-tools"/><span>{{mission.announcement.job.title}}</span>
                 </div>
             </div>
-            <v-btn :to="{name: 'contractor-mission', params: {id: mission.id}}" class="tw-p-2 tw-text-center">
+            <v-btn v-if="mission.currentStatus === 'IN PROGRESS'" :to="{name: 'contractor-mission', params: {id: mission.id}}" class="tw-p-2 tw-text-center">
                 Valider la mission
             </v-btn>
         </div>

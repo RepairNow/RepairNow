@@ -130,12 +130,14 @@ const registerForm = ref<Signup>({
 })
 
 const formError = ref<string>('')
-
+const dialog = ref(false)
 const submit = async () => {
     if (checkForm() && checkIsEmail()) {
         formError.value = ''
         try {
 			await signup(registerForm.value);
+            dialog.value = false;
+            router.push("/")
 		} catch {
 			formError.value = "Une erreur est survenue";
 		}
@@ -164,8 +166,6 @@ const rules = ref({
         return pattern.test(value) || 'Numéro de téléphone invalide'
     }
 })
-
-const dialog = ref(false)
 </script>
 
 <style scoped>
