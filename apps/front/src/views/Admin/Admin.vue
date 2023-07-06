@@ -1,10 +1,10 @@
 <template>
     <div v-if="!isSizeLG" class="tw-flex tw-h-screen tw-w-screen tw-py-16 sm:tw-pb-0">
         <header-navigation/>
-        <div class="tw-bg-green-100 tw-h-full tw-w-80 tw-hidden sm:tw-flex">
+        <div class=" tw-h-full tw-w-80 tw-hidden sm:tw-flex">
             <sidebar-navigation/>
         </div>
-        <div class="tw-bg-green-100 tw-h-full tw-w-full">
+        <div class="tw-white tw-h-full tw-w-full">
             <router-view />
         </div>
     </div>

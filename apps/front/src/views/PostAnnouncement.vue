@@ -249,6 +249,7 @@
 						show-size
 						counter
 						multiple
+						:rules="rulesFileInput"
 						class="tw-mt-2"
 						v-model="selectedFile"
 						label="Dépose ici une photo (optionnel)"
@@ -451,6 +452,11 @@ const rulesDescriptionInput = [
 	(v: string) => !!v || "Pas de détails = pas d'aide 😵",
 	(v: string) =>
 		v.length <= 255 || "La description doit faire moins de 255 caractères",
+];
+
+// TODO: Validation de taille de fichier
+const rulesFileInput = [
+    (v: any) => v.size < 10 || "La photo ne doit pas dépasser 1Mo",
 ];
 
 /** File input Part */

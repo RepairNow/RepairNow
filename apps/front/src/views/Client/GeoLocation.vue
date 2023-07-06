@@ -61,8 +61,6 @@ onMounted(async () => {
 
   await getAnnouncementGeoloc(id);
   const {geoloc} = storeToRefs(geolocStore);
-  console.log(geoloc.value);
-
   contractorCoord.value.x = geoloc.value.x;
   contractorCoord.value.y = geoloc.value.y;
 });
@@ -70,9 +68,7 @@ onMounted(async () => {
 watch(clientCoordOneLine, (newValue) => {
   const coord = newValue.split(",");
   clientCoord.value.x = Number(coord[0]);
-  clientCoord.value.y = Number(coord[1]);
-  console.log(clientCoord.value);
-  
+  clientCoord.value.y = Number(coord[1]);  
 });
 
 </script>
