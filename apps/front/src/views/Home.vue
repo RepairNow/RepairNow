@@ -89,17 +89,21 @@
 								class="tw-w-24 tw-h-24 tw-object-cover" />
 						</div>
 						<span
-							class="tw-pointer-events-none tw-py-1 tw-absolute tw-left-2/4 -tw-translate-x-2/4 tw-font-bold tw-top-2/4 -tw-translate-y-2/4">
+							class="tw-pointer-events-none tw-py-1 tw-absolute tw-text-xl tw-left-2/4 -tw-translate-x-2/4 tw-font-bold tw-top-2/4 -tw-translate-y-2/4">
 							{{ job.text }}
 						</span>
 					</div>
 				</div>
 			</div>
-			<v-btn
-				class="tw-flex tw-items-center tw-normal-case"
-				variant="text"
-				text="Voir tous les services"
-				append-icon="mdi-chevron-right" />
+			<announcements-modal>
+				<template #button>
+					<v-btn
+						class="tw-flex tw-items-center tw-normal-case"
+						variant="text"
+						text="Voir tous les services"
+						append-icon="mdi-chevron-right" />
+				</template>
+			</announcements-modal>
 		</div>
 		<div class="tw-py-10">
 			<div class="2xl:tw-w-1/2 xl:tw-w-2/3 tw-w-full">
