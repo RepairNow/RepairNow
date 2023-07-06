@@ -117,7 +117,7 @@ export class ComGateway
 
       if (role === 'ADMIN') {
         const notifications = await this.notificationsService.findAllNotifications();
-        client.emit('response_notification', notifications);
+        client.emit('send_all_notifs', notifications);
       }
 
     } catch (e) {

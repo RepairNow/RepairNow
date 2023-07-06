@@ -7,16 +7,13 @@
             <notification-form />
         </div>
         <v-list class="notification-list">
-            <v-list-item>
+            <v-list-item v-for="notification in notifications">
                 <v-list-item-content>
                 <v-list-item-title>
-                    Titre de la notification
+                    {{ notification.title }}
                 </v-list-item-title>
                 <v-list-item-subtitle>
-                    Sous-titre de la notification
-                </v-list-item-subtitle>
-                <v-list-item-subtitle>
-                    Date de la notification
+                    {{ notification.content }}
                 </v-list-item-subtitle>
                 </v-list-item-content>
             </v-list-item>
@@ -27,6 +24,11 @@
 
 <script setup lang="ts">
 import NotificationForm from "@/components/modal/form/notification/notification-form.vue";
+import { io } from "socket.io-client";
+import { token } from "@/services";
+import { onMounted, ref } from "vue";
+
+const notifications = ref([]);
 
 const socket = io("http://localhost:3005", {
 	auth: {
@@ -34,6 +36,13 @@ const socket = io("http://localhost:3005", {
 	},
 });
 
+onMounted(() => {
+	socket.on("send_all_notifs", (data) => {
+        console.log("liste notifs");
+		console.log(data);
+        notifications.value = data;
+	});
+});
 
 </script>
     

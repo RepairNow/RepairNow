@@ -59,6 +59,12 @@ import { token } from "@/services";
 const { sendNotification } = useNotificationStore();
 const router = useRouter()
 
+const socket = io("http://localhost:3005", {
+	auth: {
+		token: token.value,
+	},
+});
+
 const notificationForm = ref<SendNotification>({
     title: "",
     content: "",
