@@ -33,11 +33,13 @@
                             {{estimate.prestataire.lastname}}
                         </div>
                     </div>
-                    <div>
-                        {{estimate.price}} €
-                    </div>
-                    <div>
-                        {{estimate.description}}
+                    <div class="py-3">
+                        <div>
+                            <span class="tw-font-bold">Prix: </span>{{estimate.price}} €
+                        </div>
+                        <div>
+                            <span class="tw-font-bold">Description: </span>{{estimate.description}}
+                        </div>
                     </div>
                 </div>
                 <div class="tw-flex tw-gap-x-3">
