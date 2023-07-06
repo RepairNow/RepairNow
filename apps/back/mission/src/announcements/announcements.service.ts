@@ -57,7 +57,8 @@ export class AnnouncementsService {
                 prestataire: true
               }
             },
-            job: true
+            job: true,
+            user: true
           },
         });
         return announcement;
@@ -73,7 +74,8 @@ export class AnnouncementsService {
                 prestataire: true
               }
             },
-            job: true
+            job: true,
+            user: true
           },
         });
         return announcement;

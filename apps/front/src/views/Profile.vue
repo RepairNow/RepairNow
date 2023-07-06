@@ -147,6 +147,14 @@
 				</div>
 			</v-card>
 		</v-dialog>
+        <span>
+            <span class="tw-font-bold">Date de naissance :</span>
+            {{ myUser?.birthdate ? myUser?.birthdate : 'Non renseigné' }}
+        </span>
+        <span>
+            <span class="tw-font-bold">Rôle :</span>
+            {{ myUser?.role }}
+        </span>
 	</div>
 </template>
 

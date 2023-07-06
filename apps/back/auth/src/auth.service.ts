@@ -202,9 +202,21 @@ export class AuthService {
       where: {
         id: userId,
       },
-      include: {
+      select: {
+        id: true,
+        email: true,
+        role: true,
+        phoneNumber: true,
+        firstname: true,
+        lastname: true,
+        birthdate: true,
+        isContractorRoleAsked: true,
+        isEmailVerified: true,
+        isPhoneVerified: true,
+        isUserDeleted: true,
         avatar: true,
-      },
+        createdAt: true
+      }
     });
   }
 
