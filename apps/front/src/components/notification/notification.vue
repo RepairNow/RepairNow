@@ -7,12 +7,21 @@
 </template>
 
 <script setup lang="ts">
-    import {PropType} from "vue";
-    import {NotificationI} from "@/interfaces/notification";
+import { token } from '@/services';
+import { io } from 'socket.io-client';
+import { onMounted } from 'vue';
 
-    const props = defineProps({
-        notification: { type: Object as PropType<NotificationI>, required: true}
-    })
+const socket = io("http://localhost:3005", {
+    auth: {
+        token: token.value,
+    },
+});
+
+onMounted(() => {
+	socket.on("response_notification", (data) => {
+		console.log(data);
+	});
+});
 </script>
 
 <style scoped>

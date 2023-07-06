@@ -12,7 +12,7 @@
 <script setup lang="ts">
 import NotificationForm from "@/components/modal/form/notification/notification-form.vue";
 </script>
-
+    
 <style scoped>
 
 </style>

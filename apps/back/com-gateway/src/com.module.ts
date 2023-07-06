@@ -7,6 +7,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConversationsModule } from './conversations/conversations.module';
 import { MessagesModule } from './messages/messages.module';
 import { JwtModule } from '@nestjs/jwt';
+import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
   controllers: [ComController],
@@ -24,6 +25,7 @@ import { JwtModule } from '@nestjs/jwt';
       }),
       inject: [ConfigService],
     }),
+    NotificationsModule,
   ],
 })
 export class ComModule {}

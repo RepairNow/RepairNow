@@ -7,7 +7,6 @@ export interface NotificationI {
 }
 
 export interface SendNotification {
-    userId: string
     title: string
     content: string
 }
