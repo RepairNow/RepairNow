@@ -101,7 +101,11 @@ export class AnnouncementsService {
               }
             },
             job: true,
-            mission: true
+            mission: {
+              include: {
+                review: true
+              }
+            }
           },
         });
           

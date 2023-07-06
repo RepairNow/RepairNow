@@ -100,9 +100,9 @@ export class ReviewService {
     }
   }
 
-  async update(updateReviewDto: UpdateReviewDto) {
+  async update(payload: {announcementId: string, updateReviewDto: UpdateReviewDto}) {
     try {
-      const { id, ...reviewData } = updateReviewDto;
+      const { announcementId, updateReviewDto } = payload;
 
       // check if review exists
       const review = await this.prismaService.review.findUnique({
@@ -117,9 +117,12 @@ export class ReviewService {
 
       return await this.prismaService.review.update({
         where: {
-          id: id
+          id: updateReviewDto.id
         },
-        data: reviewData
+        data: {
+          rating: updateReviewDto.rating,
+          comment: updateReviewDto.comment,
+        }
       });
     } catch (error) {
       return new BadRequestException(error.message);
