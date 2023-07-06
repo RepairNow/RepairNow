@@ -59,7 +59,7 @@ import { token } from "@/services";
 const { sendNotification } = useNotificationStore();
 const router = useRouter()
 
-const socket = io("http://localhost:3005", {
+const socket = io(import.meta.env.VITE_BACKENDCOM_URL, {
 	auth: {
 		token: token.value,
 	},

@@ -42,7 +42,7 @@ import { useUserStore } from "@/stores/user";
 // get my current user_id just to display names
 const { currentUser } = storeToRefs(useUserStore());
 
-const socket = io("http://localhost:3005", {
+const socket = io(import.meta.env.VITE_BACKENDCOM_URL, {
 	auth: {
 		token: token.value,
 		firstname: currentUser.value?.firstname,
