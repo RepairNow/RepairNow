@@ -10,12 +10,12 @@
                         <div class="tw-flex">
                             <span class="tw-p-2 tw-w-full tw-text-center tw-rounded-md tw-text-white tw-font-bold">
                                 <announcement-estimate-form
-                                        v-if="!filteredArray?.length"
+                                        v-if="!filteredArray?.id"
                                 />
                                 <announcement-estimate-modal
-                                        v-else-if="filteredArray[0].currentStatus !== 'ACCEPTED'"
+                                        v-else-if="filteredArray.currentStatus !== 'ACCEPTED'"
                                         :announcement="announcement"
-                                        :estimate="filteredArray[0]"
+                                        :estimate="filteredArray"
                                 />
                                 <mission-modal
                                         v-else
@@ -64,7 +64,7 @@
 
 import {useAnnouncementStore} from "@/stores/announcement";
 import {storeToRefs} from "pinia";
-import {onMounted, ref} from "vue";
+import {onMounted, ref, watch} from "vue";
 import {useRoute} from "vue-router";
 import EstimationConfirmation from "@/components/modal/confirm/estimation-confirmation.vue";
 import AnnouncementEstimateForm from "@/components/modal/form/announcements/announcement-estimate-form.vue";
@@ -75,7 +75,7 @@ import imageService from "@/services/api/image";
 
 const { getImage } = imageService;
 const announcementsStore = useAnnouncementStore()
-const {announcement} = storeToRefs(announcementsStore)
+const {announcement, announcementEstimate} = storeToRefs(announcementsStore)
 const {getAnnouncement} = announcementsStore
 const {currentUser} = storeToRefs(useUserStore())
 
@@ -86,10 +86,14 @@ const startTime = ref('')
 const endTime = ref('')
 
 const filteredArray = ref()
+watch(announcementEstimate, (value, oldValue, onCleanup) => {
+    filteredArray.value = announcementEstimate.value;
+})
+
 onMounted(async () => {
     await getAnnouncement(route.params.id.toString())
     const estimates = announcement.value.estimates
-    filteredArray.value = estimates.filter(estimate => estimate.prestataire.sub === currentUser.value?.id || estimate.currentStatus === 'WAITING_PAYMENT');
+    filteredArray.value = estimates.filter(estimate => estimate.prestataire.sub === currentUser.value?.id || estimate.currentStatus === 'WAITING_PAYMENT')[0];
     startTime.value = new Date(announcement.value.startTime).toLocaleString('fr-FR', { day: "2-digit", month: "long", hour: "2-digit", minute: "2-digit" })
 })
 
