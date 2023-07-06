@@ -51,6 +51,7 @@ export class AnnouncementsService {
             currentStatus: AnnouncementStatus[query.status],
           },
           include: {
+            images: true,
             estimates: {
               include: {
                 prestataire: true
@@ -66,6 +67,7 @@ export class AnnouncementsService {
             currentStatus: AnnouncementStatus.PUBLISHED,
           },
           include: {
+            images: true,
             estimates: {
               include: {
                 prestataire: true

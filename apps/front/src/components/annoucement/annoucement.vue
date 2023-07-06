@@ -1,5 +1,5 @@
 <template>
-    <div v-if="announcement" class="tw-flex tw-flex-col tw-p-8 tw-rounded-xl tw-gap-4">
+    <div v-if="announcement" class="tw-flex tw-flex-col tw-p-8 tw-rounded-xl tw-gap-4 tw-border-primary">
         <div class="tw-flex tw-flex-col lg:tw-flex-row tw-gap-4 tw-w-full">
             <div class="tw-flex tw-flex-col tw-w-1/2">
                 <div class="tw-h-56 tw-bg-red-100 tw-rounded-xl">
@@ -22,7 +22,7 @@
                 <div v-else class="tw-border-y tw-p-6">
                     Vous n'avez pas réservé de prestataire
                 </div>
-                <div class="tw-my-3 tw-p-3 tw-border tw-rounded-xl">
+                <div class="tw-my-3 tw-p-3 tw-border tw-border-primary tw-rounded-xl">
                     Vous avez reçu {{ announcement.estimates?.length ?? 0 }} offre(s)
                 </div>
             </div>
@@ -86,7 +86,8 @@ const props = defineProps({
 
 const filteredArray = ref()
 const startTime = ref()
-onMounted(async () => {    
+onMounted(async () => {
+    
     const estimates = props.announcement.estimates
     filteredArray.value = estimates.filter(estimate => estimate.currentStatus === 'ACCEPTED');
     startTime.value = new Date(props.announcement.startTime).toLocaleString('fr-FR', { day: "2-digit", month: "long", hour: "2-digit", minute: "2-digit" })

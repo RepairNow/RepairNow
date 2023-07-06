@@ -3,10 +3,10 @@
         <mobile-navigation />
         <mobile-drawer />
         <header-navigation />
-        <div class="tw-bg-green-100 tw-h-full tw-w-80 tw-hidden lg:tw-flex">
+        <div class=" tw-h-full tw-w-80 tw-hidden lg:tw-flex">
             <sidebar-navigation />
         </div>
-        <div class="tw-bg-green-100 tw-h-full tw-w-full overflow-auto">
+        <div class="tw-white tw-h-full tw-w-full overflow-auto">
             <router-view />
         </div>
     </div>
