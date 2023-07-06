@@ -126,6 +126,10 @@
 		</div>
 
 		<div class="tw-px-16 tw-py-12 tw-border tw-rounded-lg tw-mb-8">
+			<v-img
+				:src="repairNowHome"
+				:alt="repairNowHome"
+				class="lg:tw-w-96 tw-mx-auto tw-w-full tw-h-full tw-object-cover tw-bg-red-500" />
 			<div class="lg:tw-w-1/2">
 				<h2 class="tw-font-bold tw-text-2xl">Spécialiste du service</h2>
 				<p class="tw-text-neutral-500">
@@ -196,6 +200,7 @@ import plumbingImg from "@/assets/svg/jobs/plumbing.svg";
 import carImg from "@/assets/svg/jobs/car-repair.svg";
 import locksmithImg from "@/assets/svg/jobs/locksmith.svg";
 import houseApplianceImg from "@/assets/svg/jobs/house-appliance.png";
+import repairNowHome from "@/assets/repair-now-home.png";
 import { useRouter } from "vue-router";
 
 const { _getJobs } = jobService;
