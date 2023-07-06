@@ -184,7 +184,7 @@ const routes = [
 			{
 				name: "contractor-profile",
 				path: "profile",
-				component: () => import("@/views/Profile.vue"),
+				component: () => import("@/views/contractor/Profile.vue"),
 			},
 			{
 				name: "contractor-reviews",
