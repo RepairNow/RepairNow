@@ -357,8 +357,12 @@ const formValues = reactive<CreateAnnouncement>({
 const handleSendFormValues = async () => {
 	try {
 		const annoucementCreated = await createAnnouncement(formValues);
+
 		formData.append("id", annoucementCreated.id);
-		await _uploadAnnouncementImages(formData);
+
+        if (selectedFile.value) {
+            await _uploadAnnouncementImages(formData);
+        }
 		if (annoucementCreated.id) {
 			router.push({ name: "client-announcements" });
 		}
