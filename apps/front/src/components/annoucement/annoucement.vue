@@ -1,7 +1,7 @@
 <template>
     <div v-if="announcement" class="tw-flex tw-flex-col tw-p-8 tw-rounded-xl tw-gap-4">
         <div class="tw-flex tw-flex-col lg:tw-flex-row tw-gap-4 tw-w-full">
-            <div class="tw-flex tw-flex-col tw-w-1/2">
+            <div class="tw-flex tw-flex-col tw-w-full lg:tw-w-1/2">
                 <div class="tw-h-56 tw-bg-red-100 tw-rounded-xl">
                     <v-img v-if="announcement.images.length > 0" :src="getImage(announcement.images[0].id)" />
                 </div>
@@ -10,7 +10,7 @@
                     <p class="tw-truncate">{{ announcement.description }}</p>
                 </div>
             </div>
-            <div class="tw-w-1/2">
+            <div class="tw-w-full lg:tw-w-1/2">
                 <div class="tw-border-y tw-p-6" v-if="filteredArray?.length" v-for="array in filteredArray">
                     <div>
                         Vous avez réservé un prestataire
@@ -47,13 +47,27 @@
             </div>
         </div>
         <div v-if="!contractorView">
-            <router-link :to="{name: 'client-announcement', params: { id: announcement.id }}">
-                <v-btn
-                    block
-                >
-                    Gérer ma demande
-                </v-btn>
-            </router-link>
+            <div
+                v-if="announcement.currentStatus === 'DONE'"
+                class="tw-flex tw-gap-4">
+                <router-link :to="{name: 'client-announcement', params: { id: announcement.id }}" class="tw-w-full">
+                    <v-btn
+                            block
+                    >
+                        Voir ma demande
+                    </v-btn>
+                </router-link>
+                <review-form />
+            </div>
+            <div v-else>
+                <router-link :to="{name: 'client-announcement', params: { id: announcement.id }}" class="tw-w-full">
+                    <v-btn
+                            block
+                    >
+                        Gérer ma demande
+                    </v-btn>
+                </router-link>
+            </div>
         </div>
         <div v-else>
             <router-link :to="{name: 'contractor-announcement', params: { id: announcement.id }}">
@@ -70,6 +84,7 @@
 <script setup lang="ts">
 import {onMounted, PropType, ref} from "vue";
 import {AnnouncementI} from "@/interfaces/announcement";
+import ReviewForm from "@/components/modal/form/review/review-form.vue";
 import imageService from "@/services/api/image";
 
 const { getImage } = imageService;

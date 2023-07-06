@@ -209,9 +209,9 @@ class Announcement {
         }
     }
 
-    async _createReview(payload: CreateReview): Promise<ReviewI> {
+    async _createReview(announcementId: string, payload: CreateReview): Promise<ReviewI> {
         try {
-            const uri = `${namespace}/${payload.announcementId}/mission/review`;
+            const uri = `${namespace}/${announcementId}/mission/review`;
             const res = await client.post(uri, payload);
             return res.data;
         } catch (err) {
@@ -219,9 +219,9 @@ class Announcement {
         }
     }
 
-    async _updateReview(payload: UpdateReview): Promise<ReviewI> {
+    async _updateReview(announcementId: string, payload: UpdateReview): Promise<ReviewI> {
         try {
-            const uri = `${namespace}/${payload.announcementId}/mission/review`;
+            const uri = `${namespace}/${announcementId}/mission/review`;
             const res = await client.patch(uri, payload);
             return res.data;
         } catch (err) {

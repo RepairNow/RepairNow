@@ -4,7 +4,4 @@ import { IsNotEmpty, IsUUID } from "class-validator";
 
 
 export class UpdateReviewDto extends PartialType(CreateReviewDto) {
-  @IsNotEmpty()
-  @IsUUID()
-  id: string;
 }
