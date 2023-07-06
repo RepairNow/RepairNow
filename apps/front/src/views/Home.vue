@@ -184,7 +184,9 @@
 			</div>
 		</div>
 
-		<div></div>
+		<div class="tw-flex tw-p-4">
+            Made with ♥ By Group 10
+        </div>
 	</div>
 </template>
 

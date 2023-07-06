@@ -12,7 +12,7 @@ export interface MissionI {
     announcementId: string
     providerId: string
     currentStatus: string
-    review: ReviewI
+    review: ReviewI[]
     announcement: AnnouncementI
     validationCode: ValidationCodeI
 }

@@ -27,8 +27,8 @@ export class ReviewController {
 
   @MessagePattern({ cmd: 'updateReview' })
   @UseFilters(RpcValidationFilter)
-  update(@Payload(ValidationPipe) updateReviewDto: UpdateReviewDto) {
-    return this.reviewService.update(updateReviewDto);
+  update(@Payload(ValidationPipe) payload: { announcementId: string, updateReviewDto: UpdateReviewDto}) {
+    return this.reviewService.update(payload);
   }
 
   @MessagePattern({ cmd: 'removeReview' })

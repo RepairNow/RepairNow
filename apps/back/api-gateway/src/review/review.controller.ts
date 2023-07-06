@@ -24,7 +24,7 @@ export class ReviewController {
 
     @Patch()
     update(@Param('announcementId') id: string, @Body() updateReviewDto: any) {
-        return this.missionClient.send({ cmd: 'updateReview' }, {announcementId: id, payload: updateReviewDto});
+        return this.missionClient.send({ cmd: 'updateReview' }, {announcementId: id, updateReviewDto: updateReviewDto});
     }
 
     @Delete(':id')
