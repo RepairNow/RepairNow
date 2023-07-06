@@ -9,4 +9,8 @@ export class NotificationsService {
     async createNotification(createNotificationDto: CreateNotificationDto) {
         return await this.notificationRepository.createNotification(createNotificationDto);
     }
+
+    async findAllNotifications() {
+        return await this.notificationRepository.findAllNotifications();
+    }
 }

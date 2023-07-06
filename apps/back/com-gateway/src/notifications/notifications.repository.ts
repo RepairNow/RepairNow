@@ -12,4 +12,9 @@ export class NotificationsRepository {
     const createOne = await this.notificationModel.create(notification);
     return createOne;
   }
+
+  async findAllNotifications(): Promise<any> {
+    const findAll = await this.notificationModel.find();
+    return findAll;
+  }
 }

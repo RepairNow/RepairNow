@@ -112,6 +112,14 @@ export class ComGateway
         conversation._id.toString(),
       );
       client.join(conversationsIds);
+
+      const role = client['user'].role;
+
+      if (role === 'ADMIN') {
+        const notifications = await this.notificationsService.findAllNotifications();
+        client.emit('response_notification', notifications);
+      }
+
     } catch (e) {
       console.log('dans le catch du handleConnection', e);
       return client.disconnect(true);
