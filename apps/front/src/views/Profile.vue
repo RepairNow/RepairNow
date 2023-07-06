@@ -64,17 +64,21 @@
 					Vérifier mon numéro
 				</v-btn>
 			</span>
-			<span
-				class="tw-text-center tw-mt-96"
-				v-if="!myUser?.isPhoneVerified || !myUser?.isEmailVerified"
-				>Envie de <span class="tw-font-bold">devenir prestataire</span>?
-				Faites
-				<span class="tw-text-red-800 tw-font-bold">vérifier</span> vos
-				informations et faites la demande!</span
-			>
-			<v-btn v-else variant="text" class="tw-w-fit tw-m-auto"
-				>Devenir prestataire</v-btn
-			>
+			<div
+				v-if="!(myUser?.role === 'ADMIN')"
+				class="tw-text-center tw-mt-96">
+				<span
+					v-if="!myUser?.isPhoneVerified || !myUser?.isEmailVerified"
+					>Envie de
+					<span class="tw-font-bold">devenir prestataire</span>?
+					Faites
+					<span class="tw-text-red-800 tw-font-bold">vérifier</span>
+					vos informations et faites la demande!</span
+				>
+				<v-btn v-else variant="text" class="tw-w-fit tw-m-auto"
+					>Devenir prestataire</v-btn
+				>
+			</div>
 		</section>
 		<v-dialog
 			v-model="isPhoneDialogOpened"
