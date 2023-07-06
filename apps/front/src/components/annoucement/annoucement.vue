@@ -1,5 +1,5 @@
 <template>
-    <div v-if="announcement" class="tw-flex tw-flex-col tw-p-8 tw-rounded-xl tw-gap-4 tw-shadow-lg">
+    <div v-if="announcement" class="tw-flex tw-bg-white tw-flex-col tw-p-8 tw-rounded-xl tw-gap-4 tw-shadow-lg">
         <div class="tw-flex tw-flex-col lg:tw-flex-row tw-gap-4 tw-w-full">
             <div class="tw-flex tw-flex-col tw-w-full lg:tw-w-1/2">
                 <div class="tw-h-56 tw-rounded-xl">
@@ -24,7 +24,7 @@
                     Vous n'avez pas réservé de prestataire
                 </div>
                 <div class="tw-my-3 tw-p-3 tw-border tw-border-primary tw-rounded-xl">
-                    Vous avez reçu {{ announcement.estimates?.length ?? 0 }} offre(s)
+                    Vous avez reçu <span class="tw-font-bold">{{ announcement.estimates?.length ?? 0 }}</span> offre(s)
                 </div>
                 <div v-if="announcement.currentStatus === 'DONE' && announcement.mission.review[0]?.id" class="tw-flex tw-flex-col tw-my-3 tw-p-3 tw-border tw-border-primary tw-rounded-xl">
                     Votre avis

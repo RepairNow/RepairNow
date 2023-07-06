@@ -49,7 +49,7 @@ export class AnnouncementsController {
   @UseFilters(new ExceptionFilter())
   @UseGuards(AuthGuard)
   @UseInterceptors(FilesInterceptor('files'))
-  uploadAnnouncementImages(@UploadedFiles(new ParseFilePipe({ validators: [new MaxFileSizeValidator({ maxSize: 10000000 })]})) files: Array<Express.Multer.File>, @Param() params, @Request() request): Observable<any> {
+  uploadAnnouncementImages(@UploadedFiles() files: Array<Express.Multer.File>, @Param() params, @Request() request): Observable<any> {
     const { user } = request;
     return this.missionClient.send({ cmd: "uploadAnnouncementImages" }, { files, user, id: params.id });
   }
