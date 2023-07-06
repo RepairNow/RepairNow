@@ -101,8 +101,8 @@ jobs:
             DATABASE_URL=${{ secrets.DATABASE_URL }}
             MISSION_PORT=3003
             STRIPE_SECRET_KEY=${{ secrets.STRIPE_SECRET_KEY }}
-            STRIPE_CHECKOUT_SUCCESS_URL=https://amazon.com
-            STRIPE_CHECKOUT_CANCEL_URL=https://about.meta.com/fr/
+            STRIPE_CHECKOUT_SUCCESS_URL=https://repairnow.vercel.app/
+            STRIPE_CHECKOUT_CANCEL_URL=https://repairnow.vercel.app/
             MAILER_FROM={{ secrets.MAILER_FROM }}
             MAILER_USER={{ secrets.MAILER_USER }}
             MAILER_PASSWORD={{ secrets.MAILER_PASSWORD }}
