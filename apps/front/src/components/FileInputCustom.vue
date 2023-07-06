@@ -33,10 +33,11 @@ export default {
 	margin-top: 5px;
 }
 .drop-area {
-    width: 20px;
-    cursor: pointer;
-    border: 2px lightgray dashed;
-    display: block;
-    border-radius: 50%;
+	width: 20px;
+	padding: 2px;
+	cursor: pointer;
+	border: 1px lightgray dashed;
+	display: block;
+	border-radius: 50%;
 }
 </style>

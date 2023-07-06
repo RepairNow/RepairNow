@@ -14,7 +14,7 @@
 						class="tw-rounded-full tw-w-full tw-h-full tw-object-cover" />
 					<span
 						v-else
-						class="tw-font-bold tw-text-4xl tw-absolute tw-w-full tw-bottom-2/4 tw-translate-y-2/4 tw-text-center">
+						class="tw-font-bold tw-text-4xl tw-absolute tw-w-full tw-bottom-2/4 tw-translate-y-2/4 tw-text-center tw-text-white">
 						{{
 							getInitialsFromFirstnameAndLastname(
 								myUser?.firstname,
@@ -162,11 +162,13 @@ import { useScreenSize } from "@/stores/screen-size";
 import FileInputCustom from "@/components/FileInputCustom.vue";
 import { watch } from "vue";
 import imageService from "@/services/api/image";
+import userService from "@/services/api/user";
 
 const myUser = ref();
 const fileInput = ref();
 const { getSelfAllInfos } = useUserStore();
 const { getImage } = imageService;
+const { _uploadAvatar } = userService;
 
 /** Email Verif */
 const isEmailSent = ref(false);
@@ -199,8 +201,9 @@ const handleVerifyCode = (code: string) => {
 };
 
 /** Profile picture */
+let formData = new FormData();
 const previewUrl = ref();
-const handlePPChange = (event: any) => {
+const handlePPChange = async (event: any) => {
 	const file = event.target.files[0];
 	if (file) {
 		const reader = new FileReader();
@@ -208,8 +211,8 @@ const handlePPChange = (event: any) => {
 			previewUrl.value = e.target?.result;
 		};
 		reader.readAsDataURL(file);
-		// TODO: handle file upload on profile
-		// myUser.profilePicture.value = file;
+		formData.append("file", file);
+		await _uploadAvatar(formData);
 	}
 };
 const getInitialsFromFirstnameAndLastname = (
@@ -240,7 +243,7 @@ onMounted(async () => {
 	position: relative;
 	width: 100px;
 	height: 100px;
-	background-color: silver;
+	background-color: #424242;
 	border-radius: 50%;
 	box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
 }

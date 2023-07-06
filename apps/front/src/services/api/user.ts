@@ -92,7 +92,7 @@ class User {
 
     async _uploadAvatar(formData: FormData): Promise<String> {
         try {
-            const uri = `me/${formData.get('id')}/avatar`;
+            const uri = `me/avatar`;
             const res = await clientFormData.patch(uri, formData);
             return res.data;
         } catch (err) {

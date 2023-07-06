@@ -327,42 +327,6 @@ const { createAnnouncement } = useAnnouncementStore();
 const { query } = useRoute();
 const router = useRouter();
 
-// TODO: Use jobs from backend
-const jobs = [
-	{
-		link: "plomberie",
-		name: "Plomberie",
-	},
-	{
-		link: "electricite",
-		name: "Electricité",
-	},
-	{
-		link: "bricolage",
-		name: "Bricolage",
-	},
-	{
-		link: "serrurier",
-		name: "Serrurier",
-	},
-	{
-		link: "electromenager",
-		name: "Electromenager",
-	},
-	{
-		link: "jardinage",
-		name: "Jardinage",
-	},
-	{
-		link: "reparation-2-roues",
-		name: "Réparation 2 roues",
-	},
-	{
-		link: "reparation-auto",
-		name: "Réparation auto",
-	},
-];
-
 const getCurrentJob = (job: string) => {
 	const currentJob = jobsFromBackend?.value?.find((j: any) => j.id === job);
 	return currentJob;
@@ -385,7 +349,6 @@ const formValues = reactive<CreateAnnouncement>({
 	startTime: new Date(),
 	estimatedTime: 4,
 	preferredHour: "peu importe",
-	// TODO: add job from backend
 	jobId: query.job as string,
 });
 
