@@ -16,6 +16,7 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { ConversationsService } from './conversations/conversations.service';
 import { CreateNotificationDto } from './notifications/dto/notification.dto';
+import { NotificationsService } from './notifications/notifications.service';
 
 @WebSocketGateway({
   cors: {
@@ -27,6 +28,7 @@ export class ComGateway
   constructor(
     private readonly messagesService: MessagesService,
     private readonly conversationsService: ConversationsService,
+    private readonly notificationsService: NotificationsService,
     private jwtService: JwtService,
     private configService: ConfigService,
   ) { }
@@ -70,8 +72,7 @@ export class ComGateway
     @ConnectedSocket() client: Socket,
     @MessageBody() payload: CreateNotificationDto,
   ): Promise<void> {
-    console.log('dans le handleSendNotification', payload);
-
+    await this.notificationsService.createNotification(payload);
     this.server.emit('response_notification', payload);
   }
 

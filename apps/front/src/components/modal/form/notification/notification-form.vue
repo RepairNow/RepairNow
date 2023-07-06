@@ -78,8 +78,8 @@ onMounted(() => {
 
 const sendNotificationViaSocket = () => {
     socket.emit("create_notification", {
-        title: 'title',
-        content: 'content'
+        title: notificationForm.value.title,
+        content: notificationForm.value.content
     });
 };
 

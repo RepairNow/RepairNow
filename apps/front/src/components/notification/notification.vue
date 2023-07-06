@@ -1,15 +1,31 @@
 <template>
-    <div class="tw-w-full tw-p-6 tw-bg-white tw-rounded-xl tw-shadow-lg">
-        <p class="tw-text-neutral-400 tw-text-xs">Il y a {{notification.created_at}}</p>
-        <p class="tw-font-bold tw-text-lg">{{notification.title}}</p>
-        <p class="">{{notification.content}}</p>
+    <div>
+      <v-snackbar
+        elevation="24"
+        v-model="snackbar"
+      >
+        {{ text }}
+  
+        <template v-slot:actions>
+          <v-btn
+            color="white"
+            variant="text"
+            @click="snackbar = false"
+          >
+            Fermer
+          </v-btn>
+        </template>
+      </v-snackbar>
     </div>
 </template>
 
 <script setup lang="ts">
 import { token } from '@/services';
 import { io } from 'socket.io-client';
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
+
+const snackbar = ref(false);
+const text = ref('Hello, world!');
 
 const socket = io("http://localhost:3005", {
     auth: {
@@ -20,6 +36,9 @@ const socket = io("http://localhost:3005", {
 onMounted(() => {
 	socket.on("response_notification", (data) => {
 		console.log(data);
+        const { title, content } = data;
+        text.value = `${title.toUpperCase()} : ${content}`;
+        snackbar.value = true;
 	});
 });
 </script>
