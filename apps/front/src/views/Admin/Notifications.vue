@@ -1,24 +1,39 @@
 <template>
-    <div class="tw-m-5">
+    <div class="tw-ml-[10%] tw-mt-10">
         <div class="tw-font-bold tw-text-2xl lg:tw-text-4xl">
             Les notifications
         </div>
-        <div>
+        <div class="tw-mt-10">
+            <v-timeline
+            density="compact"
+            side="end"
+            class="tw-mb-6"
+            >
+                <v-timeline-item
+                class="mb-6"
+                hide-dot
+                >
+                    <span class="tw-uppercase tw-font-bold">Les dernières notifications</span>
+                    </v-timeline-item>
+                    
+                    <v-timeline-item
+                    class="mb-4"
+                        dot-color="grey"
+                        size="small"
+                        v-for="notif in notifications"
+                        >
+                        <div class="d-flex justify-space-between flex-grow-1">
+                            <div class="tw-uppercase tw-font-bold">
+                                {{ notif.title }}
+                            </div>
+                            <div class="flex-shrink-0">
+                                : {{ notif.content }}
+                            </div>
+                        </div>
+                    </v-timeline-item>
+                </v-timeline>
             <notification-form />
         </div>
-        <v-list class="notification-list">
-            <v-list-item v-for="notification in notifications">
-                <v-list-item-content>
-                <v-list-item-title>
-                    {{ notification.title }}
-                </v-list-item-title>
-                <v-list-item-subtitle>
-                    {{ notification.content }}
-                </v-list-item-subtitle>
-                </v-list-item-content>
-            </v-list-item>
-        <!-- Ajoutez plus de v-list-item pour chaque notification -->
-        </v-list>
     </div>
 </template>
 
@@ -42,6 +57,12 @@ onMounted(() => {
 		console.log(data);
         notifications.value = data;
 	});
+
+    socket.on('response_notification', (data) => {
+        console.log("notif");
+        console.log(data);
+        notifications.value.push(data);
+    })
 });
 
 </script>

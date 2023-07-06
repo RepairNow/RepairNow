@@ -15,7 +15,7 @@ import { CurrentUserDto } from '@repairnow/dto';
 import { UpdateUserDto } from './users/dto/user.dto';
 @Controller()
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService) { }
 
   @Get()
   getHello(): string {
