@@ -128,7 +128,16 @@ export class MissionService {
               images: true,
               estimates: {
                 include: {
-                  prestataire: true
+                  prestataire: {
+                    select: {
+                        id: true,
+                        firstname: true,
+                        lastname: true,
+                        email: true,
+                        phoneNumber: true,
+                        role: true,
+                      },
+                  }
                 }
               },
               job: true
@@ -158,7 +167,16 @@ export class MissionService {
         },
         include: {
           announcement: true,
-          prestataire: true
+          prestataire: {
+            select: {
+                id: true,
+                firstname: true,
+                lastname: true,
+                email: true,
+                phoneNumber: true,
+                role: true,
+              },
+          }
         }
       });
 

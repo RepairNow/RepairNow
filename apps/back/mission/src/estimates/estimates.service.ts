@@ -289,7 +289,16 @@ export class EstimatesService {
           id: payload.estimateId
         },
         include: {
-          prestataire: true
+          prestataire: {
+            select: {
+                id: true,
+                firstname: true,
+                lastname: true,
+                email: true,
+                phoneNumber: true,
+                role: true,
+              },
+          }
         },
         data: {
           currentStatus: EstimateStatus.ACCEPTED

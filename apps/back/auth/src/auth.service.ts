@@ -173,7 +173,16 @@ export class AuthService {
           userId: payload.user.sub,
         },
         include: {
-          user: true,
+          user: {
+            select: {
+                id: true,
+                firstname: true,
+                lastname: true,
+                email: true,
+                phoneNumber: true,
+                role: true,
+              },
+          }
         },
         data: {
           ...payload.file,
@@ -182,7 +191,16 @@ export class AuthService {
     } else {
       await this.prismaService.files.create({
         include: {
-          user: true,
+          user: {
+            select: {
+                id: true,
+                firstname: true,
+                lastname: true,
+                email: true,
+                phoneNumber: true,
+                role: true,
+              },
+          }
         },
         data: {
           userId: payload.user.sub,
