@@ -9,7 +9,7 @@ import { CreateAnnouncementDto } from './dto/create-announcement.dto';
 import { UpdateAnnouncementDto } from './dto/update-announcement.dto';
 import { Prisma, PrismaService } from '@repairnow/prisma';
 import { RpcException } from '@nestjs/microservices';
-import { CurrentUserDto } from "@repairnow/dto";
+import { CurrentUserDto } from '@repairnow/dto';
 import { MulterField } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
 
 export enum AnnouncementStatus {
@@ -54,11 +54,20 @@ export class AnnouncementsService {
             images: true,
             estimates: {
               include: {
-                prestataire: true
-              }
+                prestataire: true,
+              },
             },
             job: true,
-            user: true
+            user: {
+              select: {
+                id: true,
+                firstname: true,
+                lastname: true,
+                email: true,
+                phoneNumber: true,
+                role: true,
+              },
+            },
           },
         });
         return announcement;
@@ -71,11 +80,20 @@ export class AnnouncementsService {
             images: true,
             estimates: {
               include: {
-                prestataire: true
-              }
+                prestataire: true,
+              },
             },
             job: true,
-            user: true
+            user: {
+              select: {
+                id: true,
+                firstname: true,
+                lastname: true,
+                email: true,
+                phoneNumber: true,
+                role: true,
+              },
+            },
           },
         });
         return announcement;
@@ -85,51 +103,68 @@ export class AnnouncementsService {
     }
   }
 
-  async findUserAll(payload: { user: CurrentUserDto, status: string }) {
+  async findUserAll(payload: { user: CurrentUserDto; status: string }) {
     try {
       if (payload.status && AnnouncementStatus[payload.status]) {
-
         const announcement = await this.prismaService.announcement.findMany({
           where: {
             currentStatus: AnnouncementStatus[payload.status],
-            userId: payload.user.sub
+            userId: payload.user.sub,
           },
           include: {
-            user: true,
+            user: {
+              select: {
+                id: true,
+                firstname: true,
+                lastname: true,
+                email: true,
+                phoneNumber: true,
+                role: true,
+              },
+            },
             images: true,
             estimates: {
               include: {
-                prestataire: true
-              }
+                prestataire: true,
+              },
             },
             job: true,
             mission: {
               include: {
-                review: true
-              }
-            }
+                review: true,
+              },
+            },
           },
         });
-          
+
         return announcement;
       } else {
         const announcement = await this.prismaService.announcement.findMany({
           where: {
             currentStatus: AnnouncementStatus.PUBLISHED,
-            userId: payload.user.sub
+            userId: payload.user.sub,
           },
           include: {
-            user: true,
+            user: {
+              select: {
+                id: true,
+                firstname: true,
+                lastname: true,
+                email: true,
+                phoneNumber: true,
+                role: true,
+              },
+            },
             images: true,
             estimates: {
               include: {
-                prestataire: true
-              }
+                prestataire: true,
+              },
             },
-            job: true
+            job: true,
           },
         });
-          
+
         return announcement;
       }
     } catch (error) {
@@ -144,7 +179,16 @@ export class AnnouncementsService {
           id: payload.id,
         },
         include: {
-          user: true,
+          user: {
+            select: {
+              id: true,
+              firstname: true,
+              lastname: true,
+              email: true,
+              phoneNumber: true,
+              role: true,
+            },
+          },
           images: true,
           estimates: {
             include: {
@@ -153,10 +197,10 @@ export class AnnouncementsService {
           },
           mission: {
             include: {
-              review: true
-            }
+              review: true,
+            },
           },
-          job: true
+          job: true,
         },
       });
       if (!announcement) {
@@ -168,11 +212,11 @@ export class AnnouncementsService {
     }
   }
 
-  async upload(payload: { id: string, files: Array<Express.Multer.File> }) {
+  async upload(payload: { id: string; files: Array<Express.Multer.File> }) {
     let announcement = await this.prismaService.announcement.findUnique({
       where: {
-        id: payload.id
-      }
+        id: payload.id,
+      },
     });
     if (!announcement) {
       throw new RpcException(new NotFoundException());
@@ -182,24 +226,40 @@ export class AnnouncementsService {
       await this.prismaService.files.create({
         data: {
           announcementId: payload.id,
-          ...file
-        }
+          ...file,
+        },
       });
     }
 
-    return 'file(s) created'
+    return 'file(s) created';
   }
 
-  async update(payload: { updateAnnouncementDto: UpdateAnnouncementDto, user: CurrentUserDto, id: string }): Promise<any> {
+  async update(payload: {
+    updateAnnouncementDto: UpdateAnnouncementDto;
+    user: CurrentUserDto;
+    id: string;
+  }): Promise<any> {
     try {
-      let updatableAnnouncementStatus = [AnnouncementStatus.DRAFT.toString(), AnnouncementStatus.PUBLISHED.toString()];
+      let updatableAnnouncementStatus = [
+        AnnouncementStatus.DRAFT.toString(),
+        AnnouncementStatus.PUBLISHED.toString(),
+      ];
 
       let announcement = await this.prismaService.announcement.findUnique({
         where: {
           id: payload.id,
         },
         include: {
-          user: true,
+          user: {
+            select: {
+              id: true,
+              firstname: true,
+              lastname: true,
+              email: true,
+              phoneNumber: true,
+              role: true,
+            },
+          },
         },
       });
       if (!announcement) {
@@ -238,7 +298,16 @@ export class AnnouncementsService {
           id: payload.id,
         },
         include: {
-          user: true,
+          user: {
+            select: {
+              id: true,
+              firstname: true,
+              lastname: true,
+              email: true,
+              phoneNumber: true,
+              role: true,
+            },
+          },
         },
       });
       if (!announcement) {
